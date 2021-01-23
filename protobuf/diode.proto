@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package dolphindaq;
+
+/* TOP-LEVEL MESSAGES */
+
+// Overall (slowly changing) settings; re-create TCP connection whenever settings change
+// Send Settings message on every new TCP connection
+message Settings {
+  optional uint64 shot_num = 1; // First shot number for which settings will apply (?)
+  repeated float trace_xvals = 2; // X values for the trace; same length as Trace.yvals
+}
+
+// Send Data message from device to server as often as desired
+message Data {
+  optional Trace trace = 1;
+  optional Metrics metrics = 2;
+}
+
+/* SUB-CATEGORIES OF THE DATA MESSAGE */
+
+// A single data trace
+message Trace {
+  optional uint64 shot_num = 1;
+  optional bytes yvals = 2; // same length as Settings.trace_xvals; encoding UINT16 (not an option in Google protobufs)
+}
+
+// A group of shot-to-shot metrics (computed on the device)
+message Metrics {
+  repeated uint64 shot_nums = 1; // Shot numbers for these metrics
+  repeated uint64 trace_sum = 2; // Sum of the trace, same length as shot_nums
+  repeated double trace_mean = 3; // Mean value of the trace, same length as shot_nums
+  repeated uint64 trace_max = 4; // Max value of the trace, same length as shot_nums
+  repeated uint64 trace_min = 5; // Min value of the trace, same length as shot_nums
+  repeated double trace_custom = 6; // Custom analysis of the trace, same length as shot_nums
+}
+
