@@ -8,7 +8,10 @@ package dolphindaq;
 // Send Settings message on every new TCP connection
 message Settings {
   optional uint64 shot_num = 1; // First shot number for which settings will apply (?)
-  repeated float trace_xvals = 2; // X values for the trace; same length as Trace.yvals
+  repeated float trace_xvals = 2; // X values in Seconds for the trace; same length as Trace.yvals
+  optional uint32 trace_nx = 3; // Length of the Trace.yvals array
+  optional float trace_ymin = 4; // Y value in Volts represented by uint16 value of 0
+  optional float trace_ymax = 5; // Y value in Volts represented by uint16 value of 2^16 - 1
 }
 
 // Send Data message from device to server as often as desired
@@ -27,7 +30,7 @@ message Trace {
 
 // A group of shot-to-shot metrics (computed on the device)
 message Metrics {
-  repeated uint64 shot_nums = 1; // Shot numbers for these metrics
+  repeated uint64 shot_num = 1; // Shot numbers for these metrics
   repeated uint64 trace_sum = 2; // Sum of the trace, same length as shot_nums
   repeated double trace_mean = 3; // Mean value of the trace, same length as shot_nums
   repeated uint64 trace_max = 4; // Max value of the trace, same length as shot_nums
