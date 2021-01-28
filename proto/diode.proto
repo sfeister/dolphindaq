@@ -25,7 +25,7 @@ message Data {
 // A single data trace
 message Trace {
   optional uint64 shot_num = 1;
-  optional bytes yvals = 2; // same length as Settings.trace_xvals; encoding UINT16 (not an option in Google protobufs)
+  optional bytes yvals = 2; // same length of uint16 numbers as Settings.trace_xvals; (encoding UINT16 is not an option in Google protobufs)
 }
 
 // A group of shot-to-shot metrics (computed on the device)

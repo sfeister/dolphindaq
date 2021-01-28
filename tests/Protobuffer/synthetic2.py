@@ -5,6 +5,8 @@ synthetic2.py: Module for synthetic diagnostics
 
 v2 Uses 16-bit numbers for synthetic data
 
+Loops endlessly
+
 Created by Scott Feister on Thu Jan 21 20:04:13 2021
 """
 
@@ -21,7 +23,7 @@ class Diode():
         self.yvals = (shotnum * X).astype(np.uint16)
     
     def getshot(self, shotnum):
-        return self.yvals[shotnum]
+        return self.yvals[shotnum % self.nshots]
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
