@@ -108,6 +108,7 @@ def resize_metrics_h5(metrics_h5, nshots):
     for grpname in ["shot_num", "trace_sum", "trace_mean", "trace_max", "trace_min", "trace_custom"]:
         metrics_h5[grpname].resize(nshots, axis=0)
 
+# TODO: Organize into setup, daq, cleanup
 def connection_callback(conn, addr):
     """ Callback to be called in its own thread on any new connection """
     with conn:
