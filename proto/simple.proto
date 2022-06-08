@@ -1,0 +1,10 @@
+// A very simple protocol definition, consisting of only
+// one message.
+// Copied directly from the examples in NanoPB
+
+syntax = "proto2";
+
+message SimpleMessage {
+    required int32 lucky_number = 1;
+}
+
