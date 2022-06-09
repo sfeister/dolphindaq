@@ -47,10 +47,16 @@ if __name__ == "__main__":
         hello.ParseFromString(msg)
         print(hello)
 
-        # Now, receive the diode Data message
+        # Receive Settings message
         msg2 = recvmsg(s)
+        settings = diode_pb2.Settings()
+        settings.ParseFromString(msg2)
+        print(settings)
+
+        # Now, receive the diode Data message
+        msg3 = recvmsg(s)
         data = diode_pb2.Data()
-        data.ParseFromString(msg2)
+        data.ParseFromString(msg3)
         print(data)
         
         
