@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package dolphindaq;
+package dolphindaq.diode;
 
 /* TOP-LEVEL MESSAGES */
 
