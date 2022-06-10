@@ -32,7 +32,8 @@ def recvmsg(conn):
         # TODO: Error handling for socket closed
         # raise Exception("Socket closed.")
     msgsize = np.frombuffer(msgsize_b, np.uint32)[0] # ugly, convert from bytes to uint32
-    msg = conn.recv(msgsize)
+    msg = conn.recv(msgsize, socket.MSG_WAITALL)
+    # print(msg)
         # TODO: Error handling for socket closed
         # raise Exception("Socket closed.")
     return msg
@@ -53,10 +54,18 @@ if __name__ == "__main__":
         settings.ParseFromString(msg2)
         print(settings)
 
-        # Now, receive the diode Data message
-        msg3 = recvmsg(s)
-        data = diode_pb2.Data()
-        data.ParseFromString(msg3)
-        print(data)
-        
+        # Now, receive the diode Data message in a loop
+        i = 0;
+        while True:
+            msg3 = recvmsg(s)
+            data = diode_pb2.Data()
+            data.ParseFromString(msg3)
+            # print(data)
+            
+            if i % 20 < 1:
+                if data.HasField("trace") and data.trace.HasField("yvals"):
+                    print(np.frombuffer(data.trace.yvals, dtype=np.uint16))
+            
+            print(i)
+            i+=1
         
