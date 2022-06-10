@@ -8,10 +8,11 @@ package dolphindaq.diode;
 // Send Settings message on every new TCP connection
 message Settings {
   optional uint64 shot_num = 1; // First shot number for which settings will apply (?)
-  repeated float trace_xvals = 2; // X values in Seconds for the trace; same length as Trace.yvals
-  optional uint32 trace_nx = 3; // Length of the Trace.yvals array
-  optional float trace_ymin = 4; // Y value in Volts represented by uint16 value of 0
-  optional float trace_ymax = 5; // Y value in Volts represented by uint16 value of 2^16 - 1
+  repeated double trace_xvals = 2; // X values in Seconds for the trace; same length as Trace.yvals
+  optional double trace_dx = 3; // For linearly spaced xvals, delta between adjacent x values
+  optional uint32 trace_nx = 4; // Length of the Trace.yvals array
+  optional double trace_ymin = 5; // Y value in Volts represented by uint16 value of 0
+  optional double trace_ymax = 6; // Y value in Volts represented by uint16 value of 2^16 - 1
 }
 
 // Send Data message from device to server as often as desired
