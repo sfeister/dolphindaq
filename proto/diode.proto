@@ -8,7 +8,7 @@ package dolphindaq.diode;
 // Send Settings message on every new TCP connection
 message Settings {
   optional uint64 shot_num = 1; // First shot number for which settings will apply (?)
-  repeated double trace_tvals = 2; // (DEPRECATED) Time values in Seconds for the trace; same length as Trace.yvals
+  repeated double trace_tvals = 2; // Time values in Seconds for the trace; same length as Trace.yvals
   optional double trace_dt = 3; // For linearly spaced tvals, time delta between adjacent time values, in Seconds
   optional uint32 trace_nt = 4; // Length of the Trace.yvals array
   optional double trace_ymin = 5; // Y value in Volts represented by uint16 value of 0
