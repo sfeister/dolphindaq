@@ -8,11 +8,15 @@ package dolphindaq.diode;
 // Send Settings message on every new TCP connection
 message Settings {
   optional uint64 shot_num = 1; // First shot number for which settings will apply (?)
-  repeated double trace_xvals = 2; // X values in Seconds for the trace; same length as Trace.yvals
-  optional double trace_dx = 3; // For linearly spaced xvals, delta between adjacent x values
-  optional uint32 trace_nx = 4; // Length of the Trace.yvals array
+  repeated double trace_tvals = 2; // (DEPRECATED) Time values in Seconds for the trace; same length as Trace.yvals
+  optional double trace_dt = 3; // For linearly spaced tvals, time delta between adjacent time values, in Seconds
+  optional uint32 trace_nt = 4; // Length of the Trace.yvals array
   optional double trace_ymin = 5; // Y value in Volts represented by uint16 value of 0
   optional double trace_ymax = 6; // Y value in Volts represented by uint16 value of 2^16 - 1
+  optional double t1 = 7; // Time delay #1 (trigger start to trace start, in Seconds)
+  optional double t2 = 8; // Time delay #2 (trace start / background start to background end, in Seconds)
+  optional double t3 = 9; // Time delay #3 (background end to signal start, in Seconds)
+  optional double t4 = 10; // Time delay #4 (signal start to  signal end / trace end, in Seconds)
 }
 
 // Send Data message from device to server as often as desired
@@ -26,7 +30,7 @@ message Data {
 // A single data trace
 message Trace {
   optional uint64 shot_num = 1;
-  optional bytes yvals = 2; // same length of uint16 numbers as Settings.trace_xvals; (encoding UINT16 is not an option in Google protobufs)
+  optional bytes yvals = 2; // same length of uint16 numbers as Settings.trace_tvals; (encoding UINT16 is not an option in Google protobufs)
 }
 
 // A group of shot-to-shot metrics (computed on the device)
@@ -36,6 +40,9 @@ message Metrics {
   repeated double trace_mean = 3; // Mean value of the trace, same length as shot_nums
   repeated uint64 trace_max = 4; // Max value of the trace, same length as shot_nums
   repeated uint64 trace_min = 5; // Min value of the trace, same length as shot_nums
-  repeated double trace_custom = 6; // Custom analysis of the trace, same length as shot_nums
+  repeated double trace_custom = 6; // Custom analysis of the trace, same length as shot_nums  
+  repeated double signal_mean = 7; // Reduced mean signal, in Volts, (mean signal - mean background), same length as shot_nums
+  repeated double signal_max = 8; // Reduced maximum signal, in Volts, (maximum signal - mean background), same length as shot_nums
+  repeated double signal_integ = 9; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_nums
 }
 
