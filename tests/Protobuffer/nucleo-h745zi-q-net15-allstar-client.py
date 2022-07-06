@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-nucleo-h745zi-q-net14-debug-client: Client test for Nucleo H7 TCP Protobuffer Demo
+nucleo-h745zi-q-net15-allstar-client: Client test for Nucleo H7 TCP Protobuffer Demo
 
-Created by Scott Feister July 1, 2022
+Created by Scott Feister July 6, 2022
 """
 
 import sys
@@ -78,16 +78,22 @@ def animate(frame):
 
 if __name__ == "__main__":   
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        #s.settimeout(4.0) # timeout is in seconds
         s.connect((HOST, PORT))
 
         # Receive Hello message
         msg = recvmsg(s)
+        if msg is None:
+            raise Exception("Socket closed.")
         hello = hello_pb2.Hello()
         hello.ParseFromString(msg)
         print(hello)
 
         # Receive Settings message
         msg2 = recvmsg(s)
+        if msg2 is None:
+            raise Exception("Socket closed.")
+
         settings = diode_pb2.Settings()
         settings.ParseFromString(msg2)
         print(settings)
@@ -100,6 +106,8 @@ if __name__ == "__main__":
         i = 0;
         while True:
             msg3 = recvmsg(s)
+            if msg3 is None:
+                raise Exception("Socket closed.")
             data = diode_pb2.Data()
             data.ParseFromString(msg3)
             # print(data)
