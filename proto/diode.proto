@@ -1,55 +1,60 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package dolphindaq.diode;
+
+import "google/protobuf/timestamp.proto";
 
 /* TOP-LEVEL MESSAGES */
 
 // Overall (slowly changing) settings; re-create TCP connection whenever settings change
 // Send Settings message on every new TCP connection
 message Settings {
-  optional uint64 shot_num = 1; // First shot number for which settings will apply (?)
-  repeated double trace_tvals = 2; // Time values in Seconds for the trace; same length as Trace.yvals
-  optional double trace_dt = 3; // For linearly spaced tvals, time delta between adjacent time values, in Seconds
-  optional uint32 trace_nt = 4; // Length of the Trace.yvals array
-  optional double trace_ymin = 5; // Y value in Volts represented by uint16 value of 0
-  optional double trace_ymax = 6; // Y value in Volts represented by uint16 value of 2^16 - 1
-  optional double t1 = 7; // Time delay #1 (trigger start to trace start, in Seconds)
-  optional double t2 = 8; // Time delay #2 (trace start / background start to background end, in Seconds)
-  optional double t3 = 9; // Time delay #3 (background end to signal start, in Seconds)
-  optional double t4 = 10; // Time delay #4 (signal start to  signal end / trace end, in Seconds)
-  optional double cputick_secs = 11; // Number of seconds in one CPU tick
-  optional double dt_secs = 12; // Number of seconds in one dt step
-  optional uint32 dt_cputicks = 13; // Number of CPU ticks in one dt step
-  optional uint32 t1_dts = 14; // Time delay #1, in dt steps
-  optional uint32 t2_dts = 15; // Time delay #2, in dt steps
-  optional uint32 t3_dts = 16; // Time delay #3, in dt steps
-  optional uint32 t4_dts = 17; // Time delay #4, in dt steps
+  uint64 shot_num = 1; // First shot number for which settings will apply (?)
+  google.protobuf.Timestamp real_time = 2; // Time after which settings will apply
+  repeated double trace_tvals = 3; // Time values in Seconds for the trace; same length as Trace.yvals
+  double trace_dt = 4; // For linearly spaced tvals, time delta between adjacent time values, in Seconds
+  uint32 trace_nt = 5; // Length of the Trace.yvals array
+  double trace_ymin = 6; // Y value in Volts represented by uint16 value of 0
+  double trace_ymax = 7; // Y value in Volts represented by uint16 value of 2^16 - 1
+  double t1 = 8; // Time delay #1 (trigger start to trace start, in Seconds)
+  double t2 = 9; // Time delay #2 (trace start / background start to background end, in Seconds)
+  double t3 = 10; // Time delay #3 (background end to signal start, in Seconds)
+  double t4 = 11; // Time delay #4 (signal start to  signal end / trace end, in Seconds)
+  double cputick_secs = 12; // Number of seconds in one CPU tick
+  double dt_secs = 13; // Number of seconds in one dt step
+  uint32 dt_cputicks = 14; // Number of CPU ticks in one dt step
+  uint32 t1_dts = 15; // Time delay #1, in dt steps
+  uint32 t2_dts = 16; // Time delay #2, in dt steps
+  uint32 t3_dts = 17; // Time delay #3, in dt steps
+  uint32 t4_dts = 18; // Time delay #4, in dt steps
 }
 
 // Send Data message from device to server as often as desired
 message Data {
-  optional Trace trace = 1;
-  optional Metrics metrics = 2;
+  Trace trace = 1;
+  Metrics metrics = 2;
 }
 
 /* SUB-CATEGORIES OF THE DATA MESSAGE */
 
 // A single data trace
 message Trace {
-  optional uint64 shot_num = 1;
-  optional bytes yvals = 2; // same length of uint16 numbers as Settings.trace_tvals; (encoding UINT16 is not an option in Google protobufs)
+  uint64 shot_num = 1;
+  google.protobuf.Timestamp shot_time = 2;
+  bytes yvals = 3; // same length of uint16 numbers as Settings.trace_tvals; (encoding UINT16 is not an option in Google protobufs)
 }
 
 // A group of shot-to-shot metrics (computed on the device)
 message Metrics {
   repeated uint64 shot_num = 1; // Shot numbers for these metrics
-  repeated uint64 trace_sum = 2; // Sum of the trace, same length as shot_nums
-  repeated double trace_mean = 3; // Mean value of the trace, same length as shot_nums
-  repeated uint64 trace_max = 4; // Max value of the trace, same length as shot_nums
-  repeated uint64 trace_min = 5; // Min value of the trace, same length as shot_nums
-  repeated double trace_custom = 6; // Custom analysis of the trace, same length as shot_nums  
-  repeated double signal_mean = 7; // Reduced mean signal, in Volts, (mean signal - mean background), same length as shot_nums
-  repeated double signal_max = 8; // Reduced maximum signal, in Volts, (maximum signal - mean background), same length as shot_nums
-  repeated double signal_integ = 9; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_nums
+  repeated google.protobuf.Timestamp shot_times = 2; // Shot times for these metrics
+  repeated uint64 trace_sum = 3; // Sum of the trace, same length as shot_nums
+  repeated double trace_mean = 4; // Mean value of the trace, same length as shot_nums
+  repeated uint64 trace_max = 5; // Max value of the trace, same length as shot_nums
+  repeated uint64 trace_min = 6; // Min value of the trace, same length as shot_nums
+  repeated double trace_custom = 7; // Custom analysis of the trace, same length as shot_nums  
+  repeated double signal_mean = 8; // Reduced mean signal, in Volts, (mean signal - mean background), same length as shot_nums
+  repeated double signal_max = 9; // Reduced maximum signal, in Volts, (maximum signal - mean background), same length as shot_nums
+  repeated double signal_integ = 10; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_nums
 }
 
