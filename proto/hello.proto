@@ -1,16 +1,16 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package dolphindaq;
 
 // Message sent by every device on first connection (and every re-connection) with the server
 // Identifies the device uniquely and tells server which protocol buffers with which to parse messages
 message Hello {
-  string unique_name = 1; // Unique device name string
-  int64 unique_id = 2; // Unique device ID
+  optional string unique_name = 1; // Unique device name string
+  optional int64 unique_id = 2; // Unique device ID
   enum DeviceType {
     OTHER = 0;
     DIODE = 1;
     LINECAM = 2;
   }
-  DeviceType device_type = 3;
+  optional DeviceType device_type = 3;
 }
