@@ -17,8 +17,8 @@ message Settings {
   optional double t2 = 8; // Time delay #2 (trace start / background start to background end, in Seconds)
   optional double t3 = 9; // Time delay #3 (background end to signal start, in Seconds)
   optional double t4 = 10; // Time delay #4 (signal start to  signal end / trace end, in Seconds)
-  optional uint32 cputick_secs = 11; // Number of seconds in one CPU tick
-  optional uint32 dt_secs = 12; // Number of seconds in one dt step
+  optional double cputick_secs = 11; // Number of seconds in one CPU tick
+  optional double dt_secs = 12; // Number of seconds in one dt step
   optional uint32 dt_cputicks = 13; // Number of CPU ticks in one dt step
   optional uint32 t1_dts = 14; // Time delay #1, in dt steps
   optional uint32 t2_dts = 15; // Time delay #2, in dt steps
