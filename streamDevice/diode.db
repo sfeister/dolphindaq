@@ -1,0 +1,98 @@
+# DolphinDAQ photodiode database file
+# Matches up with the proto file of the same name
+# Built by checking against supported record types at https://paulscherrerinstitute.github.io/StreamDevice/recordtypes.html
+
+##### Common #####
+
+record(stringin,"DIODE:info"){
+    field(DESC,"Device identification")
+	field(DTYP,"stream")
+	field(INP,"@diode.proto info diode_io")
+    field(PINI,"YES")
+}
+
+record(stringin,"DIODE:debug"){
+	field(DTYP,"stream")
+	field(INP,"@diode.proto debug diode_io")
+}
+
+#### Photodiode #####
+
+record(ai,"DIODE:System:Temperature"){
+	field(DTYP,"stream")
+	field(EGU,"degrees Celsius")
+    field(INP,"@diode.proto DAQ_SystemTemperatureQ diode_io")
+}
+
+record(int64out,"DIODE:System:Trigcount"){
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
+	field(EGU,"trigger events")
+    field(OUT,"@diode.proto DAQ_SystemTrigcount diode_io")
+}
+
+record(stringin,"DIODE:System:Time"){
+	field(DTYP,"stream")
+    field(INP,"@diode.proto DAQ_SystemTimeQ diode_io")
+}
+
+record(int64out,"DIODE:System:Time:UNIX"){
+	field(DTYP,"stream")
+    field(OUT,"@diode.proto DAQ_SystemTimeUnix diode_io")
+}
+
+record(ai,"DIODE:Measurement:Trace:Dt"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto DAQ_MeasurementTraceDtQ diode_io")
+}
+
+record(ai,"DIODE:Measurement:Trace:Nt"){
+	field(DTYP,"stream")
+    field(INP,"@diode.proto DAQ_MeasurementTraceNtQ diode_io")
+}
+
+record(ai,"DIODE:Measurement:Trace:Ymin"){
+	field(DTYP,"stream")
+	field(EGU,"Volts")
+    field(INP,"@diode.proto DAQ_MeasurementTraceYminQ diode_io")
+}
+
+record(ai,"DIODE:Measurement:Trace:Ymax"){
+	field(DTYP,"stream")
+	field(EGU,"Volts")
+    field(INP,"@diode.proto DAQ_MeasurementTraceYmaxQ diode_io")
+}
+
+### TODO: Add in YARR input
+
+record(ai,"DIODE:Daq:Configure:Dt"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto DAQ_DaqConfigureDtQ diode_io")
+}
+
+record(ai,"DIODE:Daq:Configure:T1"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(OUT,"@diode.proto DAQ_DaqConfigureT1 diode_io")
+}
+
+record(ai,"DIODE:Daq:Configure:T2"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(OUT,"@diode.proto DAQ_DaqConfigureT2 diode_io")
+}
+
+record(ai,"DIODE:Daq:Configure:T3"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(OUT,"@diode.proto DAQ_DaqConfigureT3 diode_io")
+}
+
+record(ai,"DIODE:Daq:Configure:T4"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(OUT,"@diode.proto DAQ_DaqConfigureT4 diode_io")
+}

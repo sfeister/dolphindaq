@@ -1,0 +1,127 @@
+# DolphinDAQ photodiode protocol file
+# Built by examining examples at: https://paulscherrerinstitute.github.io/StreamDevice/protocol.html#gen
+# And also by examining input/output formats at https://paulscherrerinstitute.github.io/StreamDevice/formats.html
+
+# TODO: Implement the YARR
+
+Terminator = CR LF;
+
+
+##### Common #####
+
+info {
+	ExtraInput = Ignore;
+	out "*IDN?";
+	in "%39c";
+}
+
+debug {
+   ExtraInput = Ignore;
+   out "%s";
+   in "%39c";
+}
+
+
+#### Photodiode #####
+
+DAQ_SystemTemperatureQ {
+        out "SYSTem:TEMPerature?";
+        in "%f";
+    }
+
+DAQ_SystemTrigcountQ {
+        out "SYSTem:TRIGCount?";
+        in "%u";
+    }
+
+DAQ_SystemTrigcount {
+        out "SYSTem:TRIGCount %u";
+        @init { DAQ_SystemTrigcountQ; }
+    }
+
+DAQ_SystemTimeQ {
+        out "SYSTem:TIME?";
+        in "%s";
+    }
+
+DAQ_SystemTimeUnixQ {
+        out "SYSTem:TIME:UNIX?";
+        in "%d";
+    }
+
+DAQ_SystemTimeUnix {
+        out "SYSTem:TIME:UNIX %d";
+        @init { DAQ_SystemTimeUnixQ; }
+    }
+
+DAQ_MeasurementTraceDtQ {
+        out "MEASurement:TRAce:DT?";
+        in "%f";
+    }
+
+DAQ_MeasurementTraceNtQ {
+        out "MEASurement:TRAce:NT?";
+        in "%f";
+    }
+
+DAQ_MeasurementTraceYminQ {
+        out "MEASurement:TRAce:YMIN?";
+        in "%f";
+    }
+
+DAQ_MeasurementTraceYmaxQ {
+        out "MEASurement:TRAce:YMAX?";
+        in "%f";
+    }
+
+### TODO: DAQ_MeasurementTraceYarrayQ {
+#        out "MEASurement:TRAce:YARRay?";
+#        in "%f";
+#    }
+
+DAQ_DaqConfigureDtQ {
+        out "DAQ:CONFigure:DT?";
+        in "%f";
+    }
+
+DAQ_DaqConfigureT1Q {
+        out "DAQ:CONFigure:T1?";
+        in "%f";
+    }
+
+DAQ_DaqConfigureT1 {
+        out "DAQ:CONFigure:T1 %f";
+        @init { DAQ_DaqConfigureT1Q; }
+    }
+
+DAQ_DaqConfigureT2Q {
+        out "DAQ:CONFigure:T2?";
+        in "%f";
+    }
+
+DAQ_DaqConfigureT2 {
+        out "DAQ:CONFigure:T2 %f";
+        @init { DAQ_DaqConfigureT2Q; }
+    }
+
+
+DAQ_DaqConfigureT3Q {
+        out "DAQ:CONFigure:T3?";
+        in "%f";
+    }
+
+DAQ_DaqConfigureT3 {
+        out "DAQ:CONFigure:T3 %f";
+        @init { DAQ_DaqConfigureT3Q; }
+    }
+
+
+DAQ_DaqConfigureT4Q {
+        out "DAQ:CONFigure:T4?";
+        in "%f";
+    }
+
+DAQ_DaqConfigureT4 {
+        out "DAQ:CONFigure:T4 %f";
+        @init { DAQ_DaqConfigureT4Q; }
+    }
