@@ -16,17 +16,18 @@ message Settings {
   optional uint32 trace_nt = 5; // Length of the Trace.yvals array
   optional double trace_ymin = 6; // Y value in Volts represented by uint16 value of 0
   optional double trace_ymax = 7; // Y value in Volts represented by uint16 value of 2^16 - 1
-  optional double t1 = 8; // Time delay #1 (trigger start to trace start, in Seconds)
-  optional double t2 = 9; // Time delay #2 (trace start / background start to background end, in Seconds)
-  optional double t3 = 10; // Time delay #3 (background end to signal start, in Seconds)
-  optional double t4 = 11; // Time delay #4 (signal start to  signal end / trace end, in Seconds)
-  optional double cputick_secs = 12; // Number of seconds in one CPU tick
-  optional double dt_secs = 13; // Number of seconds in one dt step
-  optional uint32 dt_cputicks = 14; // Number of CPU ticks in one dt step
-  optional uint32 t1_dts = 15; // Time delay #1, in dt steps
-  optional uint32 t2_dts = 16; // Time delay #2, in dt steps
-  optional uint32 t3_dts = 17; // Time delay #3, in dt steps
-  optional uint32 t4_dts = 18; // Time delay #4, in dt steps
+  optional double dt = 8; // Time delta for ADC conversions (same as trace_dt), in seconds
+  optional double t1 = 9; // Time delay #1 (trigger start to trace start, in Seconds)
+  optional double t2 = 10; // Time delay #2 (trace start / background start to background end, in Seconds)
+  optional double t3 = 11; // Time delay #3 (background end to signal start, in Seconds)
+  optional double t4 = 12; // Time delay #4 (signal start to  signal end / trace end, in Seconds)
+  optional double cputick_secs = 13; // Number of seconds in one CPU tick
+  optional double dt_secs = 14; // Number of seconds in one dt step
+  optional uint32 dt_cputicks = 15; // Number of CPU ticks in one dt step
+  optional uint32 t1_dts = 16; // Time delay #1, in dt steps
+  optional uint32 t2_dts = 17; // Time delay #2, in dt steps
+  optional uint32 t3_dts = 18; // Time delay #3, in dt steps
+  optional uint32 t4_dts = 19; // Time delay #4, in dt steps
 }
 
 // Send Data message from device to server as often as desired
