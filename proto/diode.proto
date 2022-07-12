@@ -47,7 +47,7 @@ message Trace {
 // A group of shot-to-shot metrics (computed on the device)
 message Metrics {
   repeated uint64 shot_num = 1; // Shot numbers for these metrics
-  repeated google.protobuf.Timestamp shot_times = 2; // Shot times for these metrics
+  repeated google.protobuf.Timestamp shot_time = 2; // Shot times for these metrics
   repeated uint64 trace_sum = 3; // Sum of the trace, same length as shot_nums
   repeated double trace_mean = 4; // Mean value of the trace, same length as shot_nums
   repeated uint64 trace_max = 5; // Max value of the trace, same length as shot_nums
