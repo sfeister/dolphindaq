@@ -48,13 +48,15 @@ message Trace {
 message Metrics {
   repeated uint64 shot_num = 1; // Shot numbers for these metrics
   repeated google.protobuf.Timestamp shot_time = 2; // Shot times for these metrics
-  repeated uint64 trace_sum = 3; // Sum of the trace, same length as shot_nums
-  repeated double trace_mean = 4; // Mean value of the trace, same length as shot_nums
-  repeated uint64 trace_max = 5; // Max value of the trace, same length as shot_nums
-  repeated uint64 trace_min = 6; // Min value of the trace, same length as shot_nums
-  repeated double trace_custom = 7; // Custom analysis of the trace, same length as shot_nums  
-  repeated double signal_mean = 8; // Reduced mean signal, in Volts, (mean signal - mean background), same length as shot_nums
-  repeated double signal_max = 9; // Reduced maximum signal, in Volts, (maximum signal - mean background), same length as shot_nums
-  repeated double signal_integ = 10; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_nums
+  repeated uint64 trace_sum = 3; // Sum of the trace, same length as shot_num
+  repeated double trace_mean = 4; // Mean value of the trace, same length as shot_num
+  repeated uint64 trace_max = 5; // Max value of the trace, same length as shot_num
+  repeated uint64 trace_min = 6; // Min value of the trace, same length as shot_num
+  repeated double trace_custom = 7; // Custom analysis of the trace, same length as shot_num 
+  repeated double bg_mean = 8; // Mean of T2 interval (background interval), in Volts, same length as shot_num
+  repeated double signal_mean = 9; // Mean of T4 interval (signal interval), in Volts, same length as shot_num
+  repeated double signal_max = 10; // Maximum of T4 interval (signal interval), in Volts, (maximum signal - mean background), same length as shot_num
+  repeated double reduced_integ = 11; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_num
+  repeated double reduced_mean = 12; // Reduced signal mean, in Volts (mean signal - mean background), in Volts * seconds, same length as shot_num
 }
 
