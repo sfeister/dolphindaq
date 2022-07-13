@@ -16,7 +16,7 @@ message Settings {
   optional uint32 trace_nt = 5; // Length of the Trace.yvals array
   optional double trace_ymin = 6; // Y value in Volts represented by uint16 value of 0
   optional double trace_ymax = 7; // Y value in Volts represented by uint16 value of 2^16 - 1
-  optional double metrics_batch_size = 8; // Number of shots accumulated per single batch of transmitted metrics 
+  optional uint32 metrics_batch_size = 8; // Number of shots accumulated per single batch of transmitted metrics 
   optional double dt = 9; // Time delta for ADC conversions (same as trace_dt), in seconds
   optional double t1 = 10; // Time delay #1 (trigger start to trace start, in Seconds)
   optional double t2 = 11; // Time delay #2 (trace start / background start to background end, in Seconds)
