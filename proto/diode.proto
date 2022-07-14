@@ -56,7 +56,7 @@ message Metrics {
   repeated double trace_custom = 7; // Custom analysis of the trace, same length as shot_num 
   repeated double bg_mean = 8; // Mean of T2 interval (background interval), in Volts, same length as shot_num
   repeated double signal_mean = 9; // Mean of T4 interval (signal interval), in Volts, same length as shot_num
-  repeated double signal_max = 10; // Maximum of T4 interval (signal interval), in Volts, (maximum signal - mean background), same length as shot_num
+  repeated double signal_max = 10; // Maximum of T4 interval (signal interval), in Volts, same length as shot_num
   repeated double reduced_integ = 11; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_num
   repeated double reduced_mean = 12; // Reduced signal mean, in Volts (mean signal - mean background), same length as shot_num
   repeated double reduced_max = 13; // Reduced signal maximum, in Volts (max signal - mean background), same length as shot_num
