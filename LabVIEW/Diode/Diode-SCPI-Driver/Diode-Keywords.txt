@@ -1,0 +1,24 @@
+Keyword	Gettable	Settable	Is Array	Data type	Description
+*IDN	1	0	0	string	Identification of device
+TRIGger:COUNt	1	1	0	uint64	Global external trigger count (whether or not an acquisition occurred)
+TRIGger:DECimation	1	1	0	uint32	"Optionally, acquire data only on every other trigger (=2), every fifth trigger (=5), or every tenth trigger(=10), etc. Default is to attempt acquisition on every single trigger. (default=1)."
+SYSTem:TIME	1	0	0	string	"System time (UTC time zone) in YYYY-mm-dd HH:MM:SS format, where HH is 24-hour format."
+SYSTem:TIME:UNIX	1	1	0	int64	"System time in Unix Time. (Int64, UTC, seconds since Jan 1, 1970)"
+MCU:TEMPerature	1	0	0	double	Chip temperature in degrees C
+DIODe:TRACe:DT	1	0	0	double	"Delta-time for Trace, in seconds"
+DIODe:TRACe:NT	1	0	0	double	Number of elements in a single trace
+DIODe:TRACe:YMIN	1	0	0	double	"Minimum value, in Volts, corresponding to raw ADC value of 0"
+DIODe:TRACe:YMAX	1	0	0	double	"Minimum value, in Volts, corresponding to raw ADC value of 2^16 - 1"
+DIODe:TRACe:YARRay	1	0	1	Array of uint16	"Y-value array (as UINT16 raw adc values), formatted a comma-separated ASCII values list. Number of elements in array is DIODe:TRACe:NT."
+DIODe:METRics:SIZE	1	0	0	uint32	Number of shots accumulated per single batch of transmitted metrics
+DIODe:METRics:BACKground:MEAn	1	0	1	Array of double	"Mean of T2 interval (background interval), in Volts. Formatted a comma-separated ASCII values list. Number of elements in array is DIODe:METRics:SIZE."
+DIODe:METRics:REDuced:INTegral	1	0	1	Array of double	"Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds. Formatted a comma-separated ASCII values list. Number of elements in array is DIODe:METRics:SIZE."
+DIODe:METRics:REDuced:MAX	1	0	1	Array of double	"Reduced signal maximum, in Volts (max signal - mean background). Formatted a comma-separated ASCII values list. Number of elements in array is DIODe:METRics:SIZE."
+DIODe:DT	1	1	0	double	"Delta-time for data acquisition (ADC), in seconds. Currently equivalent to MEAS:TRACE:DT."
+DIODe:T1:VALue	1	1	0	double	Time interval (in seconds) between the external trigger input and the ADC start.
+DIODe:T2:VALue	1	1	0	double	Time interval (in seconds) for the background acquisition. Part of the ADC trace.
+DIODe:T2:NT	1	0	0	uint32	Number of DIODe:DT steps represented by T2. Useful in masking the acquisition segments of the ADC trace.
+DIODe:T3:VALue	1	1	0	double	"Time interval (in seconds) for ""dead time"" between background acquisition and signal acquisition. Part of the ADC trace."
+DIODe:T3:NT	1	0	0	uint32	Number of DIODe:DT steps represented by T3. Useful in masking the acquisition segments of the ADC trace.
+DIODe:T4:VALue	1	1	0	double	Time interval (in seconds) for signal acquisition. Part of the ADC trace.
+DIODe:T4:NT	1	0	0	uint32	Number of DIODe:DT steps represented by T4. Useful in masking the acquisition segments of the ADC trace.

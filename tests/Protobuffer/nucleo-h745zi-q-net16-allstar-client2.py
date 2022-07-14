@@ -15,6 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from compiled_python import hello_pb2, diode_pb2
+import datetime
 
 HOST = '192.168.203.151'  # The server's hostname or IP address
 PORT = 1234        # The port used by the server
@@ -115,6 +116,15 @@ if __name__ == "__main__":
             if data.HasField("trace") and data.trace.HasField("yvals"):
                 y1_vals = np.frombuffer(data.trace.yvals, dtype=np.uint16)
                 print("{}, {} : {}".format(i, data.trace.shot_num, y1_vals[5]))
+            if data.HasField("trace") and data.trace.HasField("shot_time"):
+                print(datetime.datetime.fromtimestamp(data.trace.shot_time.seconds, datetime.timezone.utc))
+
+            if data.HasField("metrics"):
+                #print(data.metrics.bg_mean[51]);
+                #print(data.metrics.shot_num[51]);
+                print(np.mean(np.diff(data.metrics.shot_num)))
+                #print(data.metrics.reduced_integ[51]);
+                #print(data.metrics.reduced_max[51]);
             
             # plt.pause(0.1)
             
