@@ -5,6 +5,7 @@ TRIGger:DECimation	1	1	0	uint32	"Optionally, acquire data only on every other tr
 SYSTem:TIME	1	0	0	string	"System time (UTC time zone) in YYYY-mm-dd HH:MM:SS format, where HH is 24-hour format."
 SYSTem:TIME:UNIX	1	1	0	int64	"System time in Unix Time. (Int64, UTC, seconds since Jan 1, 1970)"
 MCU:TEMPerature	1	0	0	double	Chip temperature in degrees C
+DIODe:TRACe:DECimation	1	1	0	uint32	"Further decimation on top of the trigger decimation, that only affects the rate of buffering and transmitting full traces. (This number does not affect the rate of creating metrics.) For example, if TRIGger:DECimation = 3 and DIODe:TRACe:DECimation = 50, only one of every 150 external trigger events will result in a full trace being buffered for transmission."
 DIODe:TRACe:DT	1	0	0	double	"Delta-time for Trace, in seconds"
 DIODe:TRACe:NT	1	0	0	double	Number of elements in a single trace
 DIODe:TRACe:YMIN	1	0	0	double	"Minimum value, in Volts, corresponding to raw ADC value of 0"
