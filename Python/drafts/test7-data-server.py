@@ -195,4 +195,5 @@ if __name__ == "__main__":
         connection_callback(conn, addr)
         end = time.time()
         print(end - start)
+        s.close()
                 

@@ -35,47 +35,17 @@ def recvmsg(conn):
         # TODO: Error handling for socket closed
         # raise Exception("Socket closed.")
     msgsize = np.frombuffer(msgsize_b, np.uint32)[0] # ugly, convert from bytes to uint32
-    msg = conn.recv(msgsize, socket.MSG_WAITALL)
-    # print(msg)
-        # TODO: Error handling for socket closed
-        # raise Exception("Socket closed.")
+    
+    msg = bytes();
+    while len(msg) < msgsize:
+        msg_tmp = conn.recv(msgsize - len(msg)) # TODO: add a loop to continue if all bytes haven't arrived yet
+        if not msg_tmp:
+            return None
+            # TODO: Error handling for socket closed
+            # raise Exception("Socket closed.")
+        else:
+            msg += msg_tmp
     return msg
-
-def init_plot(settings):
-    """ Create a custom plot from photodiode settings"""
-    global y1_vals
-    
-    if settings.HasField("trace_nt"):
-        trace_nt = settings.trace_nt
-    else:
-        trace_nt = 100
-        
-    xvals = np.arange(trace_nt)
-    y1_vals = np.zeros_like(xvals)
-        
-    fig, ax = plt.subplots(figsize=(13,6))
-
-    # create a variable for the line plot so we can later update it
-    line1, = ax.plot(xvals, y1_vals, '-o', alpha=0.8)        
-    
-    ax.set_xlabel('Time (seconds)')
-    ax.set_ylabel('Signal (Volts)')
-    
-    return fig, ax, line1
-
-
-
-def animate(frame):
-    """ Update the plot with current photodiode y values """
-    global settings
-    
-    line1.set_ydata(y1_vals)
-
-    # adjust limits if new data goes beyond bounds
-    if (np.min(y1_vals) <= ax.get_ylim()[0]) or (np.max(y1_vals) >= ax.get_ylim()[1]):
-        ax.set_ylim([np.min(y1_vals) - np.std(y1_vals), np.max(y1_vals) + np.std(y1_vals)])
-
-    ax.set_title('Photodiode Data')
 
 if __name__ == "__main__":   
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -85,7 +55,7 @@ if __name__ == "__main__":
         # Receive Hello message
         msg = recvmsg(s)
         if msg is None:
-            raise Exception("Socket closed.")
+            raise Exception("Socket closed, or some other error.")
         hello = hello_pb2.Hello()
         hello.ParseFromString(msg)
         print(hello)
@@ -93,7 +63,7 @@ if __name__ == "__main__":
         # Receive Settings message
         msg2 = recvmsg(s)
         if msg2 is None:
-            raise Exception("Socket closed.")
+            raise Exception("Socket closed, or some other error.")
 
         settings = diode_pb2.Settings()
         settings.ParseFromString(msg2)
