@@ -49,16 +49,18 @@ message Trace {
 message Metrics {
   repeated uint64 shot_num = 1; // Shot numbers for these metrics
   repeated google.protobuf.Timestamp shot_time = 2; // Shot times for these metrics
-  repeated uint64 trace_sum = 3; // Sum of the trace, same length as shot_num
-  repeated double trace_mean = 4; // Mean value of the trace, same length as shot_num
-  repeated uint64 trace_max = 5; // Max value of the trace, same length as shot_num
-  repeated uint64 trace_min = 6; // Min value of the trace, same length as shot_num
-  repeated double trace_custom = 7; // Custom analysis of the trace, same length as shot_num 
-  repeated double bg_mean = 8; // Mean of T2 interval (background interval), in Volts, same length as shot_num
-  repeated double signal_mean = 9; // Mean of T4 interval (signal interval), in Volts, same length as shot_num
-  repeated double signal_max = 10; // Maximum of T4 interval (signal interval), in Volts, same length as shot_num
-  repeated double reduced_integ = 11; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_num
-  repeated double reduced_mean = 12; // Reduced signal mean, in Volts (mean signal - mean background), same length as shot_num
-  repeated double reduced_max = 13; // Reduced signal maximum, in Volts (max signal - mean background), same length as shot_num
+  repeated int64 shot_time_seconds = 3; // Shot times for these metrics (just the seconds; same meaning as given in Google's timestamp.proto)
+  repeated int32 shot_time_nanos = 4; // Shot times for these metrics (just the nanoseconds; same meaning as given in Google's timestamp.proto)
+  repeated uint64 trace_sum = 5; // Sum of the trace, same length as shot_num
+  repeated double trace_mean = 6; // Mean value of the trace, same length as shot_num
+  repeated uint64 trace_max = 7; // Max value of the trace, same length as shot_num
+  repeated uint64 trace_min = 8; // Min value of the trace, same length as shot_num
+  repeated double trace_custom = 9; // Custom analysis of the trace, same length as shot_num 
+  repeated double bg_mean = 10; // Mean of T2 interval (background interval), in Volts, same length as shot_num
+  repeated double signal_mean = 11; // Mean of T4 interval (signal interval), in Volts, same length as shot_num
+  repeated double signal_max = 12; // Maximum of T4 interval (signal interval), in Volts, same length as shot_num
+  repeated double reduced_integ = 13; // Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds, same length as shot_num
+  repeated double reduced_mean = 14; // Reduced signal mean, in Volts (mean signal - mean background), same length as shot_num
+  repeated double reduced_max = 15; // Reduced signal maximum, in Volts (max signal - mean background), same length as shot_num
 }
 
