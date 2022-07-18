@@ -9,8 +9,8 @@ import "google/protobuf/timestamp.proto";
 // Overall (slowly changing) settings; re-create TCP connection whenever settings change
 // Send Settings message on every new TCP connection
 message Settings {
-  optional uint64 shot_num = 1; // First shot number for which settings will apply (?)
-  optional google.protobuf.Timestamp real_time = 2; // Time after which settings will apply
+  optional uint64 start_shot_num = 1; // First shot number for which settings will apply (?)
+  optional google.protobuf.Timestamp start_time = 2; // Time after which settings will apply
   repeated double trace_tvals = 3; // Time values in Seconds for the trace; same length as Trace.yvals
   optional double trace_dt = 4; // For linearly spaced tvals, time delta between adjacent time values, in Seconds
   optional uint32 trace_nt = 5; // Length of the Trace.yvals array
