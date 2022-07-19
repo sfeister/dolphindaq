@@ -51,7 +51,7 @@ message Metrics {
   repeated google.protobuf.Timestamp shot_time = 2; // Shot times for these metrics, from a real-time clock
   repeated int64 shot_time_seconds = 3; // Shot times for these metrics, from a real-time clock (just the seconds; same meaning as given in Google's timestamp.proto)
   repeated int32 shot_time_nanos = 4; // Shot times for these metrics, from a real-time clock (just the nanoseconds; same meaning as given in Google's timestamp.proto)
-  repeated uint64 shot_tick_nanos = 5; // Shot times for these metrics from an alternate time source: a more-precise, but less accurate, system timer (in nanoseconds). Nanoseconds count up from zero and then roll over (at a max value that depends on the timer). Does not match meaning of Google's timestamp.proto.
+  repeated uint64 shot_time_alt_nanos = 5; // Shot times for these metrics from an alternate time source: a more-precise, but less accurate, system timer (in nanoseconds). Nanoseconds count up from zero and then roll over (at a max value that depends on the timer). Does not match meaning of Google's timestamp.proto.
   repeated uint64 trace_sum = 6; // Sum of the trace, same length as shot_num
   repeated double trace_mean = 7; // Mean value of the trace, same length as shot_num
   repeated uint64 trace_max = 8; // Max value of the trace, same length as shot_num
