@@ -15,6 +15,7 @@ DIODe:METRics:SIZE	1	0	0	uint32	Number of shots accumulated per single batch of 
 DIODe:METRics:BACKground:MEAn	1	0	1	Array of double	"Mean of T2 interval (background interval), in Volts. Formatted a comma-separated ASCII values list. Number of elements in array is DIODe:METRics:SIZE."
 DIODe:METRics:REDuced:INTegral	1	0	1	Array of double	"Reduced signal integration (Integral of [signal - mean background]), in Volts * seconds. Formatted a comma-separated ASCII values list. Number of elements in array is DIODe:METRics:SIZE."
 DIODe:METRics:REDuced:MAX	1	0	1	Array of double	"Reduced signal maximum, in Volts (max signal - mean background). Formatted a comma-separated ASCII values list. Number of elements in array is DIODe:METRics:SIZE."
+DIODe:METRics:REDuced:MEAN	1	0	1	Array of double	"Reduced signal mean, in Volts (mean signal - mean background). Formatted a comma-separated ASCII values list. Number of elements in array is DIODe:METRics:SIZE."
 DIODe:DT	1	1	0	double	"Delta-time for data acquisition (ADC), in seconds. Currently equivalent to MEAS:TRACE:DT."
 DIODe:T1:VALue	1	1	0	double	Time interval (in seconds) between the external trigger input and the ADC start.
 DIODe:T2:VALue	1	1	0	double	Time interval (in seconds) for the background acquisition. Part of the ADC trace.
