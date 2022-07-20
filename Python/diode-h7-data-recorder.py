@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-test8-data-recorder.py: Attempt to explore a data recorder
+diode-h7-data-recorder.py: A simple data recorder for the DIODE-H7 device.
 
 
 TODO:
 * Add TCP keepalive-style timeouts in case remote device wire is disconnected (so that HDF5 is closed). Currently hangs indefinitely until I do Ctrl + C.
 * On Nucleo firmware, toss in an "await_update" if trigcnt is changed. (Might not solve everything, but better than nothing).
 
-Created by Scott Feister on Thu Jan 21 20:04:13 2021
+Created by Scott Feister on July 20, 2022.
 """
 
 import sys
-sys.path.append("../../proto")
+sys.path.append("../proto")
 
 import os
 import time
