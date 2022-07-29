@@ -23,10 +23,14 @@ import h5py
 from datetime import datetime
 from flsuite import sftools as sf
 from compiled_python import hello_pb2, diode_pb2
-import Adafruit_BBIO.GPIO as GPIO  # for flashing LED indicator on Beaglebone Black
-
-DATADIR = "/home/debian/data" # this folder should already exist on this computer, and is where data will be stored
-HOST = '192.168.203.151'  # The remote device's hostname or IP address
+try:
+    import Adafruit_BBIO.GPIO as GPIO  # for flashing LED indicator on Beaglebone Black
+    bbio = True
+except:
+    bbio = False
+    
+DATADIR = r"C:\Users\scott\Documents\temp\july2022\data" # this folder should already exist on this computer, and is where data will be stored
+HOST = '196.254.31.201'  # The remote device's hostname or IP address
 PORT = 1234        # The port used by the remote device for DAQ transfer
 PIN_LED = "P8_7" # for flashing LED indicator on Beaglebone Black
 
@@ -72,14 +76,32 @@ def init_diode_h5(f, hello, settings, nt_max, nm_max):
     
     diode = f.create_group(hello.unique_name)
     
-    # TODO: Add versioning of protobufs            
+    # TODO: Add versioning of protobufs
+
+    # "Hello" message contents
     diode.attrs["unique_name"] = hello.unique_name
     diode.attrs["unique_id"] = hello.unique_id
     diode.attrs["device_type"] = hello.device_type
     
+    # "Settings" message contents
     diode.attrs["start_shot_num"] = settings.start_shot_num
+    diode.attrs["start_time_seconds"] = settings.start_time.seconds
+    diode.attrs["start_time_nanos"] = settings.start_time.nanos
+    diode.attrs["timtick_secs"] = settings.timtick_secs
+    diode.attrs["dt"] = settings.dt
     diode.attrs["trace_dt"] = settings.trace_dt
-    # TODO: Add other stuff here
+    diode.attrs["trace_nt"] = settings.trace_nt
+    diode.attrs["metrics_batch_size"] = settings.metrics_batch_size
+    diode.attrs["trace_ymin"] = settings.trace_ymin
+    diode.attrs["trace_ymax"] = settings.trace_ymax
+    diode.attrs["t1"] = settings.t1
+    diode.attrs["t1_dts"] = settings.t1_dts
+    diode.attrs["t2"] = settings.t2
+    diode.attrs["t2_dts"] = settings.t2_dts
+    diode.attrs["t3"] = settings.t3
+    diode.attrs["t3_dts"] = settings.t3_dts
+    diode.attrs["t4"] = settings.t4
+    diode.attrs["t4_dts"] = settings.t4_dts
     
     trace = diode.create_group("Trace")
     trace.create_dataset("shot_num", (nt_max,), maxshape=(nt_max,), dtype=np.uint64, chunks=True) # TODO: Smarter chunking
@@ -198,7 +220,8 @@ def connection_callback(conn):
                             raise Warning("Metrics don't all fit in the HDF5 file! Dumping this entire batch of metrics.")
                             # TODO: Expand the HDF5 file to fit them, and then pinch it off (??)
                         else:
-                            GPIO.output(PIN_LED, not GPIO.input(PIN_LED)) # toggle LED
+                            if bbio:
+                                GPIO.output(PIN_LED, not GPIO.input(PIN_LED)) # toggle LED
                             insert_metrics_h5(metrics_h5, data.metrics, j)
                             j += nm
                             
@@ -210,10 +233,12 @@ def connection_callback(conn):
                 print("File closed.")
                 end = time.time()
                 print("Time elapsed for batch: ", end - start)
-                GPIO.output(PIN_LED, GPIO.LOW)
+                if bbio:
+                    GPIO.output(PIN_LED, GPIO.LOW)
                 
 if __name__ == "__main__":
-    GPIO.setup(PIN_LED, GPIO.OUT) # for flashing LED indicator on Beaglebone Black
+    if bbio:
+        GPIO.setup(PIN_LED, GPIO.OUT) # for flashing LED indicator on Beaglebone Black
     
     while True: ## run forever!
         try:
@@ -229,7 +254,8 @@ if __name__ == "__main__":
             print(datetime.now())
             print(e)
         finally:
-            GPIO.output(PIN_LED, GPIO.LOW)
+            if bbio:
+                GPIO.output(PIN_LED, GPIO.LOW)
             
         time.sleep(10);
 
