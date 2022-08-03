@@ -105,6 +105,9 @@ def init_diode_h5(f, hello, settings, nt_max, nm_max):
     
     trace = diode.create_group("Trace")
     trace.create_dataset("shot_num", (nt_max,), maxshape=(nt_max,), dtype=np.uint64, chunks=True) # TODO: Smarter chunking
+    trace.create_dataset("shot_time_seconds", (nt_max,), dtype=np.int64, chunks=True)
+    trace.create_dataset("shot_time_nanos", (nt_max,), dtype=np.int32, chunks=True)
+
     trace.create_dataset("yvals", (nt_max, settings.trace_nt), maxshape=(nt_max, settings.trace_nt), dtype=np.uint16, chunks=True) # TODO: Smarter chunking
     
     metrics = diode.create_group("Metrics")
@@ -121,6 +124,8 @@ def insert_trace_h5(trace_h5, trace_pbuf, i):
     """ Insert a protobuf trace message into the HDF5 file at index i """
     # TODO: Check that it will fit (?) Or perhaps just handle the error message
     trace_h5["shot_num"][i] = trace_pbuf.shot_num
+    trace_h5["shot_time_seconds"][i] = trace_pbuf.shot_time.seconds
+    trace_h5["shot_time_nanos"][i] = trace_pbuf.shot_time.nanos
     trace_h5["yvals"][i, :] = np.frombuffer(trace_pbuf.yvals, dtype=np.uint16)
 
 def insert_metrics_h5(metrics_h5, metrics_pbuf, j):
@@ -137,7 +142,7 @@ def insert_metrics_h5(metrics_h5, metrics_pbuf, j):
 
 def resize_trace_h5(trace_h5, nshots):
     """ Resize the HDF5 arrays related to diode traces, truncating or expanding to "nshots" shots """
-    for grpname in ["shot_num", "yvals"]:
+    for grpname in ["shot_num", "shot_time_seconds", "shot_time_nanos", "yvals"]:
         trace_h5[grpname].resize(nshots, axis=0)
 
 def resize_metrics_h5(metrics_h5, nshots):

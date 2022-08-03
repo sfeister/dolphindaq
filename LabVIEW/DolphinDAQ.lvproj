@@ -16,6 +16,9 @@
 		<Item Name="Diode" Type="Folder" URL="../Diode">
 			<Property Name="NI.DISK" Type="Bool">true</Property>
 		</Item>
+		<Item Name="Examples" Type="Folder" URL="../Examples">
+			<Property Name="NI.DISK" Type="Bool">true</Property>
+		</Item>
 		<Item Name="Hamaline" Type="Folder" URL="../Hamaline">
 			<Property Name="NI.DISK" Type="Bool">true</Property>
 		</Item>

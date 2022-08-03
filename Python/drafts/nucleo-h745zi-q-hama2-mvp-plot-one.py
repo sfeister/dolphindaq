@@ -17,7 +17,7 @@ from matplotlib.animation import FuncAnimation
 from compiled_python import hello_pb2, linecam_pb2
 import datetime
 
-HOST = '192.168.203.151'  # The server's hostname or IP address
+HOST = '196.254.31.202'  # The server's hostname or IP address
 PORT = 1234        # The port used by the server
 
 def recvmsg(conn):
