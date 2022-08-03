@@ -23,6 +23,8 @@ message Settings {
   optional double timtick_secs = 8; // Number of seconds in one CPU-Timer tick (e.g. for TIM1 on the H7 MCU, this would match with the CPU's HRTIM frequency)
   optional uint32 clk_dt_timticks = 9; // Clock dt for exposure and reading out of the pixels (one pixel is read out per dt step), in CPU-Timer ticks
   optional uint32 exposure_clk_dts = 10; // Camera exposure time, in Clock dts
+  optional double t1 = 11; // Time delay #1 (external trigger arrival to camera ST [STart] pulse rising edge, in Seconds)
+  optional uint32 t1_clk_dts = 12; // Time delay #1, in Clock dts
 }
 
 // Send Data message from device to server as often as desired
