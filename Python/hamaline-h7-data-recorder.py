@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-test8-data-recorder.py: Attempt to explore a data recorder
+hamaline-h7-data-recorder.py: A simple data recorder for the HAMALINE-H7 line camera device.
 
+Spun off from diode-h7-data-recorder.py on July 22, 2022.
 
-TODO:
-* Add TCP keepalive-style timeouts in case remote device wire is disconnected (so that HDF5 is closed). Currently hangs indefinitely until I do Ctrl + C.
-* On Nucleo firmware, toss in an "await_update" if trigcnt is changed. (Might not solve everything, but better than nothing).
-
-Created by Scott Feister on Thu Jan 21 20:04:13 2021
+Created by Scott Feister on July 22, 2022.
 """
 
 import sys
-sys.path.append("../../proto")
+sys.path.append("../proto")
 
 import os
 import time
@@ -22,10 +19,15 @@ import h5py
 
 from datetime import datetime
 from flsuite import sftools as sf
-from compiled_python import hello_pb2, diode_pb2
-import Adafruit_BBIO.GPIO as GPIO  # for flashing LED indicator on Beaglebone Black
+from compiled_python import hello_pb2, linecam_pb2
 
-DATADIR = "/home/debian/data" # this folder should already exist on this computer, and is where data will be stored
+try:
+    import Adafruit_BBIO.GPIO as GPIO  # for flashing LED indicator on Beaglebone Black
+    bbio = True
+except:
+    bbio = False
+    
+DATADIR = r"C:\Users\scott\Documents\temp\july2022\data" # this folder should already exist on this computer, and is where data will be stored
 HOST = '192.168.203.151'  # The remote device's hostname or IP address
 PORT = 1234        # The port used by the remote device for DAQ transfer
 PIN_LED = "P8_7" # for flashing LED indicator on Beaglebone Black
@@ -57,52 +59,52 @@ def recvmsg(conn):
             msg += msg_tmp
     return msg
 
-def init_diode_h5(f, hello, settings, nt_max, nm_max):
-    """ Initialize the diode HDF5 file 
+def init_linecam_h5(f, hello, settings, ni_max, nm_max):
+    """ Initialize the LineCam HDF5 file 
     Inputs:
         f: Open, empty HDF5 file
         hello: Protobuf object from hello message
-        settings: Protobuf object from diode settings message
+        settings: Protobuf object from LineCam settings message
     Outputs:
-        IO on diode.hdf5
-        diode: HDF5 handle to the diode category
-        trace: HDF5 handle to the trace category (sub-category of diode)
-        metrics: HDF5 handle to the metrics category (sub-category of diode)
+        IO on linecam.hdf5
+        linecam: HDF5 handle to the LineCam category
+        image: HDF5 handle to the Image category (sub-category of LineCam)
+        metrics: HDF5 handle to the Metrics category (sub-category of LineCam)
     """
     
-    diode = f.create_group(hello.unique_name)
+    linecam = f.create_group(hello.unique_name)
     
     # TODO: Add versioning of protobufs            
-    diode.attrs["unique_name"] = hello.unique_name
-    diode.attrs["unique_id"] = hello.unique_id
-    diode.attrs["device_type"] = hello.device_type
+    linecam.attrs["unique_name"] = hello.unique_name
+    linecam.attrs["unique_id"] = hello.unique_id
+    linecam.attrs["device_type"] = hello.device_type
     
-    diode.attrs["start_shot_num"] = settings.start_shot_num
-    diode.attrs["trace_dt"] = settings.trace_dt
+    linecam.attrs["start_shot_num"] = settings.start_shot_num
+    linecam.attrs["image_nx"] = settings.image_nx
     # TODO: Add other stuff here
     
-    trace = diode.create_group("Trace")
-    trace.create_dataset("shot_num", (nt_max,), maxshape=(nt_max,), dtype=np.uint64, chunks=True) # TODO: Smarter chunking
-    trace.create_dataset("yvals", (nt_max, settings.trace_nt), maxshape=(nt_max, settings.trace_nt), dtype=np.uint16, chunks=True) # TODO: Smarter chunking
+    image = linecam.create_group("Image")
+    image.create_dataset("shot_num", (ni_max,), maxshape=(ni_max,), dtype=np.uint64, chunks=True) # TODO: Smarter chunking
+    image.create_dataset("yvals", (ni_max, settings.image_nx), maxshape=(ni_max, settings.image_nx), dtype=np.uint16, chunks=True) # TODO: Smarter chunking
     
-    metrics = diode.create_group("Metrics")
+    metrics = linecam.create_group("Metrics")
     metrics.create_dataset("shot_num", (nm_max,), dtype=np.uint64, chunks=True)
     metrics.create_dataset("shot_time_seconds", (nm_max,), dtype=np.int64, chunks=True)
     metrics.create_dataset("shot_time_nanos", (nm_max,), dtype=np.int32, chunks=True)
     metrics.create_dataset("shot_time_alt_nanos", (nm_max,), dtype=np.uint64, chunks=True)
-    metrics.create_dataset("bg_mean", (nm_max,), dtype=np.double, chunks=True)
-    metrics.create_dataset("reduced_mean", (nm_max,), dtype=np.double, chunks=True)
+    metrics.create_dataset("image_mean", (nm_max,), dtype=np.double, chunks=True)
+    metrics.create_dataset("image_max", (nm_max,), dtype=np.uint64, chunks=True)
     
-    return diode, trace, metrics
+    return linecam, image, metrics
                 
-def insert_trace_h5(trace_h5, trace_pbuf, i):
-    """ Insert a protobuf trace message into the HDF5 file at index i """
+def insert_image_h5(image_h5, image_pbuf, i):
+    """ Insert a protobuf image message into the HDF5 file at index i """
     # TODO: Check that it will fit (?) Or perhaps just handle the error message
-    trace_h5["shot_num"][i] = trace_pbuf.shot_num
-    trace_h5["yvals"][i, :] = np.frombuffer(trace_pbuf.yvals, dtype=np.uint16)
+    image_h5["shot_num"][i] = image_pbuf.shot_num
+    image_h5["yvals"][i, :] = np.frombuffer(image_pbuf.yvals, dtype=np.uint16)
 
 def insert_metrics_h5(metrics_h5, metrics_pbuf, j):
-    """ Insert a set of protobuf diode metrics message into the HDF5 file at index j """
+    """ Insert a set of protobuf linecam metrics message into the HDF5 file at index j """
     nm = len(metrics_pbuf.shot_num)
     
     # TODO: Check that it will fit (?) Or perhaps just handle the error message
@@ -110,17 +112,17 @@ def insert_metrics_h5(metrics_h5, metrics_pbuf, j):
     metrics_h5["shot_time_seconds"][j:j + nm] = metrics_pbuf.shot_time_seconds
     metrics_h5["shot_time_nanos"][j:j + nm] = metrics_pbuf.shot_time_nanos
     metrics_h5["shot_time_alt_nanos"][j:j + nm] = metrics_pbuf.shot_time_alt_nanos
-    metrics_h5["bg_mean"][j:j + nm] = metrics_pbuf.bg_mean
-    metrics_h5["reduced_mean"][j:j + nm] = metrics_pbuf.reduced_mean
+    metrics_h5["image_mean"][j:j + nm] = metrics_pbuf.image_mean
+    metrics_h5["image_max"][j:j + nm] = metrics_pbuf.image_max
 
-def resize_trace_h5(trace_h5, nshots):
-    """ Resize the HDF5 arrays related to diode traces, truncating or expanding to "nshots" shots """
+def resize_image_h5(image_h5, nshots):
+    """ Resize the HDF5 arrays related to linecam images, truncating or expanding to "nshots" shots """
     for grpname in ["shot_num", "yvals"]:
-        trace_h5[grpname].resize(nshots, axis=0)
+        image_h5[grpname].resize(nshots, axis=0)
 
 def resize_metrics_h5(metrics_h5, nshots):
-    """ Resize the HDF5 arrays related to diode metrics, truncating or expanding to "nshots" shots """
-    for grpname in ["shot_num", "shot_time_seconds", "shot_time_nanos", "shot_time_alt_nanos", "bg_mean", "reduced_mean"]:
+    """ Resize the HDF5 arrays related to linecam metrics, truncating or expanding to "nshots" shots """
+    for grpname in ["shot_num", "shot_time_seconds", "shot_time_nanos", "shot_time_alt_nanos", "image_mean", "image_max"]:
         metrics_h5[grpname].resize(nshots, axis=0)
 
 # TODO: Organize into setup, daq, cleanup
@@ -136,16 +138,16 @@ def connection_callback(conn):
     print(hello)
 
     # Handle the Hello message
-    if hello.device_type == hello_pb2.Hello.DIODE:
+    if hello.device_type == hello_pb2.Hello.LINECAM:
         msg = recvmsg(conn)
         if not msg:
-           print("No diode message.")
+           print("No linecam message.")
            return # HDF5 file isn't yet open. Break out of function immediately if TCP connection closed here.
-        settings = diode_pb2.Settings()
+        settings = linecam_pb2.Settings()
         settings.ParseFromString(msg)
         print(settings)
                 
-        nt_max = 1000 # Max number of shots with traces to store in a single HDF5 file (10k ~= 80 MB. Trace settings on device will set the file size.) 
+        ni_max = 30000 # Max number of shots with images to store in a single HDF5 file (About 4 kB per image. Image settings on device will set the file size.) 
         nm_max = 30000 # Max number of shots with metrics to store in a single HDF5 file (60k = 60 seconds. Metrics settings here will set the batch time duration.)
         
         while msg:
@@ -162,13 +164,13 @@ def connection_callback(conn):
                 f.attrs["Original Filename"] = h5fn
                 # TODO: Put this analysis script in the file as well? IDK.
     
-                diode_h5, trace_h5, metrics_h5 = init_diode_h5(f, hello, settings, nt_max, nm_max)
+                linecam_h5, image_h5, metrics_h5 = init_linecam_h5(f, hello, settings, ni_max, nm_max)
             
                 i = 0 # Trace index
                 j = 0 # Metrics index
                 nm = 0 # Number of metrics per packet
                 
-                while (i < nt_max) and (j < nm_max - nm):
+                while (i < ni_max) and (j < nm_max - nm):
                     # TCP receipt of data
                     try:
                         msg = recvmsg(conn)
@@ -181,15 +183,15 @@ def connection_callback(conn):
                         print(datetime.now())
                         print("Socket closed.")
                         break
-                    data = diode_pb2.Data()
+                    data = linecam_pb2.Data()
                     data.ParseFromString(msg)
     
                     # Store the data message appropriately
-                    if data.HasField("trace"):
-                        if data.trace.shot_num % 10 == 0:   # DEBUG ONLY
-                            print(data.trace.shot_num)      # DEBUG ONLY
+                    if data.HasField("image"):
+                        if data.image.shot_num % 10 == 0:   # DEBUG ONLY
+                            print(data.image.shot_num)      # DEBUG ONLY
 
-                        insert_trace_h5(trace_h5, data.trace, i)
+                        insert_image_h5(image_h5, data.image, i)
                         i += 1
                     
                     if data.HasField("metrics"):
@@ -198,22 +200,25 @@ def connection_callback(conn):
                             raise Warning("Metrics don't all fit in the HDF5 file! Dumping this entire batch of metrics.")
                             # TODO: Expand the HDF5 file to fit them, and then pinch it off (??)
                         else:
-                            GPIO.output(PIN_LED, not GPIO.input(PIN_LED)) # toggle LED
+                            if bbio:
+                                GPIO.output(PIN_LED, not GPIO.input(PIN_LED)) # toggle LED
                             insert_metrics_h5(metrics_h5, data.metrics, j)
                             j += nm
                             
                     del data # TODO: Is this needed? Check for any memory leaks.
                 
                 f.attrs["File Closure Time"] = datetime.now().strftime(ftimespec)
-                resize_trace_h5(trace_h5, i)
+                resize_image_h5(image_h5, i)
                 resize_metrics_h5(metrics_h5, j)
                 print("File closed.")
                 end = time.time()
                 print("Time elapsed for batch: ", end - start)
-                GPIO.output(PIN_LED, GPIO.LOW)
+                if bbio:
+                    GPIO.output(PIN_LED, GPIO.LOW)
                 
 if __name__ == "__main__":
-    GPIO.setup(PIN_LED, GPIO.OUT) # for flashing LED indicator on Beaglebone Black
+    if bbio:
+        GPIO.setup(PIN_LED, GPIO.OUT) # for flashing LED indicator on Beaglebone Black
     
     while True: ## run forever!
         try:
@@ -229,7 +234,8 @@ if __name__ == "__main__":
             print(datetime.now())
             print(e)
         finally:
-            GPIO.output(PIN_LED, GPIO.LOW)
+            if bbio:
+                GPIO.output(PIN_LED, GPIO.LOW)
             
         time.sleep(10);
 
