@@ -319,8 +319,13 @@
 				<Item Name="Unflatten Error Stack.vi" Type="VI" URL="/&lt;vilib&gt;/UPVI/lvhdf5/error.llb/Unflatten Error Stack.vi"/>
 				<Item Name="Update HDF5 Tree Group Icons.vi" Type="VI" URL="/&lt;vilib&gt;/UPVI/lvhdf5/utility.llb/private/Update HDF5 Tree Group Icons.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>
+				<Item Name="Write Delimited Spreadsheet (DBL).vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Write Delimited Spreadsheet (DBL).vi"/>
+				<Item Name="Write Delimited Spreadsheet (I64).vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Write Delimited Spreadsheet (I64).vi"/>
+				<Item Name="Write Delimited Spreadsheet (string).vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Write Delimited Spreadsheet (string).vi"/>
+				<Item Name="Write Delimited Spreadsheet.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Write Delimited Spreadsheet.vi"/>
 				<Item Name="Write LV Compound Attrs.vi" Type="VI" URL="/&lt;vilib&gt;/UPVI/lvhdf5/datatype.llb/private/Write LV Compound Attrs.vi"/>
 				<Item Name="Write LV Type Attrs.vi" Type="VI" URL="/&lt;vilib&gt;/UPVI/lvhdf5/datatype.llb/private/Write LV Type Attrs.vi"/>
+				<Item Name="Write Spreadsheet String.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Write Spreadsheet String.vi"/>
 			</Item>
 			<Item Name="kernel32.dll" Type="Document" URL="kernel32.dll">
 				<Property Name="NI.PreserveRelativePath" Type="Bool">true</Property>

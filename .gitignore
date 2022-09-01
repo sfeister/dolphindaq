@@ -4,6 +4,9 @@ proto/compiled*
 # Test outputs
 out/
 
+# Save files from LabVIEW Control Panel VIs
+LabVIEW/*/SavedSettings*.csv
+
 # HDF5 datasets
 *.hdf5
 *.h5
