@@ -9,3 +9,6 @@ Keyword	Gettable	Settable	Is Array	Data type	Description
 :SYSTem:TIME	1	0	0	string	"System time (UTC time zone) in YYYY-mm-dd HH:MM:SS format, where HH is 24-hour format."
 :SYSTem:TIME:UNIX	1	1	0	int64	"System time in Unix Time. (Int64, UTC, seconds since Jan 1, 1970)"
 :MCU:TEMPerature	1	0	0	double	Chip temperature in degrees C
+:ROSie:OUTPut:ENabled	1	1	0	bool	"False (0) if trigger output to secondary devices is inhibited, True (1) if trigger output to secondary devices is permitted"
+:ROSie:OUTPut:FIRSt	1	0	0	uint64	Global external trigger count representing the first decimated trigger output (resets when output re-enabled or DAQ is reset)
+:ROSie:OUTPut:COUNt	1	0	0	uint64	Number of decimated triggers which have been sent out in the time period including the first decimated trigger (resets when output re-enabled or DAQ is reset)
