@@ -1,0 +1,17 @@
+# DolphinDAQ Rosie database file
+# Matches up with the proto file of the same name
+# Built by checking against supported record types at https://paulscherrerinstitute.github.io/StreamDevice/recordtypes.html
+
+##### Common #####
+
+record(stringin,"ROSIE:info"){
+    field(DESC,"Device identification")
+	field(DTYP,"stream")
+	field(INP,"@rosie.proto info rosie_io")
+    field(PINI,"YES")
+}
+
+record(stringin,"ROSIE:debug"){
+	field(DTYP,"stream")
+	field(INP,"@rosie.proto debug rosie_io")
+}
