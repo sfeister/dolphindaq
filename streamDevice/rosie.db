@@ -15,3 +15,53 @@ record(stringin,"ROSIE:debug"){
 	field(DTYP,"stream")
 	field(INP,"@rosie.proto debug rosie_io")
 }
+
+record(int64in,"ROSIE:trigger:count"){
+    field(DESC,"Get global trigger count")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@rosie.proto TriggerCountQ rosie_io")
+    }
+
+record(int64out,"ROSIE:trigger:count:set"){
+    field(DESC,"Set global trigger count")
+	field(DTYP,"stream")
+    field(OUT,"@rosie.proto TriggerCount rosie_io")
+    }
+    
+record(int64out,"ROSIE:trigger:decimation"){
+    field(DESC,"Set decimation")
+	field(DTYP,"stream")
+    field(DRVL,"1") # can't set values less than 1 - a value of 1 means no decimation
+    field(DRVH,"100000") # even for 1kHz, a decimation of 100k gives a pulse less than once per minute; seems a reasonable upper bound
+    field(OUT,"@rosie.proto TriggerDecimation rosie_io")
+    }
+
+record(bi,"ROSIE:rosie:output:enabled"){
+    field(DESC,"Get whether TTL pulse output is enabled")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(ZNAM,"False")
+	field(ONAM,"True")
+    field(INP,"@rosie.proto RosieOutputEnabledQ rosie_io")
+    }
+
+record(bo,"ROSIE:rosie:output:enabled:set"){
+    field(DESC,"Set whether TTL pulse output is enabled")
+	field(DTYP,"stream")
+	field(ZNAM,"False")
+	field(ONAM,"True")
+    field(OUT,"@rosie.proto RosieOutputEnabled rosie_io")
+    }
+
+record(int64in,"ROSIE:rosie:output:first"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@rosie.proto RosieOutputFirstQ rosie_io")
+    }
+
+record(int64in,"ROSIE:rosie:output:count"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@rosie.proto RosieOutputCountQ rosie_io")
+    }

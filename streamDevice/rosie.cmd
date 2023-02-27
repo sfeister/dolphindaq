@@ -9,10 +9,6 @@ drvAsynIPPortConfigure ("rosie_io", "196.254.31.204:1064")
 
 # Note that Rosie is hardcoded in firmware to this IP and port address
 
-epicsThreadSleep(5)
-
-# May not still be needed; was empirically necessary to pause here, to avoid communication timeout on first SCPI commands to Arduinos, circa April 2022 for sidekick system
-
 dbLoadRecords "rosie.db"
 
 #log debug output to file

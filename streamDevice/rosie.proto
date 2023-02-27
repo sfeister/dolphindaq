@@ -17,3 +17,60 @@ debug {
    out "%s";
    in "%39c";
 }
+
+TriggerCountQ {
+        out ":TRIGger:COUNt?";
+        in "%u";
+    }
+
+TriggerCount {
+        out ":TRIGger:COUNt %u";
+        @init { TriggerCountQ; }
+    }
+
+TriggerDecimationQ {
+        out ":TRIGger:DECimation?";
+        in "%u";
+    }
+
+TriggerDecimation {
+        out ":TRIGger:DECimation %u";
+        @init { TriggerDecimationQ; }
+    }
+    
+SystemTimeQ {
+        out ":SYSTem:TIME?";
+        in "%s";
+    }
+
+SystemTimeUnixQ {
+        out ":SYSTem:TIME:UNIX?";
+        in "%i";
+    }
+
+SystemTimeUnix {
+        out ":SYSTem:TIME:UNIX %i";
+        @init { SystemTimeUnixQ; }
+    }
+
+##### Rosie-Specific #####
+
+RosieOutputEnabledQ {
+        out ":ROSie:OUTPut:ENabled?";
+        in "%i";
+    }
+
+RosieOutputEnabled {
+        out ":ROSie:OUTPut:ENabled %i";
+        @init { RosieOutputEnabledQ; }
+    }
+
+RosieOutputFirstQ {
+        out ":ROSie:OUTPut:FIRSt?";
+        in "%u";
+    }
+
+RosieOutputCountQ {
+        out ":ROSie:OUTPut:COUNt?";
+        in "%u";
+    }
