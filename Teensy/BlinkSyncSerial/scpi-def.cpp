@@ -43,11 +43,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <Arduino.h>
 #include <SCPI_Parser.h>
 #include "scpi-def.h"
 
 /// EXTERNAL VARIABLES (from BlinkSyncSCPI.ino)
 extern uint64_t trigcnt;
+extern uint32_t refFreqHz;
+extern bool await_update;
+
 
 static scpi_result_t DAQ_TriggerCountQ(scpi_t * context) {
     SCPI_ResultUInt64(context, trigcnt);
@@ -64,6 +68,26 @@ static scpi_result_t DAQ_TriggerCount(scpi_t * context) {
     }
 
     trigcnt = param1;
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_ReferenceFrequencyQ(scpi_t * context) {
+    SCPI_ResultUInt32(context, refFreqHz);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_ReferenceFrequency(scpi_t * context) {
+    uint32_t param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamUInt32(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    refFreqHz = constrain(param1, (uint32_t)20, (uint32_t)2000); // frequencies below 20 Hz don't work the way I implemented with PWM
+    await_update = true;
 
     return SCPI_RES_OK;
 }
@@ -98,6 +122,8 @@ const scpi_command_t scpi_commands[] = {
     /* DAQ */
     {.pattern = "TRIGger:COUNt?", .callback = DAQ_TriggerCountQ,},
     {.pattern = "TRIGger:COUNt", .callback = DAQ_TriggerCount,},
+    {.pattern = "REFerence:FREQuency?", .callback = DAQ_ReferenceFrequencyQ,},
+    {.pattern = "REFerence:FREQuency", .callback = DAQ_ReferenceFrequency,},
 
     {"SYSTem:COMMunication:TCPIP:CONTROL?", SCPI_SystemCommTcpipControlQ, 0},
 
