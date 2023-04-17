@@ -1,0 +1,54 @@
+# Teensy Pulse Generator protocol file
+# Built by examining examples at: https://paulscherrerinstitute.github.io/StreamDevice/protocol.html#gen
+
+Terminator = CR LF;
+
+##### Common #####
+
+info {
+	ExtraInput = Ignore;
+	out "*IDN?";
+	in "%39c";
+}
+
+debug {
+   ExtraInput = Ignore;
+   out "%s";
+   in "%39c";
+}
+
+TriggerCountQ {
+        out ":TRIGger:COUNt?";
+        in "%u";
+    }
+
+TriggerCount {
+        out ":TRIGger:COUNt %u";
+        @init { TriggerCountQ; }
+    }
+
+##### TeensyPulse-Specific #####
+
+# Repetition rate is a float (positive-definite)
+# Use analog output record type
+ReprateQ {
+        out "REPrate?";
+        in "%f";
+    }
+
+Reprate {
+        out "REPrate %f";
+        @init { ReprateQ; }
+    }
+
+# Delay is an unsigned long integer
+# Use int64 record type
+DelayChannelNQ {
+        out "DELay:CHannel\$1?";
+        in "%u";
+    }
+
+DelayChannelN {
+        out "DELay:CHannel\$1 %u";
+        @init { DelayChannelNQ; }
+    }

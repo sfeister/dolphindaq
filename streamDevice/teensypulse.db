@@ -1,0 +1,122 @@
+
+##### Common #####
+
+record(stringin,"TEENSYPULSE:info"){
+    field(DESC,"Device identification")
+	field(DTYP,"stream")
+	field(INP,"@rosie.proto info rosie_io")
+    field(PINI,"YES")
+}
+
+record(stringin,"TEENSYPULSE:debug"){
+	field(DTYP,"stream")
+	field(INP,"@rosie.proto debug rosie_io")
+}
+
+record(int64in,"TEENSYPULSE:trigger:count"){
+    field(DESC,"Get global trigger count")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@rosie.proto TriggerCountQ rosie_io")
+    }
+
+record(int64out,"TEENSYPULSE:trigger:count:set"){
+    field(DESC,"Set global trigger count")
+	field(DTYP,"stream")
+    field(OUT,"@rosie.proto TriggerCount rosie_io")
+    }
+
+record(ao,"TEENSYPULSE:reprate"){
+    field (DESC, "Set repetition rate for all pulse channels")
+	field(DTYP,"stream")
+    field(DRVL,"0")
+	field(EGU,"Hz")
+	field(OUT,"@teensypulse.proto setRepRate teensypulse_ino")
+}
+
+
+# Channel 1
+record(int64out,"TEENSYPULSE:CH1:delay"){
+    field(DESC, "Get pulse delay time")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"micros")
+	field(INP,"@teensypulse.proto DelayChannelNQ(1) teensypulse_ino")
+}
+
+# Channel 2
+record(int64out,"TEENSYPULSE:CH2:delay"){
+    field(DESC, "Get pulse delay time")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"micros")
+	field(INP,"@teensypulse.proto DelayChannelNQ(2) teensypulse_ino")
+}
+
+
+# Channel 3
+record(int64out,"TEENSYPULSE:CH3:delay"){
+    field(DESC, "Get pulse delay time")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"micros")
+	field(INP,"@teensypulse.proto DelayChannelNQ(3) teensypulse_ino")
+}
+
+
+# Channel 4
+record(int64out,"TEENSYPULSE:CH4:delay"){
+    field(DESC, "Get pulse delay time")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"micros")
+	field(INP,"@teensypulse.proto DelayChannelNQ(4) teensypulse_ino")
+}
+
+# Channel 1
+record(int64out,"TEENSYPULSE:CH1:delay:set"){
+    field(DESC, "Set pulse delay time")
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"10000000") # restrict users from setting overly high times
+	field(EGU,"micros")
+	field(OUT,"@teensypulse.proto DelayChannelN(1) teensypulse_ino")
+}
+
+# Channel 2
+record(int64out,"TEENSYPULSE:CH2:delay:set"){
+    field(DESC, "Set pulse delay time")
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"10000000") # restrict users from setting overly high times
+	field(EGU,"micros")
+	field(OUT,"@teensypulse.proto DelayChannelN(2) teensypulse_ino")
+}
+
+
+# Channel 3
+record(int64out,"TEENSYPULSE:CH3:delay:set"){
+    field(DESC, "Set pulse delay time")
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"10000000") # restrict users from setting overly high times
+	field(EGU,"micros")
+	field(OUT,"@teensypulse.proto DelayChannelN(3) teensypulse_ino")
+}
+
+
+# Channel 4
+record(int64out,"TEENSYPULSE:CH4:delay:set"){
+    field(DESC, "Set pulse delay time")
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"10000000") # restrict users from setting overly high times
+	field(EGU,"micros")
+	field(OUT,"@teensypulse.proto DelayChannelN(4) teensypulse_ino")
+}
+
+
+record(stringin,"TEENSYPULSE:debug"){
+	field(DTYP,"stream")
+	field(INP,"@teensypulse.proto debug teensypulse_ino")
+}

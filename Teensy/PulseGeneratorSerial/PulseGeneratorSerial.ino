@@ -39,9 +39,9 @@ using namespace TeensyTimerTool;
 
 IntervalTimer periodTimer;
 OneShotTimer tref;
-OneShotTimer t1; 
-OneShotTimer t2; 
-OneShotTimer t3; 
+OneShotTimer t1;
+OneShotTimer t2;
+OneShotTimer t3;
 OneShotTimer t4;
 
 uint64_t trigcnt = 0; // global, incrementing trigger count
