@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 fauxspec.py: A fake 2D spectrometer data source. Triggered to display image data. Cycles through a folder full of images, displaying each one after the other on an external display when a trigger arrives.
+This version is externally triggered.
 
 References:
 1. OpenCV API: https://docs.opencv.org/4.7.0/index.html
@@ -13,7 +14,27 @@ import cv2
 import os
 import glob
 import numpy as np
+
+import RPi.GPIO as GPIO
+import signal
+import sys
+
 from time import sleep, perf_counter
+
+
+trigcnt = 0
+triggered = False
+
+def signal_handler(sig, frame):
+    GPIO.cleanup()
+    sys.exit(0)
+
+def exti_callback(channel):
+    # When trigger arrives, increment trigger count and request image display
+    global trigcnt, triggered
+    trigcnt += 1
+    if not triggered:
+        triggered = True
 
 
 if __name__ == "__main__":
@@ -48,32 +69,39 @@ if __name__ == "__main__":
 
     background = cv2.imread(bg_filename, cv2.IMREAD_REDUCED_GRAYSCALE_4)
     
+    
+    #### Initialize GPIO interrupt (external trigger)
+    EXTI_GPIO = 16
+    
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(EXTI_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(EXTI_GPIO, GPIO.RISING, 
+        callback=exti_callback, bouncetime=200)
+    
+    signal.signal(signal.SIGINT, signal_handler) # Catch Ctrl+c for cleanup
+    
     trigcnt = 0
     
-    def callback_trigger():
-        global trigcnt
-        trigcnt += 1
-        t1_start = perf_counter()
-        index_img = trigcnt % NUM_IMS
-        cv2.imshow("espec", ims[index_img])
-        retval=cv2.waitKey(50) # Flash signal for about 50 milliseconds (might take longer to process updates)
-        if retval != -1: # key was pressed
-            return retval
-        cv2.imshow("espec", background)
-        retval=cv2.waitKey(50) # Gives GUI another 50 dedicated milliseconds to process updates
-        if retval != -1: # key was pressed
-            return retval
-        t1_stop = perf_counter()
-        print("Elapsed time: {} milliseconds".format(np.round((t1_stop - t1_start)*1000)))
-        return -1
-        
-    for i in range(20):
-        retval = callback_trigger()
-        if retval != -1: # key was pressed
-            break
-        retval=cv2.waitKey(500)
-        if retval != -1: # key was pressed
-            break
+    while True:                
+        if triggered:
+            t1_start = perf_counter()
+            index_img = trigcnt % NUM_IMS
+            cv2.imshow("espec", ims[index_img])
+            retval=cv2.waitKey(50) # Flash signal for about 50 milliseconds (might take longer to process updates)
+            if retval != -1: # key was pressed
+                break
+            cv2.imshow("espec", background)
+            retval=cv2.waitKey(50) # Gives GUI another 50 dedicated milliseconds to process updates
+            if retval != -1: # key was pressed
+                break
+            t1_stop = perf_counter()
+            print("Elapsed time: {} milliseconds".format(np.round((t1_stop - t1_start)*1000)))
+            
+            triggered = False
+        else:
+            retval=cv2.waitKey(1) # Stall for 10 milliseconds and then poll again again
+            if retval != -1: # key was pressed
+                break
 
         
     # closing all open windows
