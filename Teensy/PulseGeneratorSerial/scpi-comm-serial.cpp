@@ -72,7 +72,8 @@ void SCPI_Arduino_Setup() {
           scpi_error_queue_data, SCPI_ERROR_QUEUE_SIZE);
 
   Serial.begin(9600);
-  while (!Serial); // wait for serial to finish initializing
+  unsigned long tstart = millis();
+  while (!Serial and (millis() - tstart) < 3000); // wait for serial to finish initializing, up to three seconds timeout before moving on
 }
 
 // Call this each iteration of the "loop()" in the .ino file

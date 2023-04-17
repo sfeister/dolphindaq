@@ -177,7 +177,7 @@ void setup() {
 void loop() {
   // Blink the heartbeat LED
   if (heartbeatMetro.check() == 1) { // check if the metro has passed its interval
-    heartbeatState = ~heartbeatState; // toggle LED state
+    heartbeatState = !heartbeatState; // toggle LED state
     digitalWriteFast(HEARTBEAT_LED_PIN, heartbeatState); // write LED state to pin
   }
 
