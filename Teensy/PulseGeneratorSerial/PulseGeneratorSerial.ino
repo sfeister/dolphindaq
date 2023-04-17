@@ -50,6 +50,7 @@ uint8_t heartbeatState = LOW;
 uint8_t trigLedState = LOW;
 
 uint8_t trig_mode = 0; // 0 for internal triggering, 1 for external triggering
+bool out_enabled = true; // whether outputs are enabled
 
 uint32_t ch1_delay_us_pr = 100; // preload values
 uint32_t ch2_delay_us_pr = 100;
@@ -71,7 +72,9 @@ Metro heartbeatMetro = Metro(500);
 void internal_trig_callback() {
   if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 0)) {
     trigcnt++;
-    fire_pulses();
+    if (out_enabled) {
+      fire_pulses();    
+    }
   }
 }
 
@@ -79,7 +82,9 @@ void internal_trig_callback() {
 void ISR_exttrig() {
   if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 1)) {
     trigcnt++;
-    fire_pulses();
+    if (out_enabled) {
+      fire_pulses();    
+    }
   }
 }
 
@@ -182,7 +187,6 @@ void loop() {
   }
 
   if (await_update) {
-      await_update = false;
       periodTimer.end();
       tref.stop();
       t1.stop();
@@ -196,8 +200,10 @@ void loop() {
       ch2_delay_us = ch2_delay_us_pr;
       ch3_delay_us = ch3_delay_us_pr;
       ch4_delay_us = ch4_delay_us_pr;
-
+      
       double period_us = (1.0 / reprate_hz) * 1000000; // convert frequency (Hz) to time (microseconds)
+
+      await_update = false;
       periodTimer.begin(internal_trig_callback, period_us);
   }
   

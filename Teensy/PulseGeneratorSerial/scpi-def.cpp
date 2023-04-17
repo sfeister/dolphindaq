@@ -60,6 +60,7 @@ extern const uint32_t ch2_delay_us;
 extern const uint32_t ch3_delay_us;
 extern const uint32_t ch4_delay_us;
 
+extern bool out_enabled;
 extern bool await_update;
 
 
@@ -162,6 +163,24 @@ static scpi_result_t DAQ_DelayChannelN(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+static scpi_result_t DAQ_OutputEnabled(scpi_t * context) {
+    bool param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamBool(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    out_enabled = param1;
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_OutputEnabledQ(scpi_t * context) {
+    SCPI_ResultBool(context, out_enabled);
+
+    return SCPI_RES_OK;
+}
 
 const scpi_command_t scpi_commands[] = {
     /* IEEE Mandated Commands (SCPI std V1999.0 4.1.1) */
@@ -197,6 +216,8 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "DELay:CHannel#", .callback = DAQ_DelayChannelN,},
     {.pattern = "REPrate?", .callback = DAQ_ReprateQ,},
     {.pattern = "REPrate", .callback = DAQ_Reprate,},
+    {.pattern = "OUTPut:ENABled?", .callback = DAQ_OutputEnabledQ,},
+    {.pattern = "OUTPut:ENABled", .callback = DAQ_OutputEnabled,},
 
     {"SYSTem:COMMunication:TCPIP:CONTROL?", SCPI_SystemCommTcpipControlQ, 0},
 
