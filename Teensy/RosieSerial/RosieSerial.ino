@@ -37,7 +37,7 @@ bool await_update = false; // Boolean: 1 if there are new updates to the device 
 bool out_enabled = true; // Boolean: 1 if Rosie's decimated trigger outputs are enabled.
 bool out_enabled_preload = true; // Boolean: 1 if Rosie's decimated trigger outputs are enabled. (Preload)
 uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
-uint32_t decimate = 1; // The ratio of external triggers to acquisition triggers. If decimate = 1, no decimation. If decimate = 2, every other trigger results in image acquisition. If decimate = 10, every tenth trigger results in image acquisition. Etc.
+uint32_t decimate = 100; // The ratio of external triggers to acquisition triggers. If decimate = 1, no decimation. If decimate = 2, every other trigger results in image acquisition. If decimate = 10, every tenth trigger results in image acquisition. Etc.
 uint64_t out_first = 0; // The first trigger number, of the most recent output enabled
 uint64_t out_count = 0; // The count of triggers output since enabling outputs / restarting DAQ
 
