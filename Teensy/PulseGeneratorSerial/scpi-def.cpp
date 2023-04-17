@@ -50,9 +50,16 @@
 /// EXTERNAL VARIABLES (from PulseGeneratorSerial.ino)
 extern uint64_t trigcnt;
 extern double reprate_hz;
-extern uint32_t ch1_delay_us_pr
-extern uint32_t ch2_delay_us_pr
-extern uint32_t ch3_delay_us_pr
+extern uint32_t ch1_delay_us_pr;
+extern uint32_t ch2_delay_us_pr;
+extern uint32_t ch3_delay_us_pr;
+extern uint32_t ch4_delay_us_pr;
+
+extern const uint32_t ch1_delay_us;
+extern const uint32_t ch2_delay_us;
+extern const uint32_t ch3_delay_us;
+extern const uint32_t ch4_delay_us;
+
 extern bool await_update;
 
 
@@ -89,32 +96,72 @@ static scpi_result_t DAQ_Reprate(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    reprate_hz = constrain(param, 0.10, 5000.0); // Constrain rep rate to between 0.1 Hz and 5000 Hz, somewhat arbitrarily, to avoid lockouts
+    reprate_hz = constrain(param1, 0.10, 5000.0); // Constrain rep rate to between 0.1 Hz and 5000 Hz, somewhat arbitrarily, to avoid lockouts
     await_update = true;
 
     return SCPI_RES_OK;
 }
 
 
-static scpi_result_t DAQ_DelayChannel1Q(scpi_t * context) {
-    SCPI_ResultUInt32(context, refFreqHz);
+static scpi_result_t DAQ_DelayChannelNQ(scpi_t * context) {
+    int32_t command_numbers[1];
+    SCPI_CommandNumbers(context, command_numbers, 1, 0);
+    
+    switch(command_numbers[0]) {
+      case 1:
+        SCPI_ResultUInt32(context, ch1_delay_us);
+        break;
+      case 2:
+        SCPI_ResultUInt32(context, ch2_delay_us);
+        break;        
+      case 3:
+        SCPI_ResultUInt32(context, ch3_delay_us);
+        break;    
+      case 4:
+        SCPI_ResultUInt32(context, ch4_delay_us);
+        break;
+      default:
+        return SCPI_RES_ERR;
+    }
 
     return SCPI_RES_OK;
 }
 
-static scpi_result_t DAQ_DelayChannel1(scpi_t * context) {
+static scpi_result_t DAQ_DelayChannelN(scpi_t * context) {
     uint32_t param1;
 
+    int32_t command_numbers[1];
+    SCPI_CommandNumbers(context, command_numbers, 1, 0);
+    
     /* read first parameter if present */
     if (!SCPI_ParamUInt32(context, &param1, TRUE)) {
         return SCPI_RES_ERR;
     }
 
-    ch1_delay_us_pr = constrain(param1, (uint32_t)5, (uint32_t)200000); // arbitrary constraints on delays, 5 microseconds to 200 milliseconds
+    uint32_t ch_delay_us_pr = constrain(param1, (uint32_t)5, (uint32_t)200000); // arbitrary constraints on delays, 5 microseconds to 200 milliseconds
+
+   switch(command_numbers[0]) {
+      case 1:
+        ch1_delay_us_pr = ch_delay_us_pr;
+        break;
+      case 2:
+        ch2_delay_us_pr = ch_delay_us_pr;
+        break;        
+      case 3:
+        ch3_delay_us_pr = ch_delay_us_pr;
+        break;    
+      case 4:
+        ch4_delay_us_pr = ch_delay_us_pr;
+        break;
+      default:
+        return SCPI_RES_ERR;
+    }
+    
     await_update = true;
 
     return SCPI_RES_OK;
 }
+
 
 const scpi_command_t scpi_commands[] = {
     /* IEEE Mandated Commands (SCPI std V1999.0 4.1.1) */
@@ -146,8 +193,8 @@ const scpi_command_t scpi_commands[] = {
     /* DAQ */
     {.pattern = "TRIGger:COUNt?", .callback = DAQ_TriggerCountQ,},
     {.pattern = "TRIGger:COUNt", .callback = DAQ_TriggerCount,},
-    {.pattern = "DELay:CHannel1?", .callback = DAQ_DelayChannel1Q,},
-    {.pattern = "DELay:CHannel1", .callback = DAQ_DelayChannel1,},
+    {.pattern = "DELay:CHannel#?", .callback = DAQ_DelayChannelNQ,},
+    {.pattern = "DELay:CHannel#", .callback = DAQ_DelayChannelN,},
     {.pattern = "REPrate?", .callback = DAQ_ReprateQ,},
     {.pattern = "REPrate", .callback = DAQ_Reprate,},
 
