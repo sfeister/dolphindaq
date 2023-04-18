@@ -1,17 +1,15 @@
 /* Rosie
     Decimates incoming triggers.
 
-    Built for a Teensy 4.1 board
+    Built for a Teensy 4.1 board or Teensy 3.2 board
+    On Teensy 3.2, delay between trigger input and trigger output is about 3 microseconds
 
     PINS:
       23    |   Input, external trigger
+      12     |   Output, decimated trigger
       3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
       4     |   Output, blue LED indicating that a trigger has arrived.
       19    |   Output, Reference. HIGH at time zero, LOW when all pulses have completed firing
-      9     |   Output, Channel 1
-      10    |   Output, Channel 2
-      11    |   Output, Channel 3
-      12    |   Output, Channel 4
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
     
@@ -19,7 +17,7 @@
 */
 
 #include <Arduino.h>
-#include <Metro.h> //non-interrupt, low-precision timing
+#include <Chrono.h> //non-interrupt, low-precision timing
 #include "scpi-def.h"
 #include "TeensyTimerTool.h"
 using namespace TeensyTimerTool;
@@ -28,7 +26,7 @@ using namespace TeensyTimerTool;
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN 3
 #define TRIGGERED_LED_PIN 4 // Pin that is active for a brief time after each trigger is being output
-#define TRIGOUT_PIN 9
+#define TRIGOUT_PIN 12
 #define WIDTH_US 10 // (lower bound for) pulse width in microseconds
 
 OneShotTimer t1;
@@ -41,12 +39,9 @@ uint32_t decimate = 100; // The ratio of external triggers to acquisition trigge
 uint64_t out_first = 0; // The first trigger number, of the most recent output enabled
 uint64_t out_count = 0; // The count of triggers output since enabling outputs / restarting DAQ
 
-uint8_t heartbeatState = LOW;
-uint8_t trigLedState = LOW;
-
-
-// Instantiate a metro object for the led heartbeat, and set the interval to 500 milliseconds
-Metro heartbeatMetro = Metro(500);
+// Instantiate a Chrono object for the led heartbeat and LED trigger display
+Chrono heartbeatChrono; 
+Chrono trigLEDChrono; 
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
@@ -63,6 +58,8 @@ void ISR_exttrig() {
           out_first = trigcnt; // starting trigger since enabling
         }
         out_count++;
+        digitalWriteFast(TRIGGERED_LED_PIN, HIGH);    
+        trigLEDChrono.restart();
       }
     }
 }
@@ -106,9 +103,14 @@ void setup() {
 
 void loop() {
   // Blink the heartbeat LED
-  if (heartbeatMetro.check() == 1) { // check if the metro has passed its interval
-    heartbeatState = !heartbeatState; // toggle LED state
-    digitalWriteFast(HEARTBEAT_LED_PIN, heartbeatState); // write LED state to pin
+  if (heartbeatChrono.hasPassed(500)) { // check if the 500 milliseconds of heartbeat have elapsed
+    digitalToggleFast(HEARTBEAT_LED_PIN); // write LED state to pin
+    heartbeatChrono.restart();
+  }
+
+  if (trigLEDChrono.hasPassed(5, true)) {
+    trigLEDChrono.stop();
+    digitalWriteFast(TRIGGERED_LED_PIN, LOW);
   }
 
   // Check for settings updates

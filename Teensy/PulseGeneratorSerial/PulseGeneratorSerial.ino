@@ -10,14 +10,15 @@
     Tested to work fine at repetition rates up to or even slightly beyond 1 kHz.
 
     PINS:
-      23    |   Input, external trigger (optional)
-      3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
-      4     |   Output, blue LED indicating that a trigger has arrived.
-      19    |   Output, Reference. HIGH at time zero, LOW when all pulses have completed firing
+      23    |   Input, external trigger (optional; internally triggered by default)
       9     |   Output, Channel 1
       10    |   Output, Channel 2
       11    |   Output, Channel 3
       12    |   Output, Channel 4
+      3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
+      4     |   Output, blue LED indicating that a trigger has arrived.
+      19    |   Output, Reference. HIGH at time zero, LOW when all pulses have completed firing
+
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
     
@@ -25,7 +26,6 @@
 */
 
 #include <Arduino.h>
-#include <Metro.h> //non-interrupt, low-precision timing
 #include <Chrono.h> //non-interrupt, low-precision timing
 #include "scpi-def.h"
 #include "TeensyTimerTool.h"
