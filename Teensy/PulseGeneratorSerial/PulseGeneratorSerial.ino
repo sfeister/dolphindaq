@@ -4,14 +4,15 @@
     With the arrival of each new external / internal trigger pulse:
       A global counter is incremented
       
-    Built for a Teensy 4.1 board
+    Built for a Teensy 4.1 board or Teensy 3.2 board.
+    Based on testing with a Teensy 3.2 board, expect in the range 20-microsecond precision. Jitter is less than 5 microseconds.
 
     PINS:
       23    |   Input, external trigger (optional)
       3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
       4     |   Output, blue LED indicating that a trigger has arrived.
       19    |   Output, Reference. HIGH at time zero, LOW when all pulses have completed firing
-      9    |   Output, Channel 1
+      9     |   Output, Channel 1
       10    |   Output, Channel 2
       11    |   Output, Channel 3
       12    |   Output, Channel 4
@@ -23,6 +24,7 @@
 
 #include <Arduino.h>
 #include <Metro.h> //non-interrupt, low-precision timing
+#include <Chrono.h> //non-interrupt, low-precision timing
 #include "scpi-def.h"
 #include "TeensyTimerTool.h"
 using namespace TeensyTimerTool;
@@ -43,10 +45,10 @@ OneShotTimer t1;
 OneShotTimer t2;
 OneShotTimer t3;
 OneShotTimer t4;
+OneShotTimer tled; // LED indicator that a trigger has arrived
 
 uint64_t trigcnt = 0; // global, incrementing trigger count
 bool await_update = false; // whether to pause to update the frequency, etc
-uint8_t heartbeatState = LOW;
 uint8_t trigLedState = LOW;
 
 uint8_t trig_mode = 0; // 0 for internal triggering, 1 for external triggering
@@ -63,11 +65,12 @@ uint32_t ch2_delay_us = ch2_delay_us_pr;
 uint32_t ch3_delay_us = ch3_delay_us_pr;
 uint32_t ch4_delay_us = ch3_delay_us_pr;
 
-double reprate_hz = 20;  // Start out at 20 Hz period
+double reprate_hz = 10;  // Start out at 10 Hz repetition rate for pulses
 double period_us = (1.0 / reprate_hz) * 1000000; // convert frequency (Hz) to time (microseconds)
 
-// Instantiate a metro object for the led heartbeat, and set the interval to 500 milliseconds
-Metro heartbeatMetro = Metro(500);
+// Instantiate a Chrono object for the led heartbeat and LED trigger display
+Chrono heartbeatChrono; 
+Chrono trigLEDChrono; 
 
 void internal_trig_callback() {
   if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 0)) {
@@ -98,6 +101,8 @@ void fire_pulses() {
   t3.trigger(ch3_delay_us);
   t4.trigger(ch4_delay_us);
   tref.trigger(max(ch1_delay_us, max(ch2_delay_us, max(ch3_delay_us, ch4_delay_us))) + WIDTH_US + 100);
+  digitalWriteFast(TRIGGERED_LED_PIN, HIGH);    
+  trigLEDChrono.restart();
 }
 
 
@@ -154,6 +159,7 @@ void setup() {
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
   pinMode(TRIGGERED_LED_PIN, OUTPUT);
+  pinMode(REF_PIN, OUTPUT);
 
   // set primary and secondary channel output pins
   pinMode(CH1_PIN, OUTPUT);
@@ -161,7 +167,7 @@ void setup() {
   pinMode(CH3_PIN, OUTPUT);
   pinMode(CH4_PIN, OUTPUT);
 
-  // Setup the channel timers
+  // Setup the output timers
   t1.begin(ch1_callback);
   t2.begin(ch2_callback);
   t3.begin(ch3_callback);
@@ -181,11 +187,16 @@ void setup() {
 
 void loop() {
   // Blink the heartbeat LED
-  if (heartbeatMetro.check() == 1) { // check if the metro has passed its interval
-    heartbeatState = !heartbeatState; // toggle LED state
-    digitalWriteFast(HEARTBEAT_LED_PIN, heartbeatState); // write LED state to pin
+  if (heartbeatChrono.hasPassed(500)) { // check if the 500 milliseconds of heartbeat have elapsed
+    digitalToggleFast(HEARTBEAT_LED_PIN); // write LED state to pin
+    heartbeatChrono.restart();
   }
-
+  
+  if (trigLEDChrono.hasPassed(5, true)) {
+    trigLEDChrono.stop();
+    digitalWriteFast(TRIGGERED_LED_PIN, LOW);
+  }
+  
   if (await_update) {
       periodTimer.end();
       tref.stop();
