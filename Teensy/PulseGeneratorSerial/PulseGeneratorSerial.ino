@@ -7,6 +7,8 @@
     Built for a Teensy 4.1 board or Teensy 3.2 board.
     Based on testing with a Teensy 3.2 board, expect in the range 20-microsecond precision. Jitter is less than 5 microseconds.
 
+    Tested to work fine at repetition rates up to or even slightly beyond 1 kHz.
+
     PINS:
       23    |   Input, external trigger (optional)
       3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
