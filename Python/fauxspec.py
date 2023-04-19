@@ -3,6 +3,11 @@
 """
 fauxspec.py: A fake 2D spectrometer data source. Triggered to display image data. Cycles through a folder full of images, displaying each one after the other on an external display when a trigger arrives.
 
+Requires "unclutter" to be installed in order to remove the cursor from the window.
+Install this with "sudo apt install unclutter" before running this script.
+
+Trigger is wired into the Pi.
+
 References:
 1. OpenCV API: https://docs.opencv.org/4.7.0/index.html
 
@@ -17,10 +22,11 @@ import numpy as np
 import RPi.GPIO as GPIO
 import signal
 import sys
+import subprocess
 
 from time import sleep, perf_counter
 
-TRIGD_GPIO = 26
+TRIGD_GPIO = 26 # Using this GPIO very oddly, as a global semaphore, because I couldn't get global variables working right with the interrupt
 EXTI_GPIO = 16
 
 global trigcnt, triggered
@@ -99,6 +105,7 @@ if __name__ == "__main__":
         return -1
     
     cv2.setWindowProperty("espec", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    hidemouse = subprocess.Popen(["unclutter","-idle","0"])
     
     while True:
         if GPIO.input(TRIGD_GPIO):
@@ -106,9 +113,11 @@ if __name__ == "__main__":
             if retval != -1: # key was pressed
                 break
             GPIO.output(TRIGD_GPIO, 0)
-        retval=cv2.waitKey(500)
+        retval=cv2.waitKey(1)
         if retval != -1: # key was pressed
             break
 
     # closing all open windows
     cv2.destroyAllWindows()
+    
+    hidemouse.terminate()
