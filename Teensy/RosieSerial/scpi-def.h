@@ -48,7 +48,7 @@
 #define SCPI_INPUT_BUFFER_LENGTH 256
 #define SCPI_ERROR_QUEUE_SIZE 17
 #define SCPI_IDN1 "DOLPHINDAQ"
-#define SCPI_IDN2 "Teensy ROSIE"
+#define SCPI_IDN2 "Teensy Rosie"
 #define SCPI_IDN3 "00"
 #define SCPI_IDN4 "20230418"
 
