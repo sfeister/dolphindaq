@@ -3,6 +3,7 @@
 
 record(stringin,"TEENSYROSIE:info"){
     field(DESC,"Device identification")
+    field(SCAN,"10 second")
 	field(DTYP,"stream")
 	field(INP,"@teensyrosie.proto info teensyrosie_ino")
     field(PINI,"YES")
