@@ -22,6 +22,8 @@
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
     
+    Works for delays up to about 10 milliseconds.
+
     Written by Scott Feister on August 4, 2023.
 */
 
@@ -42,11 +44,11 @@ using namespace TeensyTimerTool;
 #define WIDTH_US 10 // (lower bound for) pulse width in microseconds
 
 IntervalTimer periodTimer;
-OneShotTimer tref(TCK64);
-OneShotTimer t1(TCK64);
-OneShotTimer t2(TCK64);
-OneShotTimer t3(TCK64);
-OneShotTimer t4(TCK64);
+OneShotTimer tref;
+OneShotTimer t1;
+OneShotTimer t2;
+OneShotTimer t3;
+OneShotTimer t4;
 
 uint64_t trigcnt = 0; // global, incrementing trigger count
 bool await_update = false; // whether to pause to update the frequency, etc
@@ -227,6 +229,14 @@ void loop() {
       
       double period_us = (1.0 / reprate_hz) * 1000000; // convert frequency (Hz) to time (microseconds)
 
+      /* 
+      Serial.printf("t1  %8.2f milliseconds\n",t1.getMaxPeriod()*1000);
+      Serial.printf("t2  %8.2f milliseconds\n",t2.getMaxPeriod()*1000);
+      Serial.printf("t3  %8.2f milliseconds\n",t3.getMaxPeriod()*1000);
+      Serial.printf("t4  %8.2f milliseconds\n",t4.getMaxPeriod()*1000);
+      Serial.printf("tref  %8.2f milliseconds\n",tref.getMaxPeriod()*1000);
+      */ // DEBUG
+      
       await_update = false;
       periodTimer.begin(internal_trig_callback, period_us);
   }

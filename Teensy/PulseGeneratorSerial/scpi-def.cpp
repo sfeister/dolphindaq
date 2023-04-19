@@ -145,7 +145,7 @@ static scpi_result_t DAQ_DelayChannelN(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    uint32_t ch_delay_us_pr = constrain(param1, (uint32_t)5, (uint32_t)200000); // arbitrary constraints on delays, 5 microseconds to 200 milliseconds
+    uint32_t ch_delay_us_pr = constrain(param1, (uint32_t)5, (uint32_t)10000); // arbitrary constraints on delays, 5 microseconds to 10 milliseconds (timers past this can have errors)
 
    switch(command_numbers[0]) {
       case 1:
