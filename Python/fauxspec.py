@@ -8,6 +8,8 @@ Install this with "sudo apt install unclutter" before running this script.
 
 Trigger is wired into the Pi.
 
+Note that on_update() methods need to yield coroutine control in some fashion. See https://dls-controls.github.io/pythonSoftIOC/master/explanations/asyncio-cothread-differences.html
+
 References:
 1. OpenCV API: https://docs.opencv.org/4.7.0/index.html
 
@@ -23,6 +25,10 @@ import RPi.GPIO as GPIO
 import signal
 import sys
 import subprocess
+
+from softioc import softioc, builder
+import cothread
+import logging
 
 from time import sleep, perf_counter
 
@@ -43,8 +49,16 @@ def exti_callback(channel):
     if not GPIO.input(TRIGD_GPIO):
         GPIO.output(TRIGD_GPIO, 1)
     
+def update_trigcnt(value):
+    global trigcnt
+    global spec_trigcnt
+    cothread.Yield()
+    print("Updating trigger count to: {}".format(value))
+    trigcnt = value
+    spec_trigcnt.set(trigcnt)
 
 if __name__ == "__main__":
+    ### INITIALIZE IMAGES
     # imgdir = r"C:\Users\scott\Documents\DATA\2023-03-24 Sample Particle Spectrometer Images\SampleImages"
     imgdir = "/home/pi/fauxspec/SampleImages"
     pnglist = glob.glob(os.path.join(imgdir, r'image*.png'))
@@ -76,21 +90,35 @@ if __name__ == "__main__":
 
     background = cv2.imread(bg_filename, cv2.IMREAD_COLOR)
     
-    #### Initialize GPIO interrupt (external trigger)
-    
+
+    ### INITIALIZE EPICS SERVER
+    logging.basicConfig(level=logging.DEBUG)
+
+    # Set the record prefix
+    builder.SetDeviceName("FAUXSPEC")
+
+    ## Create some records
+    spec_info = builder.stringIn("info", initial_value="DolphinDAQ,FauxSpec,#00,20230418")
+    spec_trigcnt = builder.longIn("trigger:count", initial_value=trigcnt)
+    spec_trigcnt_set = builder.longOut("trigger:count:set", initial_value=trigcnt, on_update=update_trigcnt, always_update=True) # always_update being true allows us to repeatedly set this value to zero as necessary, with that value still being passed through
+            
+    # Boilerplate get the IOC started
+    builder.LoadDatabase()
+    softioc.iocInit()
+
+
+    ### INITIALIZE GPIO INTERRUPT (FOR EXTERNAL TRIGGER)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(TRIGD_GPIO, GPIO.OUT)
     GPIO.setup(EXTI_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(EXTI_GPIO, GPIO.RISING, 
         callback=exti_callback, bouncetime=200)
     
-    signal.signal(signal.SIGINT, signal_handler) # Catch Ctrl+c for cleanup
-    
-    trigcnt = 0
-    
+    signal.signal(signal.SIGINT, signal_handler) # Catch Ctrl+c for cleanup   
     
     def callback_trigger():
         t1_start = perf_counter()
+        spec_trigcnt.set(trigcnt)
         index_img = trigcnt % NUM_IMS
         cv2.imshow("espec", ims[index_img])
         retval=cv2.waitKey(50) # Flash signal for about 50 milliseconds (might take longer to process updates)
@@ -113,9 +141,10 @@ if __name__ == "__main__":
             if retval != -1: # key was pressed
                 break
             GPIO.output(TRIGD_GPIO, 0)
-        retval=cv2.waitKey(1)
+        retval=cv2.waitKey(1) # delays for 1 ms
         if retval != -1: # key was pressed
             break
+        cothread.Yield()
 
     # closing all open windows
     cv2.destroyAllWindows()
