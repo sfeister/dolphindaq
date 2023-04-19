@@ -26,6 +26,23 @@ record(int64out,"TEENSYPULSE:trigger:count:set"){
     field(OUT,"@teensypulse.proto TriggerCount teensypulse_ino")
     }
 
+record(bi,"TEENSYPULSE:output:enabled"){
+    field(DESC,"Get whether TTL pulse output is enabled")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(ZNAM,"False")
+	field(ONAM,"True")
+    field(INP,"@teensypulse.proto OutputEnabledQ teensypulse_ino")
+    }
+
+record(bo,"TEENSYPULSE:output:enabled:set"){
+    field(DESC,"Set whether TTL pulse output is enabled")
+	field(DTYP,"stream")
+	field(ZNAM,"False")
+	field(ONAM,"True")
+    field(OUT,"@teensypulse.proto OutputEnabled teensypulse_ino")
+    }
+
 record(ao,"TEENSYPULSE:reprate:set"){
     field (DESC, "Set current repetition rate of pulse generator")
 	field(DTYP,"stream")

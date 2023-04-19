@@ -29,6 +29,17 @@ TriggerCount {
 
 ##### TeensyPulse-Specific #####
 
+OutputEnabledQ {
+        out ":OUTPut:ENABled?";
+        in "%i";
+    }
+
+OutputEnabled {
+        out ":OUTPut:ENABled %i";
+        @init { OutputEnabledQ; }
+    }
+
+
 # Repetition rate is a float (positive-definite)
 # Use analog output record type
 ReprateQ {
