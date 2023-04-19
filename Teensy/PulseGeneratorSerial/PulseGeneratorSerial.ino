@@ -75,21 +75,17 @@ Chrono heartbeatChrono;
 Chrono trigLEDChrono; 
 
 void internal_trig_callback() {
-  if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 0)) {
+  if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 0) && out_enabled) {
     trigcnt++;
-    if (out_enabled) {
-      fire_pulses();    
-    }
+    fire_pulses();    
   }
 }
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
-  if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 1)) {
+  if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 1) && out_enabled) {
     trigcnt++;
-    if (out_enabled) {
-      fire_pulses();    
-    }
+    fire_pulses();
   }
 }
 
