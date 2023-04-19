@@ -42,12 +42,11 @@ using namespace TeensyTimerTool;
 #define WIDTH_US 10 // (lower bound for) pulse width in microseconds
 
 IntervalTimer periodTimer;
-OneShotTimer tref;
-OneShotTimer t1;
-OneShotTimer t2;
-OneShotTimer t3;
-OneShotTimer t4;
-OneShotTimer tled; // LED indicator that a trigger has arrived
+OneShotTimer tref(TCK64);
+OneShotTimer t1(TCK64);
+OneShotTimer t2(TCK64);
+OneShotTimer t3(TCK64);
+OneShotTimer t4(TCK64);
 
 uint64_t trigcnt = 0; // global, incrementing trigger count
 bool await_update = false; // whether to pause to update the frequency, etc
