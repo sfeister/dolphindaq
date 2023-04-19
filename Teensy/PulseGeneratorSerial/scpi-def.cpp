@@ -89,6 +89,12 @@ static scpi_result_t DAQ_ReprateQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+static scpi_result_t DAQ_AwaitQ(scpi_t * context) {
+    SCPI_ResultBool(context, await_update);
+
+    return SCPI_RES_OK;
+}
+
 static scpi_result_t DAQ_Reprate(scpi_t * context) {
     double param1;
 
@@ -214,6 +220,7 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "TRIGger:COUNt", .callback = DAQ_TriggerCount,},
     {.pattern = "DELay:CHannel#?", .callback = DAQ_DelayChannelNQ,},
     {.pattern = "DELay:CHannel#", .callback = DAQ_DelayChannelN,},
+    {.pattern = "AWAIT?", .callback = DAQ_AwaitQ,},
     {.pattern = "REPrate?", .callback = DAQ_ReprateQ,},
     {.pattern = "REPrate", .callback = DAQ_Reprate,},
     {.pattern = "OUTPut:ENABled?", .callback = DAQ_OutputEnabledQ,},

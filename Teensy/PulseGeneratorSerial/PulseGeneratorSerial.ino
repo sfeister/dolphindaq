@@ -77,7 +77,16 @@ void internal_trig_callback() {
   if ((digitalReadFast(REF_PIN) == LOW) && (!await_update) && (trig_mode == 0) && out_enabled) {
     trigcnt++;
     fire_pulses();    
-  }
+  } /* else {
+    Serial.print("REF_PIN: ");
+    Serial.print(digitalReadFast(REF_PIN));
+    Serial.print(", await_update: ");
+    Serial.print(await_update);
+    Serial.print(", trig_mode: ");
+    Serial.print(trig_mode);
+    Serial.print(", out_enabled: ");
+    Serial.println(out_enabled);
+  } */ //DEBUG
 }
 
 // external trig callback interrupt service routine
@@ -203,7 +212,14 @@ void loop() {
       t4.stop();
 
       delayMicroseconds(100); // short superstitious delay to clear things out
-      
+
+      // Bring all triggered outputs back to low, in case they were stuck high when we cut them off
+      digitalWriteFast(REF_PIN, LOW);
+      digitalWriteFast(CH1_PIN, LOW);
+      digitalWriteFast(CH2_PIN, LOW);
+      digitalWriteFast(CH3_PIN, LOW);
+      digitalWriteFast(CH4_PIN, LOW);
+
       ch1_delay_us = ch1_delay_us_pr; // Update with preload values
       ch2_delay_us = ch2_delay_us_pr;
       ch3_delay_us = ch3_delay_us_pr;
