@@ -41,7 +41,7 @@ using namespace TeensyTimerTool;
 #define CH2_PIN 10
 #define CH3_PIN 11
 #define CH4_PIN 12
-#define WIDTH_US 10 // (lower bound for) pulse width in microseconds
+#define WIDTH_US 100 // (lower bound for) pulse width in microseconds
 
 IntervalTimer periodTimer;
 OneShotTimer tref;
