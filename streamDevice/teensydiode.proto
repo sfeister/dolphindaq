@@ -1,0 +1,61 @@
+# DolphinDAQ photodiode protocol file
+# Built by examining examples at: https://paulscherrerinstitute.github.io/StreamDevice/protocol.html#gen
+# And also by examining input/output formats at https://paulscherrerinstitute.github.io/StreamDevice/formats.html
+
+# TODO: Implement the YARR
+
+Terminator = CR LF;
+
+##### Common #####
+
+info {
+	ExtraInput = Ignore;
+	out "*IDN?";
+	in "%39c";
+}
+
+debug {
+   ExtraInput = Ignore;
+   out "%s";
+   in "%39c";
+}
+
+
+#### Photodiode #####
+
+
+DAQ_TriggerCountQ {
+        out "TRIGger:COUNt?";
+        in "%u";
+    }
+
+DAQ_TriggerCount {
+        out "TRIGger:COUNt %u";
+        @init { DAQ_TriggerCountQ; }
+    }
+
+DAQ_DiodeTraceDtQ {
+        out "DIODe:TRACe:DT?";
+        in "%f";
+    }
+
+DAQ_DiodeTraceNtQ {
+        out "DIODe:TRACe:NT?";
+        in "%f";
+    }
+
+DAQ_DiodeTraceYminQ {
+        out "DIODe:TRACe:YMIN?";
+        in "%f";
+    }
+
+DAQ_DiodeTraceYmaxQ {
+        out "DIODe:TRACe:YMAX?";
+        in "%f";
+    }
+
+DAQ_DiodeTraceYarrayQ {
+        out "DIODe:TRACe:YARRay?";
+        separator=",";
+        in "%u";
+    }

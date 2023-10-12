@@ -1,0 +1,77 @@
+# DolphinDAQ photodiode database file
+# Matches up with the proto file of the same name
+# Built by checking against supported record types at https://paulscherrerinstitute.github.io/StreamDevice/recordtypes.html
+
+##### Common #####
+
+record(stringin,"TEENSYDIODE:info"){
+    field(DESC,"Device identification")
+	field(DTYP,"stream")
+	field(INP,"@teensydiode.proto info teensydiode_ino")
+    field(PINI,"YES")
+}
+
+record(stringin,"TEENSYDIODE:debug"){
+	field(DTYP,"stream")
+	field(INP,"@teensydiode.proto debug teensydiode_ino")
+}
+
+#### Photodiode #####
+
+record(int64in,"TEENSYDIODE:trigger:count"){
+    field(DESC,"Get global trigger count")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"trigger events")
+    field(INP,"@teensydiode.proto DAQ_TriggerCountQ teensydiode_ino")
+}
+
+
+record(int64out,"TEENSYDIODE:trigger:count:set"){
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
+	field(EGU,"trigger events")
+    field(OUT,"@teensydiode.proto DAQ_TriggerCount teensydiode_ino")
+}
+
+record(ai,"TEENSYDIODE:trace:dt"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceDtQ teensydiode_ino")
+}
+
+record(ai,"TEENSYDIODE:trace:nt"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceNtQ teensydiode_ino")
+}
+
+record(ai,"TEENSYDIODE:trace:ymin"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceYminQ teensydiode_ino")
+}
+
+record(ai,"TEENSYDIODE:trace:ymax"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"Volts")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceYmaxQ teensydiode_ino")
+}
+
+record(aai,"TEENSYDIODE:trace:yarr"){
+    field(SCAN,".1 second")
+	field(DTYP,"stream")
+	field(EGU,"ADC units")
+	field(NELM,50)
+    field(FTVL,"USHORT")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceYarrayQ teensydiode_ino")
+}
+
+record(ai,"TEENSYDIODE:trace:ymax"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"Volts")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceYmaxQ teensydiode_ino")
+}
