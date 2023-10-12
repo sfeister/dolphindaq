@@ -5,12 +5,14 @@
 
     PINS:
       23    |   Input, external trigger
+      14 (A0) |   Input, phototransistor pin
       3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
       19    |   Output, Debug. HIGH when an acquisition starts, LOW when the acquisition stops
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
-    
-    Written by Scott Feister on August 4, 2023.
+    Followed (and copied portions of code from) ADC tutorials at https://github.com/pedvide/ADC
+
+    Written by Scott Feister on October 11, 2023.
 */
 
 #include <Arduino.h>
@@ -18,6 +20,7 @@
 #include "scpi-def.h"
 #include <TeensyTimerTool.h>
 using namespace TeensyTimerTool;
+#include <ddaqproto.h> // stub
 #include <pb_encode.h>
 #include <pb_decode.h>
 #include <ADC.h> // from https://github.com/pedvide/ADC
@@ -51,6 +54,7 @@ uint16_t imgbuf_trace[TRACE_NT];
 
 bool lock_adc = false; // Boolean: 1 if adc_buffer is currently being written to
 bool lock_trace = false; // Boolean: 1 if trace is currently being written to
+bool ripe_trace = false; // Boolean: 1 if Trace block is filled and ready (a new trace is "ripe" for transfer)
 bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
 uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
 uint64_t trigcnt_adc = 0; // Trigger ID that matches the trace held in adc_buf array, updated prior to buffer being filled
@@ -96,7 +100,7 @@ void ISR_exttrig() {
     if (!lock_adc) {
       lock_adc = true;
       trigcnt_adc = trigcnt;
-      abdma1.clearCompletion(); // run it again
+      abdma1.clearCompletion(); // run acquisition again
     }
 }
 
@@ -172,10 +176,15 @@ void loop() {
     lock_adc = false;
   }
 
+  if (ripe_trace) {
+    encode_trace(); // Transfers Trace block into Trace-Proto block, and also clears ripe_trace and lock_trace flags.
+    // TODO: Attempt to transfer data across the network
+  }
+
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }
 
-// ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
+// ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino (with some modifications now)
 void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
   volatile uint16_t *pbuffer = pabdma->bufferLastISRFilled();
   //Serial.println(pabdma->bufferCountLastISRFilled());
@@ -184,13 +193,48 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
     arm_dcache_delete((void *)pbuffer, sizeof(dma_adc_buff1));
   
   // Copy the buffer data into the image buffer
-  lock_trace = true;
-  for (int i = 0; i < TRACE_NT; i++) {
-    imgbuf_trace[i] = *pbuffer;
-    pbuffer++;
+  if (!lock_trace) {
+    lock_trace = true;
+    trigcnt_trace = trigcnt_adc;
+    for (int i = 0; i < TRACE_NT; i++) {
+      imgbuf_trace[i] = *pbuffer;
+      pbuffer++;
+    }
+    ripe_trace = true; // indicate that Trace block is filled and ready for usage
   }
-  lock_trace = false;
 }
 // END ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
 
+// Works with the global variable imgbuf_trace and TRACE_NT
+/*bool encode_imgbuf_trace(pb_ostream_t *stream, const pb_field_t *field, void * const *arg);
+{
+    if (!pb_encode_tag_for_field(stream, field))
+        return false;
+
+    return pb_encode_string(stream, &imgbuf_trace, TRACE_NT*sizeof(uint16_t));
+} */
+
+// Fills in structured data of an already-created data_t protobuffer (data trace protobuffer)
+void update_data_t(dolphindaq_diode_Data* data_ptr, dolphindaq_diode_Trace* trace_ptr) {
+  data_ptr->has_trace = true;
+  data_ptr->trace = *trace_ptr;
+  data_ptr->trace.has_shot_num = true;
+  data_ptr->trace.shot_num = trigcnt_trace;
+  //data_ptr->trace.yvals.funcs.encode = &encode_imgbuf_trace;
+  //data_ptr->trace.has_shot_time = true;
+  //data_ptr->trace.shot_time = to_timestamp(trigtime_trace);
+}
+
+// Encodes data from the Trace block into the Trace-Proto block, then unlocks the Trace block
+void encode_trace() {
+  /* Encode Trace within a Protobuffer "Data" message */
+  update_data_t(&data, &trace);
+  data_stream = pb_ostream_from_buffer(data_buf, sizeof(data_buf));
+  data_status = pb_encode(&data_stream, dolphindaq_diode_Data_fields, &data);
+  data_len = data_stream.bytes_written;
+
+  // TODO: Encoding error handling
+  ripe_trace = false; // reset the Trace block for update
+  lock_trace = false; // 
+}
 
