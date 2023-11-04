@@ -60,6 +60,7 @@ uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external tri
 uint64_t trigcnt_adc = 0; // Trigger ID that matches the trace held in adc_buf array, updated prior to buffer being filled
 uint64_t trigcnt_trace = 0; // Trigger ID that matches the trace held in trace (until it's filled into the trace object)
 uint16_t imgbuf_adc[TRACE_NT]; // Buffer completely re-filled by the ADC during each acquisition. Used within the ADC block of the timing.
+int i;
 
 // Instantiate a Chrono object for the led heartbeat and LED trigger display
 Chrono heartbeatChrono; 
@@ -95,6 +96,7 @@ dolphindaq_diode_Trace trace = dolphindaq_diode_Trace_init_zero;
 void ISR_exttrig() {
     // (1) Increment trigger counter
     trigcnt++;
+    CHECK_INTERRUPTS("test");
 
     // (2) Activate the ADC (TODO)
     if (!lock_adc) {
@@ -109,6 +111,7 @@ void ISR_exttrig() {
 // Impose the settings (and update unreasonable settings)
 void update_settings(dolphindaq_diode_Settings* settings_ptr) {
   dolphindaq_diode_Settings* s = settings_ptr; // shorthand
+  CHECK_INTERRUPTS("update settings");
 
   // Get current shot number
   s->has_start_shot_num = true;
@@ -126,8 +129,10 @@ void update_settings(dolphindaq_diode_Settings* settings_ptr) {
 }
 
 void setup() {
+  i = 0;
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
+  CHECK_INTERRUPTS("setup1");
 
   // ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
@@ -137,6 +142,7 @@ void setup() {
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0 /*, DMAMUX_SOURCE_ADC_ETC*/);
   abdma1.userData(initial_average_value); // save away initial starting average
+  CHECK_INTERRUPTS("setup2");
 
   // Start the dma operation..
   lock_adc = true;
@@ -144,17 +150,20 @@ void setup() {
       readPin_adc_0); // call this to setup everything before the Timer starts,
                       // differential is also possible
   adc->adc0->startTimer(50000); // frequency in Hz
+  CHECK_INTERRUPTS("setup3");
 
   // end ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
 
   // attach the external interrupt
   pinMode(EXTTRIG_PIN, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(EXTTRIG_PIN), ISR_exttrig, RISING);
+  CHECK_INTERRUPTS("setup4");
 
   update_settings(&settings);
 
   // Initialize SCPI interface
   SCPI_Arduino_Setup(); // note, begins Serial if communication style is Serial
+  CHECK_INTERRUPTS("setup5");
 }
 
 void loop() {
@@ -180,6 +189,15 @@ void loop() {
     encode_trace(); // Transfers Trace block into Trace-Proto block, and also clears ripe_trace and lock_trace flags.
     // TODO: Attempt to transfer data across the network
   }
+
+  if ((i < 1) && (millis() > 5000)) {
+    Serial.print("Digital Pin Interrupt: ");
+    Serial.println(digitalPinToInterrupt(EXTTRIG_PIN));
+    PrintInterrupts();
+    i++;
+  }
+
+  CHECK_INTERRUPTS("loop");
 
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }
@@ -238,3 +256,42 @@ void encode_trace() {
   lock_trace = false; // 
 }
 
+// Copied from https://forum.pjrc.com/threads/69145-Collision-between-interrupts-on-Teensy-4-1
+class PrintInterruptsClass
+{ public:
+  void         *func;
+  char          Name[14];
+  unsigned char Priority;
+  unsigned char FirstFound;
+};
+
+
+PrintInterruptsClass PIC[512];
+int MaxPIC=0;
+
+
+void CHECK_INTERRUPTS(char *name) // you should place it in some places where you are expecting to have some interrupts
+{ for(int i=0; i<160; i++)
+  { void *f=_VectorsRam[16+i];
+    unsigned char pri=NVIC_GET_PRIORITY(i);
+    for(int j=0; j<MaxPIC; j++)
+      if(f==PIC[j].func && pri==PIC[j].Priority) goto next;
+    PIC[MaxPIC].func=f;
+    PIC[MaxPIC].Priority=pri;
+    int j;
+    for(j=0; j<13; j++)
+      if(name[j]) PIC[MaxPIC].Name[j]=name[j]; else break;
+    PIC[MaxPIC].Name[j]=0;
+    PIC[MaxPIC++].FirstFound=i;
+next:;
+  }
+  return;
+}
+
+
+void PrintInterrupts() // it prints the first occourance of interrupt function, its priority, its interrupt number and the name that was used by CHECK_INTERRUPTS call
+{ Serial.printf("We found %d different entries of functions and its priorities:\n", MaxPIC);
+  for(int i=0; i<MaxPIC; i++)
+    Serial.printf("%p %d %d @ %s\n", PIC[i].func, PIC[i].Priority, PIC[i].FirstFound, PIC[i].Name);
+  return;
+}

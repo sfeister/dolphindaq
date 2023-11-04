@@ -66,7 +66,7 @@ uint32_t ch4_delay_us_pr = 100;
 uint32_t ch1_delay_us = ch1_delay_us_pr; // default delay
 uint32_t ch2_delay_us = ch2_delay_us_pr;
 uint32_t ch3_delay_us = ch3_delay_us_pr;
-uint32_t ch4_delay_us = ch3_delay_us_pr;
+uint32_t ch4_delay_us = ch4_delay_us_pr;
 
 double reprate_hz = 10;  // Start out at 10 Hz repetition rate for pulses
 double period_us = (1.0 / reprate_hz) * 1000000; // convert frequency (Hz) to time (microseconds)
