@@ -27,7 +27,7 @@ using namespace TeensyTimerTool;
 #include <hello.pb.h> // custom protobuffer
 #include <diode.pb.h> // custom protobuffer
 
-#define DEBUG_PIN 19 // reference / internal trigger pin
+#define DEBUG_PIN 4 // just for debugging
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN 3
 #define TRACE_NT 50
@@ -99,9 +99,11 @@ void ISR_exttrig() {
     // (2) Activate the ADC (TODO)
     if (!lock_adc) {
       lock_adc = true;
+      digitalWriteFast(DEBUG_PIN, HIGH);
       trigcnt_adc = trigcnt;
       abdma1.clearCompletion(); // run acquisition again
     }
+
 }
 
 // Fills in structured data of an already-created settings protobuffer
@@ -126,6 +128,8 @@ void update_settings(dolphindaq_diode_Settings* settings_ptr) {
 }
 
 void setup() {
+  pinMode(DEBUG_PIN, OUTPUT);
+
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
 
@@ -172,6 +176,7 @@ void loop() {
   }
   
   if (abdma1.interrupted()) {
+    digitalToggleFast(DEBUG_PIN);
     ProcessAnalogData(&abdma1, 0);
     lock_adc = false;
   }
@@ -200,6 +205,7 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
       imgbuf_trace[i] = *pbuffer;
       pbuffer++;
     }
+    pabdma->clearInterrupt();
     ripe_trace = true; // indicate that Trace block is filled and ready for usage
   }
 }
