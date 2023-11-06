@@ -30,7 +30,7 @@ using namespace TeensyTimerTool;
 #define DEBUG_PIN 4 // just for debugging
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN 3
-#define TRACE_NT 50
+#define TRACE_NT 100
 
 OneShotTimer t1;
 
@@ -99,9 +99,10 @@ void ISR_exttrig() {
     // (2) Activate the ADC (TODO)
     if (!lock_adc) {
       lock_adc = true;
-      digitalWriteFast(DEBUG_PIN, HIGH);
       trigcnt_adc = trigcnt;
-      abdma1.clearCompletion(); // run acquisition again
+      adc->adc0->startSingleRead(readPin_adc_0);
+      adc->adc0->startTimer(100000); // frequency in Hz
+      digitalToggleFast(DEBUG_PIN);
     }
 
 }
@@ -135,7 +136,7 @@ void setup() {
 
   // ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
-  adc->adc0->setAveraging(0);   // set number of averages
+  adc->adc0->setAveraging(4);   // set number of averages
   adc->adc0->setResolution(10); // set bits of resolution
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
@@ -178,6 +179,8 @@ void loop() {
   if (abdma1.interrupted()) {
     digitalToggleFast(DEBUG_PIN);
     ProcessAnalogData(&abdma1, 0);
+    adc->adc0->stopTimer();
+    abdma1.clearCompletion();
     lock_adc = false;
   }
 

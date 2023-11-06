@@ -64,7 +64,7 @@ record(aai,"TEENSYDIODE:trace:yarr"){
     field(SCAN,".1 second")
 	field(DTYP,"stream")
 	field(EGU,"ADC units")
-	field(NELM,50)
+	field(NELM,100)
     field(FTVL,"USHORT")
     field(INP,"@teensydiode.proto DAQ_DiodeTraceYarrayQ teensydiode_ino")
 }
