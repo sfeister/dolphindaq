@@ -6,7 +6,7 @@
     PINS:
       23    |   Input, external trigger
       14 (A0) |   Input, phototransistor pin
-      3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
+      built-in LED     |   Output, green status LED, heartbeat. Flashes once per second reliably.
       19    |   Output, Debug. HIGH when an acquisition starts, LOW when the acquisition stops
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
@@ -29,7 +29,7 @@ using namespace TeensyTimerTool;
 
 #define DEBUG_PIN 4 // just for debugging
 #define EXTTRIG_PIN 23
-#define HEARTBEAT_LED_PIN 3
+#define HEARTBEAT_LED_PIN LED_BUILTIN
 #define TRACE_NT 100
 
 OneShotTimer t1;

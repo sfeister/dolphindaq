@@ -15,7 +15,7 @@
       10    |   Output, Channel 2
       11    |   Output, Channel 3
       12    |   Output, Channel 4
-      3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
+      built-in LED     |   Output, green status LED, heartbeat. Flashes once per second reliably.
       4     |   Output, blue LED indicating that a trigger has arrived.
       19    |   Output, Reference. HIGH at time zero, LOW when all pulses have completed firing
 
@@ -35,7 +35,7 @@ using namespace TeensyTimerTool;
 
 #define REF_PIN 19 // reference / internal trigger pin
 #define EXTTRIG_PIN 23
-#define HEARTBEAT_LED_PIN 3
+#define HEARTBEAT_LED_PIN LED_BUILTIN
 #define TRIGGERED_LED_PIN 4 // Pin that is active for a brief time after each trigger is being output
 #define CH1_PIN 9
 #define CH2_PIN 10

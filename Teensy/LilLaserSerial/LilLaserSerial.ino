@@ -13,7 +13,7 @@
       23    |   Input, external trigger (optional; internally triggered by default)
       19    |   Output, reference trigger (optional usage for internal triggering is to bridge pins 19 and 23). User-configurable repetition rate.
       14     |   Output, Pen laser control (this PWM output goes to the base of a transistor which switches the actual laser)
-      3     |   Output, green status LED, heartbeat. Flashes once per second reliably.
+      built-in LED     |   Output, green status LED, heartbeat. Flashes once per second reliably.
             
     Written using the other existing DolphinDAQ projects (PulseGenerator, BlinkSync, and Rosie) as computer code templates.
 
@@ -30,7 +30,7 @@ using namespace TeensyTimerTool;
 
 #define REF_PIN 19 // reference / internal trigger pin
 #define EXTTRIG_PIN 23
-#define HEARTBEAT_LED_PIN 3
+#define HEARTBEAT_LED_PIN LED_BUILTIN
 #define LASER_PIN 22 // Note, must avoid PWM clashes: https://github.com/luni64/TeensyTimerTool/wiki/Avoid-PWM-timer-clashes#teensy-41
 #define MAIN_WIDTH_US 10 // (lower bound for) main-pulse width in microseconds
 #define PRE_WIDTH_US 10 // (lower bound for) pre-pulse width in microseconds
