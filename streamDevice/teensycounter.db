@@ -1,0 +1,28 @@
+
+##### Common #####
+
+record(stringin,"COUNTER:info"){
+    field(DESC,"Device identification")
+    field(SCAN,"10 second")
+	field(DTYP,"stream")
+	field(INP,"@teensycounter.proto info teensycounter_ino")
+    field(PINI,"YES")
+}
+
+record(stringin,"COUNTER:debug"){
+	field(DTYP,"stream")
+	field(INP,"@teensycounter.proto debug teensycounter_ino")
+}
+
+record(int64in,"COUNTER:count"){
+    field(DESC,"Up-to-date pulse count")
+    field(SCAN,"I/O Intr")
+	field(DTYP,"stream")
+    field(INP,"@teensycounter.proto CountGet teensycounter_ino")
+    }
+
+record(int64out,"COUNTER:count:set"){
+    field(DESC,"Set count to a new value")
+	field(DTYP,"stream")
+    field(OUT,"@teensycounter.proto CountSet teensycounter_ino")
+    }

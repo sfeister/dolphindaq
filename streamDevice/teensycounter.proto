@@ -1,0 +1,30 @@
+# DolphinDAQ Counter protocol file
+# Built by examining examples at: https://paulscherrerinstitute.github.io/StreamDevice/protocol.html#gen
+# And also by examining input/output formats at https://paulscherrerinstitute.github.io/StreamDevice/formats.html
+
+Terminator = CR LF;
+
+##### Common #####
+
+info {
+	ExtraInput = Ignore;
+	out "*IDN?";
+	in "%39c";
+}
+
+debug {
+   ExtraInput = Ignore;
+   out "%s";
+   in "%39c";
+}
+
+# Count automatically comes in
+CountGet {
+	ExtraInput = Ignore;
+	in "COUNT: %u";
+}
+
+# We can set the count how we wish
+CountSet {
+        out ":TRIGger:COUNt %u";
+    }
