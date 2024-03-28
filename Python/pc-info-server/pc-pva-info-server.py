@@ -29,8 +29,16 @@ from p4p.server import Server
 from p4p.server.thread import SharedPV
 from p4p.client.thread import Context
 
+import argparse
 
-DEVICE_NAME = socket.gethostname()
+# Argument parsing with help from: https://stackoverflow.com/questions/40710719/optional-command-line-arguments
+parser = argparse.ArgumentParser(description = "Description for my parser")
+parser.add_argument("-p", "--prefix", help = 'Override the default EPICS prefix to use for this device -- by default, the PC hostname. Example: --prefix "TargetPC"', required = False, default=socket.gethostname())
+parser.add_argument("-d", "--directory", help = 'Override the default directory to monitor for free space -- by default, the root directory of the PC. Example: --directory "/home/debian/data"', required = False, default="/")
+
+argument = parser.parse_args()
+DEVICE_NAME = str(argument.prefix)  # Needs to match unique EPICS device name
+DISK_DIRECTORY = str(argument.directory) # The disk directory to monitor for free space
 
 if __name__ == "__main__":
     print("Device name is: " + DEVICE_NAME)
@@ -47,11 +55,16 @@ if __name__ == "__main__":
     dev_free_GB = SharedPV(nt=NTScalar('i'), # scalar int32 
                   initial=0)      # setting initial value also open()'s
     
-    providers = {DEVICE_NAME + ':info':dev_info, DEVICE_NAME + ':clock:time':dev_clock_str, DEVICE_NAME + ':clock:unix_time':dev_clock_unix, DEVICE_NAME + 'disk:free':dev_free_GB}
+    providers = {
+        DEVICE_NAME + ':info': dev_info,
+        DEVICE_NAME + ':clock:time': dev_clock_str,
+        DEVICE_NAME + ':clock:unix_time': dev_clock_unix,
+        DEVICE_NAME + ':disk:free': dev_free_GB
+    }
     
     with Server(providers=[providers]) as S:
         while True:
-            free_GB = np.int64(np.round(shutil.disk_usage('/').free / (1024 * 1024 * 1024)))
+            free_GB = np.int64(np.round(shutil.disk_usage(DISK_DIRECTORY).free / (1024 * 1024 * 1024)))
             dev_free_GB.post(free_GB)
             for i in range(20): # update wall time more frequently than other stats
                 now = datetime.datetime.now()
