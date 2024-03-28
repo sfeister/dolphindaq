@@ -4,6 +4,7 @@ PC Info Channel Access Server
 Run this on various PCs to broadcast some generic info such as the wall clock time and the amount of free disk space
 
 EPICS CA PVs broadcast:
+    $HOSTNAME:clock:time          Human-readable time on this PC
     $HOSTNAME:clock:unix_time     Current unix time on this PC
     $HOSTNAME:disk:free           Current free disk space on this PC (in GB)
 
@@ -54,7 +55,7 @@ if __name__ == "__main__":
     # Start processes required to be run after iocInit
     async def update():
         while True:
-            free_GB = np.int(np.round(shutil.disk_usage('/').free / (1024 * 1024 * 1024)))
+            free_GB = np.int64(np.round(shutil.disk_usage('/').free / (1024 * 1024 * 1024)))
             dev_free_GB.set(free_GB)
             for i in range(20): # update wall time more frequently than other stats
                 now = datetime.datetime.now()
@@ -63,6 +64,9 @@ if __name__ == "__main__":
                 await asyncio.sleep(0.25)
 
     dispatcher(update)
-
+    
+    while True:
+        print("Working on it!")
+        sleep(1)
     # Finally leave the IOC running with an interactive shell.
     softioc.interactive_ioc(globals())

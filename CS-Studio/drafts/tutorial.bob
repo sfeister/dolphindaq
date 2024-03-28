@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-03-27 11:43:02 by scott-->
+<display version="2.0.0">
+  <name>Mightex EPICS Control Panel</name>
+  <macros>
+    <DEVICE_NAME>MIGHTEX2</DEVICE_NAME>
+  </macros>
+  <widget type="label" version="2.0.0">
+    <name>Title</name>
+    <class>TITLE</class>
+    <text>${DEVICE_NAME}: EPICS Control Panel</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>800</width>
+    <height>30</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <wrap_words>false</wrap_words>
+  </widget>
+  <widget type="xyplot" version="3.0.0">
+    <name>Spectrum X/Y Plot</name>
+    <x>180</x>
+    <y>320</y>
+    <width>590</width>
+    <height>260</height>
+    <x_axis>
+      <title>Pixel #</title>
+      <autoscale>false</autoscale>
+      <log_scale>false</log_scale>
+      <minimum>0.0</minimum>
+      <maximum>3648.0</maximum>
+      <show_grid>false</show_grid>
+      <title_font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </title_font>
+      <scale_font>
+        <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+        </font>
+      </scale_font>
+      <visible>true</visible>
+    </x_axis>
+    <y_axes>
+      <y_axis>
+        <title>Value</title>
+        <autoscale>false</autoscale>
+        <log_scale>false</log_scale>
+        <minimum>100.0</minimum>
+        <maximum>32768.0</maximum>
+        <show_grid>false</show_grid>
+        <title_font>
+          <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+          </font>
+        </title_font>
+        <scale_font>
+          <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+          </font>
+        </scale_font>
+        <on_right>false</on_right>
+        <visible>true</visible>
+        <color>
+          <color name="Text" red="0" green="0" blue="0">
+          </color>
+        </color>
+      </y_axis>
+    </y_axes>
+    <traces>
+      <trace>
+        <name>$(traces[0].y_pv)</name>
+        <x_pv></x_pv>
+        <y_pv>pva://$(DEVICE_NAME):data</y_pv>
+        <err_pv></err_pv>
+        <axis>0</axis>
+        <trace_type>0</trace_type>
+        <color>
+          <color red="0" green="0" blue="255">
+          </color>
+        </color>
+        <line_width>1</line_width>
+        <line_style>0</line_style>
+        <point_type>3</point_type>
+        <point_size>2</point_size>
+        <visible>true</visible>
+      </trace>
+    </traces>
+  </widget>
+  <widget type="slide_button" version="2.0.0">
+    <name>Trigger Enable</name>
+    <pv_name>ca://${DEVICE_NAME}:TRIGGERED</pv_name>
+    <label>Trigger Enable</label>
+    <x>210</x>
+    <y>80</y>
+    <width>190</width>
+  </widget>
+  <widget type="slide_button" version="2.0.0">
+    <name>Camera Enable</name>
+    <pv_name>ca://${DEVICE_NAME}:ENABLE</pv_name>
+    <label>Camera Enable</label>
+    <x>210</x>
+    <y>40</y>
+    <width>190</width>
+  </widget>
+  <widget type="scaledslider" version="2.0.0">
+    <name>Exposure Time</name>
+    <pv_name>ca://${DEVICE_NAME}:EXPOSURE</pv_name>
+    <x>10</x>
+    <y>120</y>
+    <width>90</width>
+    <height>460</height>
+    <horizontal>false</horizontal>
+    <scale_format>#,###</scale_format>
+    <show_hihi>false</show_hihi>
+    <show_high>false</show_high>
+    <show_low>false</show_low>
+    <show_lolo>false</show_lolo>
+    <increment>1000.0</increment>
+    <maximum>1000000.0</maximum>
+    <limits_from_pv>false</limits_from_pv>
+  </widget>
+  <widget type="led" version="2.0.0">
+    <name>Camera Running?</name>
+    <pv_name>ca://${DEVICE_NAME}:RUNNING</pv_name>
+    <x>728</x>
+    <y>97</y>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Cam Running Label</name>
+    <text>Camera Running?</text>
+    <x>640</x>
+    <y>70</y>
+    <width>130</width>
+    <height>30</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Exposure Label</name>
+    <text>Exposure Time (us)</text>
+    <x>20</x>
+    <y>50</y>
+    <width>160</width>
+    <height>30</height>
+    <font>
+      <font name="Header 3" family="Liberation Sans" style="BOLD" size="16.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>MT Time</name>
+    <pv_name>ca://${DEVICE_NAME}:FRAME:timestamp</pv_name>
+    <x>430</x>
+    <y>80</y>
+    <width>80</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>MT Trigger</name>
+    <pv_name>ca://${DEVICE_NAME}:FRAME:trigevt</pv_name>
+    <x>530</x>
+    <y>80</y>
+    <width>80</width>
+    <height>30</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>MT Time Label</name>
+    <text>MT Time</text>
+    <x>430</x>
+    <y>60</y>
+    <width>70</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>MT Trigger Label</name>
+    <text>MT Trigger</text>
+    <x>530</x>
+    <y>60</y>
+    <width>70</width>
+  </widget>
+  <widget type="scaledslider" version="2.0.0">
+    <name>Exposure Time_2</name>
+    <pv_name>ca://${DEVICE_NAME}:EXPOSURE</pv_name>
+    <x>100</x>
+    <y>120</y>
+    <width>80</width>
+    <height>460</height>
+    <horizontal>false</horizontal>
+    <scale_format>#,###</scale_format>
+    <show_hihi>false</show_hihi>
+    <show_high>false</show_high>
+    <show_low>false</show_low>
+    <show_lolo>false</show_lolo>
+    <increment>100.0</increment>
+    <minimum>100.0</minimum>
+    <maximum>20000.0</maximum>
+    <limits_from_pv>false</limits_from_pv>
+  </widget>
+  <widget type="textentry" version="3.0.0">
+    <name>Text Entry</name>
+    <pv_name>ca://${DEVICE_NAME}:EXPOSURE</pv_name>
+    <x>20</x>
+    <y>80</y>
+    <width>140</width>
+    <height>30</height>
+    <background_color>
+      <color red="230" green="230" blue="230">
+      </color>
+    </background_color>
+  </widget>
+  <widget type="xyplot" version="3.0.0">
+    <name>Spectrum X/Y Plot_1</name>
+    <x>180</x>
+    <y>120</y>
+    <width>590</width>
+    <height>200</height>
+    <title>Raw Spectrum (note: UINT16 vs. INT16 issue)</title>
+    <x_axis>
+      <title></title>
+      <autoscale>false</autoscale>
+      <log_scale>false</log_scale>
+      <minimum>0.0</minimum>
+      <maximum>3648.0</maximum>
+      <show_grid>false</show_grid>
+      <title_font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </title_font>
+      <scale_font>
+        <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+        </font>
+      </scale_font>
+      <visible>false</visible>
+    </x_axis>
+    <y_axes>
+      <y_axis>
+        <title>Value</title>
+        <autoscale>false</autoscale>
+        <log_scale>false</log_scale>
+        <minimum>-32767.0</minimum>
+        <maximum>0.0</maximum>
+        <show_grid>false</show_grid>
+        <title_font>
+          <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+          </font>
+        </title_font>
+        <scale_font>
+          <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+          </font>
+        </scale_font>
+        <on_right>false</on_right>
+        <visible>true</visible>
+        <color>
+          <color name="Text" red="0" green="0" blue="0">
+          </color>
+        </color>
+      </y_axis>
+    </y_axes>
+    <traces>
+      <trace>
+        <name>$(traces[0].y_pv)</name>
+        <x_pv></x_pv>
+        <y_pv>pva://$(DEVICE_NAME):data</y_pv>
+        <err_pv></err_pv>
+        <axis>0</axis>
+        <trace_type>0</trace_type>
+        <color>
+          <color red="0" green="0" blue="255">
+          </color>
+        </color>
+        <line_width>1</line_width>
+        <line_style>0</line_style>
+        <point_type>3</point_type>
+        <point_size>2</point_size>
+        <visible>true</visible>
+      </trace>
+    </traces>
+  </widget>
+</display>

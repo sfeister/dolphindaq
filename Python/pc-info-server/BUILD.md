@@ -1,0 +1,1 @@
+pyinstaller pc-pva-info-server.py --clean --collect-all epicscorelibs --collect-all pvxslibs
