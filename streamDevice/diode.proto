@@ -21,107 +21,145 @@ debug {
    in "%39c";
 }
 
-
-#### Photodiode #####
-
-DAQ_SystemTemperatureQ {
-        out "SYSTem:TEMPerature?";
-        in "%f";
-    }
-
-DAQ_SystemTrigcountQ {
-        out "SYSTem:TRIGCount?";
+CountQ {
+        out ":TRIGger:COUNt?";
         in "%u";
     }
 
-DAQ_SystemTrigcount {
-        out "SYSTem:TRIGCount %u";
-        @init { DAQ_SystemTrigcountQ; }
+Count {
+        out ":TRIGger:COUNt %u";
+        @init { CountQ; }
     }
 
-DAQ_SystemTimeQ {
-        out "SYSTem:TIME?";
-        in "%s";
+DecimationQ {
+        out ":TRIGger:DECimation?";
+        in "%u";
     }
 
-DAQ_SystemTimeUnixQ {
-        out "SYSTem:TIME:UNIX?";
-        in "%d";
+Decimation {
+        out ":TRIGger:DECimation %u";
+        @init { DecimationQ; }
+    }
+    
+TimeQ {
+        out ":SYSTem:TIME?";
+	    in "%39c";
     }
 
-DAQ_SystemTimeUnix {
-        out "SYSTem:TIME:UNIX %d";
-        @init { DAQ_SystemTimeUnixQ; }
+TimeUnixQ {
+        out ":SYSTem:TIME:UNIX?";
+        in "%i";
     }
 
-DAQ_MeasurementTraceDtQ {
-        out "MEASurement:TRAce:DT?";
+TimeUnix {
+        out ":SYSTem:TIME:UNIX %i";
+        @init { TimeUnixQ; }
+    }
+
+##### Diode-Specific #####
+
+TraceDecQ {
+        out ":DIODe:TRACe:DECimation?";
+        in "%u";
+    }
+
+TraceDec {
+        out ":DIODe:TRACe:DECimation %u";
+        @init { TraceDecQ; }
+    }
+
+TraceDtQ {
+        out ":DIODe:TRAce:DT?";
         in "%f";
     }
 
-DAQ_MeasurementTraceNtQ {
-        out "MEASurement:TRAce:NT?";
+TraceNtQ {
+        out ":DIODe:TRAce:NT?";
         in "%f";
     }
 
-DAQ_MeasurementTraceYminQ {
-        out "MEASurement:TRAce:YMIN?";
+TraceYminQ {
+        out ":DIODe:TRAce:YMIN?";
         in "%f";
     }
 
-DAQ_MeasurementTraceYmaxQ {
-        out "MEASurement:TRAce:YMAX?";
+TraceYmaxQ {
+        out ":DIODe:TRAce:YMAX?";
         in "%f";
     }
 
-### TODO: DAQ_MeasurementTraceYarrayQ {
-#        out "MEASurement:TRAce:YARRay?";
+### TODO: TraceYarrayQ {
+#        out ":DIODe:TRAce:YARRay?";
 #        in "%f";
 #    }
 
-DAQ_DaqConfigureDtQ {
-        out "DAQ:CONFigure:DT?";
+DtQ {
+        out ":DIODe:DT?";
         in "%f";
     }
 
-DAQ_DaqConfigureT1Q {
-        out "DAQ:CONFigure:T1?";
+Dt {
+        out ":DIODE:DT %i";
+    }
+
+T1NtQ {
+        out ":DIODE:T3:NT?";
+        in "%u";
+    }
+    
+T1Q {
+        out ":DIODE:T1:VALue?";
         in "%f";
     }
 
-DAQ_DaqConfigureT1 {
-        out "DAQ:CONFigure:T1 %f";
-        @init { DAQ_DaqConfigureT1Q; }
+T1 {
+        out ":DIODE:T1:VALue %f";
+        @init { T1Q; }
     }
 
-DAQ_DaqConfigureT2Q {
-        out "DAQ:CONFigure:T2?";
+T2NtQ {
+        out ":DIODE:T2:NT?";
+        in "%u";
+    }
+
+T2Q {
+        out ":DIODE:T2:VALue?";
         in "%f";
     }
 
-DAQ_DaqConfigureT2 {
-        out "DAQ:CONFigure:T2 %f";
-        @init { DAQ_DaqConfigureT2Q; }
+T2 {
+        out ":DIODE:T2:VALue %f";
+        @init { T2Q; }
     }
 
 
-DAQ_DaqConfigureT3Q {
-        out "DAQ:CONFigure:T3?";
+T3NtQ {
+        out ":DIODE:T3:NT?";
+        in "%u";
+    }
+
+T3Q {
+        out ":DIODE:T3:VALue?";
         in "%f";
     }
 
-DAQ_DaqConfigureT3 {
-        out "DAQ:CONFigure:T3 %f";
-        @init { DAQ_DaqConfigureT3Q; }
+T3 {
+        out ":DIODE:T3:VALue %f";
+        @init { T3Q; }
     }
 
 
-DAQ_DaqConfigureT4Q {
-        out "DAQ:CONFigure:T4?";
+T4NtQ {
+        out ":DIODE:T4:NT?";
+        in "%u";
+    }
+
+T4Q {
+        out ":DIODE:T4:VALue?";
         in "%f";
     }
 
-DAQ_DaqConfigureT4 {
-        out "DAQ:CONFigure:T4 %f";
-        @init { DAQ_DaqConfigureT4Q; }
+T4 {
+        out ":DIODE:T4:VALue %f";
+        @init { T4Q; }
     }

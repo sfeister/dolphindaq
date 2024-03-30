@@ -1,25 +1,15 @@
-exec O.$EPICS_HOST_ARCH/streamApp $0
+# exec O.$EPICS_HOST_ARCH/streamApp $0
+
 dbLoadDatabase "O.Common/streamApp.dbd"
 streamApp_registerRecordDeviceDriver
 
-
 epicsEnvSet "STREAM_PROTOCOL_PATH","."
 
-drvAsynSerialPortConfigure("diode_io","/dev/ttyUSB0")
-asynSetOption("diode_io",0,"baud","115200")
-asynSetOption("diode_io",0,"bits","8")
-asynSetOption("diode_io",0,"parity","none")
-asynSetOption("diode_io",0,"stop","1")
-asynSetOption("diode_io",0,"clocal","Y")
-asynSetOption("diode_io",0,"crtscts","N")
+drvAsynIPPortConfigure ("io1", "196.254.31.200:1064")
 
-epicsThreadSleep(5) # May not still be needed; was empirically necessary to pause here, to avoid communication timeout on first SCPI commands to Arduinos, circa April 2022 for sidekick system
-
-dbLoadRecords "diode.db"
-
-#log debug output to file
-#streamSetLogfile StreamDebug.log
+dbLoadRecords "diode.db", "P=DIODE-00,BUS=io1"
 
 iocInit
 
-#var streamDebug 1
+# Enable StreamDevice Debugging output (1) or disable output (0)
+var streamDebug 0

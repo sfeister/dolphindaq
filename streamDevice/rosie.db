@@ -28,7 +28,9 @@ record(int64out,"ROSIE:trigger:count:set"){
 	field(DTYP,"stream")
     field(OUT,"@rosie.proto TriggerCount rosie_io")
     }
-    
+
+##### Rosie-Specific #####
+
 record(int64out,"ROSIE:trigger:decimation"){
     field(DESC,"Set decimation")
 	field(DTYP,"stream")

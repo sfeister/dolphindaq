@@ -20,11 +20,10 @@ debug {
 
 # Count automatically comes in
 CountGet {
-	ExtraInput = Ignore;
 	in "COUNT: %u";
 }
 
 # We can set the count how we wish
 CountSet {
         out ":TRIGger:COUNt %u";
-    }
+}

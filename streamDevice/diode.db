@@ -4,95 +4,186 @@
 
 ##### Common #####
 
-record(stringin,"DIODE:info"){
+record(stringin,"$(P):info"){
     field(DESC,"Device identification")
 	field(DTYP,"stream")
-	field(INP,"@diode.proto info diode_io")
+	field(INP,"@diode.proto info $(BUS)")
     field(PINI,"YES")
 }
 
-record(stringin,"DIODE:debug"){
+record(stringin,"$(P):debug"){
 	field(DTYP,"stream")
-	field(INP,"@diode.proto debug diode_io")
+	field(INP,"@diode.proto debug $(BUS)")
 }
 
-#### Photodiode #####
-
-record(ai,"DIODE:System:Temperature"){
+record(int64in,"$(P):trigger:count"){
+    field(DESC,"Get global trigger count")
+    field(SCAN,"1 second")
 	field(DTYP,"stream")
-	field(EGU,"degrees Celsius")
-    field(INP,"@diode.proto DAQ_SystemTemperatureQ diode_io")
+    field(INP,"@diode.proto CountQ $(BUS)")
+    }
+
+record(int64out,"$(P):trigger:count:set"){
+    field(DESC,"Set global trigger count")
+	field(DTYP,"stream")
+    field(OUT,"@diode.proto Count $(BUS)")
+    }
+
+record(stringin,"$(P):system:time"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+    field(INP,"@diode.proto TimeQ $(BUS)")
 }
 
-record(int64out,"DIODE:System:Trigcount"){
+record(int64in,"$(P):system:time:unix"){
 	field(DTYP,"stream")
-	field(DRVL,"0")
-	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
-	field(EGU,"trigger events")
-    field(OUT,"@diode.proto DAQ_SystemTrigcount diode_io")
+    field(SCAN,"1 second")
+    field(INP,"@diode.proto TimeUnixQ $(BUS)")
 }
 
-record(stringin,"DIODE:System:Time"){
+record(int64out,"$(P):system:time:unix:set"){
 	field(DTYP,"stream")
-    field(INP,"@diode.proto DAQ_SystemTimeQ diode_io")
+    field(OUT,"@diode.proto TimeUnix $(BUS)")
 }
 
-record(int64out,"DIODE:System:Time:UNIX"){
+##### Diode-Specific #####
+
+record(int64in,"$(P):trace:decimation"){
 	field(DTYP,"stream")
-    field(OUT,"@diode.proto DAQ_SystemTimeUnix diode_io")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto TraceDecQ $(BUS)")
 }
 
-record(ai,"DIODE:Measurement:Trace:Dt"){
+record(int64out,"$(P):trace:decimation:set"){
 	field(DTYP,"stream")
 	field(EGU,"seconds")
-    field(INP,"@diode.proto DAQ_MeasurementTraceDtQ diode_io")
+    field(OUT,"@diode.proto TraceDec $(BUS)")
 }
 
-record(ai,"DIODE:Measurement:Trace:Nt"){
+record(ai,"$(P):trace:dt"){
 	field(DTYP,"stream")
-    field(INP,"@diode.proto DAQ_MeasurementTraceNtQ diode_io")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto TraceDtQ $(BUS)")
 }
 
-record(ai,"DIODE:Measurement:Trace:Ymin"){
+record(ai,"$(P):trace:nt"){
 	field(DTYP,"stream")
+    field(SCAN,"1 second")
+    field(INP,"@diode.proto TraceNtQ $(BUS)")
+}
+
+record(ai,"$(P):trace:ymin"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
 	field(EGU,"Volts")
-    field(INP,"@diode.proto DAQ_MeasurementTraceYminQ diode_io")
+    field(INP,"@diode.proto TraceYminQ $(BUS)")
 }
 
-record(ai,"DIODE:Measurement:Trace:Ymax"){
+record(ai,"$(P):trace:ymax"){
 	field(DTYP,"stream")
+    field(SCAN,"1 second")
 	field(EGU,"Volts")
-    field(INP,"@diode.proto DAQ_MeasurementTraceYmaxQ diode_io")
+    field(INP,"@diode.proto TraceYmaxQ $(BUS)")
 }
 
 ### TODO: Add in YARR input
 
-record(ai,"DIODE:Daq:Configure:Dt"){
+
+#### Dt, T1, T2, T3, T4
+record(ai,"$(P):dt"){
 	field(DTYP,"stream")
+    field(SCAN,"1 second")
 	field(EGU,"seconds")
-    field(INP,"@diode.proto DAQ_DaqConfigureDtQ diode_io")
+    field(INP,"@diode.proto DtQ $(BUS)")
 }
 
-record(ai,"DIODE:Daq:Configure:T1"){
+record(ao,"$(P):dt:set"){
 	field(DTYP,"stream")
 	field(EGU,"seconds")
-    field(OUT,"@diode.proto DAQ_DaqConfigureT1 diode_io")
+    field(OUT,"@diode.proto Dt $(BUS)")
 }
 
-record(ai,"DIODE:Daq:Configure:T2"){
+
+record(ai,"$(P):t1"){
 	field(DTYP,"stream")
+    field(SCAN,"1 second")
 	field(EGU,"seconds")
-    field(OUT,"@diode.proto DAQ_DaqConfigureT2 diode_io")
+    field(INP,"@diode.proto T1Q $(BUS)")
 }
 
-record(ai,"DIODE:Daq:Configure:T3"){
+record(ao,"$(P):t1:set"){
 	field(DTYP,"stream")
 	field(EGU,"seconds")
-    field(OUT,"@diode.proto DAQ_DaqConfigureT3 diode_io")
+    field(OUT,"@diode.proto T1 $(BUS)")
 }
 
-record(ai,"DIODE:Daq:Configure:T4"){
+record(ai,"$(P):t1:nt"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto T1NtQ $(BUS)")
+}
+
+
+record(ai,"$(P):t2"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto T2Q $(BUS)")
+}
+
+record(ao,"$(P):t2:set"){
 	field(DTYP,"stream")
 	field(EGU,"seconds")
-    field(OUT,"@diode.proto DAQ_DaqConfigureT4 diode_io")
+    field(OUT,"@diode.proto T2 $(BUS)")
+}
+
+record(ai,"$(P):t2:nt"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto T2NtQ $(BUS)")
+}
+
+
+record(ai,"$(P):t3"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto T3Q $(BUS)")
+}
+
+record(ao,"$(P):t3:set"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(OUT,"@diode.proto T3 $(BUS)")
+}
+
+record(ai,"$(P):t3:nt"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto T3NtQ $(BUS)")
+}
+
+record(ai,"$(P):t4"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto T4Q $(BUS)")
+}
+
+record(ao,"$(P):t4:set"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+    field(OUT,"@diode.proto T4 $(BUS)")
+}
+
+record(ai,"$(P):t4:nt"){
+	field(DTYP,"stream")
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+    field(INP,"@diode.proto T4NtQ $(BUS)")
 }
