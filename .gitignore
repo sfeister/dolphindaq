@@ -1,5 +1,5 @@
-# Compiled protobufs
-proto/compiled*
+# Compiled protobufs (Actually... I'm going to include those so I commented this out. -SF March 30 2024)
+# proto/compiled*
 
 # Test outputs
 out/
