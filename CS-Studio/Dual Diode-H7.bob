@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-03-31 01:31:31 by scott-->
+<display version="2.0.0">
+  <name>Dual Diode-H7 Control</name>
+  <width>1130</width>
+  <height>1310</height>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <class>TITLE</class>
+    <text>Dual Diode Display Panel</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>550</width>
+    <height>31</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+  </widget>
+  <widget type="embedded" version="2.0.0">
+    <name>Embedded Display_1</name>
+    <macros>
+      <DEVICE_NAME>DIODE-00</DEVICE_NAME>
+    </macros>
+    <file>Single Diode-H7 Control Panel.bob</file>
+    <x>10</x>
+    <y>50</y>
+    <width>1120</width>
+    <height>620</height>
+  </widget>
+  <widget type="embedded" version="2.0.0">
+    <name>Embedded Display_2</name>
+    <macros>
+      <DEVICE_NAME>DIODE-01</DEVICE_NAME>
+    </macros>
+    <file>Single Diode-H7 Control Panel.bob</file>
+    <y>690</y>
+    <width>1120</width>
+    <height>620</height>
+  </widget>
+</display>

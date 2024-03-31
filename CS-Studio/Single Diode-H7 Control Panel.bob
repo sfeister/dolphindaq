@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-03-31 01:31:24 by scott-->
+<display version="2.0.0">
+  <name>${DEVICE_NAME} Control</name>
+  <width>1110</width>
+  <height>530</height>
+  <widget type="label" version="2.0.0">
+    <name>Title_3</name>
+    <class>TITLE</class>
+    <text>${DEVICE_NAME}: EPICS Control Panel</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>800</width>
+    <height>30</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <wrap_words>false</wrap_words>
+  </widget>
+  <widget type="xyplot" version="3.0.0">
+    <name>Spectrum X/Y Plot</name>
+    <x>110</x>
+    <y>270</y>
+    <width>590</width>
+    <height>260</height>
+    <x_axis>
+      <title>Time (1000 units = 500 micros)</title>
+      <autoscale>false</autoscale>
+      <log_scale>false</log_scale>
+      <minimum>0.0</minimum>
+      <maximum>1000.0</maximum>
+      <show_grid>false</show_grid>
+      <title_font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </title_font>
+      <scale_font>
+        <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+        </font>
+      </scale_font>
+      <visible>true</visible>
+    </x_axis>
+    <y_axes>
+      <y_axis>
+        <title>Value</title>
+        <autoscale>false</autoscale>
+        <log_scale>false</log_scale>
+        <minimum>100.0</minimum>
+        <maximum>32768.0</maximum>
+        <show_grid>false</show_grid>
+        <title_font>
+          <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+          </font>
+        </title_font>
+        <scale_font>
+          <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+          </font>
+        </scale_font>
+        <on_right>false</on_right>
+        <visible>true</visible>
+        <color>
+          <color name="Text" red="0" green="0" blue="0">
+          </color>
+        </color>
+      </y_axis>
+    </y_axes>
+    <traces>
+      <trace>
+        <name>$(traces[0].y_pv)</name>
+        <x_pv></x_pv>
+        <y_pv>pva://$(DEVICE_NAME):trace</y_pv>
+        <err_pv></err_pv>
+        <axis>0</axis>
+        <trace_type>0</trace_type>
+        <color>
+          <color red="0" green="0" blue="255">
+          </color>
+        </color>
+        <line_width>1</line_width>
+        <line_style>0</line_style>
+        <point_type>3</point_type>
+        <point_size>2</point_size>
+        <visible>true</visible>
+      </trace>
+    </traces>
+    <marker>
+      <marker>
+        <color>
+          <color red="255" green="179" blue="102">
+          </color>
+        </color>
+        <pv_name>=0</pv_name>
+        <interactive>false</interactive>
+      </marker>
+      <marker>
+        <color>
+          <color red="230" green="153" blue="77">
+          </color>
+        </color>
+        <pv_name>ca://${DEVICE_NAME}:t2:nt</pv_name>
+        <interactive>false</interactive>
+      </marker>
+      <marker>
+        <color>
+          <color red="102" green="77" blue="179">
+          </color>
+        </color>
+        <pv_name>=`ca://${DEVICE_NAME}:t2:nt`+`ca://${DEVICE_NAME}:t3:nt`</pv_name>
+        <interactive>false</interactive>
+      </marker>
+      <marker>
+        <color>
+          <color red="102" green="77" blue="179">
+          </color>
+        </color>
+        <pv_name>=`ca://${DEVICE_NAME}:t2:nt`+`ca://${DEVICE_NAME}:t3:nt` + `ca://${DEVICE_NAME}:t4:nt`</pv_name>
+        <interactive>false</interactive>
+      </marker>
+    </marker>
+  </widget>
+  <widget type="xyplot" version="3.0.0">
+    <name>Spectrum X/Y Plot_1</name>
+    <x>110</x>
+    <y>70</y>
+    <width>590</width>
+    <height>200</height>
+    <title>Diode Signal (note: UINT16 vs. INT16 issue)</title>
+    <x_axis>
+      <title></title>
+      <autoscale>false</autoscale>
+      <log_scale>false</log_scale>
+      <minimum>0.0</minimum>
+      <maximum>1000.0</maximum>
+      <show_grid>false</show_grid>
+      <title_font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </title_font>
+      <scale_font>
+        <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+        </font>
+      </scale_font>
+      <visible>false</visible>
+    </x_axis>
+    <y_axes>
+      <y_axis>
+        <title>Value</title>
+        <autoscale>false</autoscale>
+        <log_scale>false</log_scale>
+        <minimum>-32767.0</minimum>
+        <maximum>0.0</maximum>
+        <show_grid>false</show_grid>
+        <title_font>
+          <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+          </font>
+        </title_font>
+        <scale_font>
+          <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+          </font>
+        </scale_font>
+        <on_right>false</on_right>
+        <visible>true</visible>
+        <color>
+          <color name="Text" red="0" green="0" blue="0">
+          </color>
+        </color>
+      </y_axis>
+    </y_axes>
+    <traces>
+      <trace>
+        <name>$(traces[0].y_pv)</name>
+        <x_pv></x_pv>
+        <y_pv>pva://$(DEVICE_NAME):trace</y_pv>
+        <err_pv></err_pv>
+        <axis>0</axis>
+        <trace_type>0</trace_type>
+        <color>
+          <color red="0" green="0" blue="255">
+          </color>
+        </color>
+        <line_width>1</line_width>
+        <line_style>0</line_style>
+        <point_type>3</point_type>
+        <point_size>2</point_size>
+        <visible>true</visible>
+      </trace>
+    </traces>
+  </widget>
+  <widget type="thumbwheel" version="2.0.0">
+    <name>Thumbwheel</name>
+    <pv_name>ca://${DEVICE_NAME}:t1:set</pv_name>
+    <x>850</x>
+    <y>160</y>
+    <width>130</width>
+    <height>50</height>
+    <decimal_digits>6</decimal_digits>
+    <integer_digits>1</integer_digits>
+  </widget>
+  <widget type="thumbwheel" version="2.0.0">
+    <name>Thumbwheel_1</name>
+    <pv_name>ca://${DEVICE_NAME}:t2:set</pv_name>
+    <x>850</x>
+    <y>228</y>
+    <width>130</width>
+    <height>50</height>
+    <decimal_digits>6</decimal_digits>
+    <integer_digits>1</integer_digits>
+  </widget>
+  <widget type="thumbwheel" version="2.0.0">
+    <name>Thumbwheel_2</name>
+    <pv_name>ca://${DEVICE_NAME}:t3:set</pv_name>
+    <x>850</x>
+    <y>300</y>
+    <width>130</width>
+    <height>50</height>
+    <decimal_digits>6</decimal_digits>
+    <integer_digits>1</integer_digits>
+  </widget>
+  <widget type="thumbwheel" version="2.0.0">
+    <name>Thumbwheel_3</name>
+    <pv_name>ca://${DEVICE_NAME}:t4:set</pv_name>
+    <x>850</x>
+    <y>370</y>
+    <width>130</width>
+    <height>50</height>
+    <decimal_digits>6</decimal_digits>
+    <integer_digits>1</integer_digits>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update</name>
+    <pv_name>ca://${DEVICE_NAME}:t3:nt</pv_name>
+    <x>1010</x>
+    <y>380</y>
+    <width>70</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_1</name>
+    <pv_name>ca://${DEVICE_NAME}:t3:nt</pv_name>
+    <x>1010</x>
+    <y>310</y>
+    <width>70</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_2</name>
+    <pv_name>ca://${DEVICE_NAME}:t2:nt</pv_name>
+    <x>850</x>
+    <y>480</y>
+    <width>70</width>
+    <height>30</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>Timings Set</text>
+    <x>880</x>
+    <y>110</y>
+    <width>60</width>
+    <height>40</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_1</name>
+    <text>Timings Readback (in dts)</text>
+    <x>1020</x>
+    <y>90</y>
+    <width>70</width>
+    <height>60</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_2</name>
+    <text>t1</text>
+    <x>820</x>
+    <y>180</y>
+    <width>12</width>
+    <height>16</height>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_3</name>
+    <text>t2</text>
+    <x>820</x>
+    <y>252</y>
+    <width>12</width>
+    <height>16</height>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_4</name>
+    <text>t3</text>
+    <x>820</x>
+    <y>320</y>
+    <width>12</width>
+    <height>16</height>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_5</name>
+    <text>t4</text>
+    <x>820</x>
+    <y>390</y>
+    <width>12</width>
+    <height>16</height>
+    <auto_size>true</auto_size>
+  </widget>
+  <widget type="combo" version="2.0.0">
+    <name>Combo Box_1</name>
+    <pv_name>ca://${DEVICE_NAME}:trace:decimation:set</pv_name>
+    <x>832</x>
+    <y>50</y>
+    <width>120</width>
+    <items>
+      <item>200</item>
+      <item>1000</item>
+    </items>
+    <items_from_pv>false</items_from_pv>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_6</name>
+    <text>Trace Decimation (set to 200 during alignment)</text>
+    <x>832</x>
+    <y>10</y>
+    <width>188</width>
+    <height>40</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_4</name>
+    <pv_name>=`ca://${DEVICE_NAME}:t2:nt`+`ca://${DEVICE_NAME}:t3:nt`</pv_name>
+    <x>930</x>
+    <y>480</y>
+    <width>70</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_5</name>
+    <pv_name>ca://${DEVICE_NAME}:t2:nt</pv_name>
+    <x>1016</x>
+    <y>240</y>
+    <width>70</width>
+    <height>30</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_8</name>
+    <text>Background begins... and ends.   Signal begins...  and ends.</text>
+    <x>720</x>
+    <y>450</y>
+    <width>390</width>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_6</name>
+    <pv_name>=`ca://${DEVICE_NAME}:t2:nt`+`ca://${DEVICE_NAME}:t3:nt` + `ca://${DEVICE_NAME}:t4:nt`</pv_name>
+    <x>1030</x>
+    <y>480</y>
+    <width>70</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_7</name>
+    <pv_name>=0</pv_name>
+    <x>750</x>
+    <y>480</y>
+    <width>70</width>
+    <height>30</height>
+  </widget>
+</display>

@@ -9,5 +9,5 @@ source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 workon daq
 
 # Run the python script within the dolhindaq folder so it can find its dependencies
-cd ${DOLPHINDAQ_ROOT}/Python
-python diode-h7-pva-data-recorder.py -p "DIODE-00" -n "196.254.31.200" -o "/home/debian/data"
+cd ${DOLPHINDAQ_ROOT}/Python/pc-info-server
+python pc-pva-info-server.py --directory "/home/debian/data"

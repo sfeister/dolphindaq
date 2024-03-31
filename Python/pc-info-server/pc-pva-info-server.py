@@ -1,12 +1,15 @@
 """
 PC Info Channel Access Server
 
-Run this on various PCs to broadcast some generic info such as the wall clock time and the amount of free disk space
+Run this on various PCs to broadcast some generic info such as the wall clock time and the amount of free disk space.
+
+Example usage:
+    python pc-pva-info-server.py --directory "/home/debian/data"
 
 EPICS PVA PVs broadcast:
     $HOSTNAME:clock:time          Human-readable time on this PC
     $HOSTNAME:clock:unix_time     Current unix time on this PC
-    $HOSTNAME:disk:free           Current free disk space on this PC (in GB)
+    $HOSTNAME:disk:free           Current free disk space on this PC or specified folder (in GB)
 
 Should work on either Linux or Windows.
 May require Python 3.9+ to get the time properly.

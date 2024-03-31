@@ -4,7 +4,7 @@
 diode-h7-pva-data-recorder.py: A data recorder for the DIODE-H7 device, with PVAccess.
 
 Example Command Line Usage:
-    python diode-h7-pva-data-recorder.py -p "DIODE-H7-01" -n "196.254.31.201" -o "/home/debian/data"
+    python diode-h7-pva-data-recorder.py -p "DIODE-01" -n "196.254.31.201" -o "/home/debian/data"
 
 TODO:
 * Add TCP keepalive-style timeouts in case remote device wire is disconnected (so that HDF5 is closed). Currently hangs indefinitely until I do Ctrl + C.
@@ -308,10 +308,11 @@ def connection_callback(conn):
                     del data # TODO: Is this needed? Check for any memory leaks.
                     
 def pva_handle_data(data):
-    global dev_metrics_global_peak5_avg # PVA
+    global dev_trace # PVA
     global dev_metrics_global_peak5_std # PVA
     global dev_metrics_reduced_mean_avg # PVA
     global dev_metrics_reduced_mean_std # PVA
+    global dev_metrics_global_trace # PVA
 
     if data.HasField("metrics"):
         dev_metrics_global_peak5_avg.post(np.mean(data.metrics.global_peak5), timestamp=time.time())
@@ -319,7 +320,9 @@ def pva_handle_data(data):
         dev_metrics_reduced_mean_avg.post(np.mean(data.metrics.reduced_mean), timestamp=time.time())
         dev_metrics_reduced_mean_std.post(np.std(data.metrics.reduced_mean), timestamp=time.time())
     
-                
+    if data.HasField("trace"):
+        dev_trace.post( np.frombuffer(data.trace.yvals, dtype=np.uint16) )
+
 if __name__ == "__main__":
 
     ### INITIALIZE PVACCESS EPICS SERVER
@@ -337,26 +340,8 @@ if __name__ == "__main__":
                   initial=0.0)      # setting initial value also open()'s
     dev_metrics_reduced_mean_std = SharedPV(nt=NTScalar('d'), # scalar double
                   initial=0.0)      # setting initial value also open()'s
-
-    @dev_metrics_global_peak5_avg.put
-    def dev_metrics_global_peak5_avg_handle(pv, op):
-        pv.post(op.value()) # just store and update subscribers
-        op.done()
-
-    @dev_metrics_global_peak5_std.put
-    def dev_metrics_global_peak5_std_handle(pv, op):
-        pv.post(op.value()) # just store and update subscribers
-        op.done()
-
-    @dev_metrics_reduced_mean_std.put
-    def dev_metrics_reduced_mean_std_handle(pv, op):
-        pv.post(op.value()) # just store and update subscribers
-        op.done()
-
-    @dev_metrics_reduced_mean_avg.put
-    def dev_metrics_reduced_mean_avg_handle(pv, op):
-        pv.post(op.value()) # just store and update subscribers
-        op.done()
+    dev_trace = SharedPV(nt=NTNDArray(),
+                  initial=np.zeros(8).astype("uint16")) # TODO: Create more options
 
     @dev_rec_on.put
     def dev_rec_on_handle(pv, op):
@@ -364,11 +349,13 @@ if __name__ == "__main__":
         op.done()
         
     providers = {
-        DEVICE_NAME + ':info': dev_info,
+        DEVICE_NAME + ':RECORDER:info': dev_info,
         DEVICE_NAME + ':RECORDER:on': dev_rec_on,
         DEVICE_NAME + ':METRICS:global_peak5:avg': dev_metrics_global_peak5_avg,
+        DEVICE_NAME + ':METRICS:global_peak5:std': dev_metrics_global_peak5_std,
         DEVICE_NAME + ':METRICS:reduced_mean:avg': dev_metrics_reduced_mean_avg,
         DEVICE_NAME + ':METRICS:reduced_mean:std': dev_metrics_reduced_mean_std,
+        DEVICE_NAME + ':trace': dev_trace,
     }
 
     with Server(providers=[providers]) as S:

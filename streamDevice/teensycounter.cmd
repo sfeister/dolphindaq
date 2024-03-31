@@ -5,17 +5,15 @@ streamApp_registerRecordDeviceDriver
 
 epicsEnvSet "STREAM_PROTOCOL_PATH","."
 
-drvAsynSerialPortConfigure("teensycounter_ino","/dev/ttyUSB-teensy1")
-asynSetOption("teensycounter_ino",0,"baud","115200")
-asynSetOption("teensycounter_ino",0,"bits","8")
-asynSetOption("teensycounter_ino",0,"parity","none")
-asynSetOption("teensycounter_ino",0,"stop","1")
-asynSetOption("teensycounter_ino",0,"clocal","Y")
-asynSetOption("teensycounter_ino",0,"crtscts","N")
+drvAsynSerialPortConfigure("io1","/dev/ttyUSB-teensy1")
+asynSetOption("io1",0,"baud","115200")
+asynSetOption("io1",0,"bits","8")
+asynSetOption("io1",0,"parity","none")
+asynSetOption("io1",0,"stop","1")
+asynSetOption("io1",0,"clocal","Y")
+asynSetOption("io1",0,"crtscts","N")
 
-# epicsThreadSleep(5) # empirically necessary to pause here, to avoid communication timeout on first SCPI commands to Arduinos. -SKF April 5 2022
-
-dbLoadRecords "teensycounter.db", "P=COUNTER1,BUS=teensycounter_ino"
+dbLoadRecords "teensycounter.db", "P=COUNTER-00,BUS=io1"
 
 iocInit
 
