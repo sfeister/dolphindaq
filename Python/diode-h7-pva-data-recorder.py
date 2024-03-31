@@ -136,12 +136,14 @@ def init_diode_h5(f, hello, settings, nt_max, nm_max):
     
     metrics = diode.create_group("Metrics")
     metrics.create_dataset("shot_num", (nm_max,), dtype=np.uint64, chunks=True)
-    metrics.create_dataset("shot_time_seconds", (nm_max,), dtype=np.int64, chunks=True)
-    metrics.create_dataset("shot_time_nanos", (nm_max,), dtype=np.int32, chunks=True)
+    #metrics.create_dataset("shot_time_seconds", (nm_max,), dtype=np.int64, chunks=True)
+    #metrics.create_dataset("shot_time_nanos", (nm_max,), dtype=np.int32, chunks=True)
     metrics.create_dataset("shot_time_alt_nanos", (nm_max,), dtype=np.uint64, chunks=True)
+    #metrics.create_dataset("global_max", (nm_max,), dtype=np.uint64, chunks=True)
+    metrics.create_dataset("global_peak5", (nm_max,), dtype=np.uint64, chunks=True)
     metrics.create_dataset("bg_mean", (nm_max,), dtype=np.double, chunks=True)
     metrics.create_dataset("reduced_mean", (nm_max,), dtype=np.double, chunks=True)
-    metrics.create_dataset("reduced_max", (nm_max,), dtype=np.double, chunks=True)
+    #metrics.create_dataset("reduced_max", (nm_max,), dtype=np.double, chunks=True)
     
     return diode, trace, metrics
                 
@@ -159,12 +161,14 @@ def insert_metrics_h5(metrics_h5, metrics_pbuf, j):
     
     # TODO: Check that it will fit (?) Or perhaps just handle the error message
     metrics_h5["shot_num"][j:j + nm] = metrics_pbuf.shot_num
-    metrics_h5["shot_time_seconds"][j:j + nm] = metrics_pbuf.shot_time_seconds
-    metrics_h5["shot_time_nanos"][j:j + nm] = metrics_pbuf.shot_time_nanos
+    #metrics_h5["shot_time_seconds"][j:j + nm] = metrics_pbuf.shot_time_seconds
+    #metrics_h5["shot_time_nanos"][j:j + nm] = metrics_pbuf.shot_time_nanos
     metrics_h5["shot_time_alt_nanos"][j:j + nm] = metrics_pbuf.shot_time_alt_nanos
+    #metrics_h5["global_max"][j:j + nm] = metrics_pbuf.global_max
+    metrics_h5["global_peak5"][j:j + nm] = metrics_pbuf.global_peak5
     metrics_h5["bg_mean"][j:j + nm] = metrics_pbuf.bg_mean
     metrics_h5["reduced_mean"][j:j + nm] = metrics_pbuf.reduced_mean
-    metrics_h5["reduced_max"][j:j + nm] = metrics_pbuf.reduced_max
+    #metrics_h5["reduced_max"][j:j + nm] = metrics_pbuf.reduced_max
 
 def resize_trace_h5(trace_h5, nshots):
     """ Resize the HDF5 arrays related to diode traces, truncating or expanding to "nshots" shots """
@@ -173,8 +177,10 @@ def resize_trace_h5(trace_h5, nshots):
 
 def resize_metrics_h5(metrics_h5, nshots):
     """ Resize the HDF5 arrays related to diode metrics, truncating or expanding to "nshots" shots """
-    for grpname in ["shot_num", "shot_time_seconds", "shot_time_nanos", "shot_time_alt_nanos", "bg_mean", "reduced_mean", "reduced_max"]:
-        metrics_h5[grpname].resize(nshots, axis=0)
+    grpnames = ["shot_num", "shot_time_seconds", "shot_time_nanos", "shot_time_alt_nanos", "global_max", "global_peak5", "bg_mean", "reduced_mean", "reduced_max"]
+    for grpname in grpnames:
+        if grpname in metrics_h5:
+            metrics_h5[grpname].resize(nshots, axis=0)
 
 # TODO: Organize into setup, daq, cleanup
 def connection_callback(conn):
@@ -203,6 +209,8 @@ def connection_callback(conn):
                 
         nt_max = 1000 # Max number of shots with traces to store in a single HDF5 file (10k ~= 80 MB. Trace settings on device will set the file size.) 
         nm_max = 30000 # Max number of shots with metrics to store in a single HDF5 file (60k = 60 seconds. Metrics settings here will set the batch time duration.)
+        
+        snum_max_old = 0
         
         while msg:
             if dev_rec_on.current():
@@ -246,14 +254,22 @@ def connection_callback(conn):
         
                         # Store the data message appropriately
                         if data.HasField("trace"):
-                            if data.trace.shot_num % 10 == 0:   # DEBUG ONLY
-                                print(data.trace.shot_num)      # DEBUG ONLY
+                            #if data.trace.shot_num % 10 == 0:   # DEBUG ONLY
+                                #print(data.trace.shot_num)      # DEBUG ONLY
 
                             insert_trace_h5(trace_h5, data.trace, i)
                             i += 1
                         
                         if data.HasField("metrics"):                           
                             nm = len(data.metrics.shot_num)
+                            snum_min = data.metrics.shot_num[0]
+                            dropped_between = snum_min - snum_max_old
+                            snum_max = data.metrics.shot_num[-1]
+                            dropped_shots = (snum_max - snum_min + 1) - nm
+                            dropped_shot_rate = dropped_shots / (snum_max - snum_min)
+                            print("Dropped Shots in Data: ", dropped_shots, "Drop shot rate in Data: ", dropped_shot_rate*100, "% Dropped Shots between Data: ", dropped_between)
+                            snum_max_old = snum_max
+
                             if j + nm > nm_max:
                                 raise Warning("Metrics don't all fit in the HDF5 file! Dumping this entire batch of metrics.")
                                 # TODO: Expand the HDF5 file to fit them, and then pinch it off (??)
@@ -292,10 +308,14 @@ def connection_callback(conn):
                     del data # TODO: Is this needed? Check for any memory leaks.
                     
 def pva_handle_data(data):
+    global dev_metrics_global_peak5_avg # PVA
+    global dev_metrics_global_peak5_std # PVA
     global dev_metrics_reduced_mean_avg # PVA
     global dev_metrics_reduced_mean_std # PVA
 
     if data.HasField("metrics"):
+        dev_metrics_global_peak5_avg.post(np.mean(data.metrics.global_peak5), timestamp=time.time())
+        dev_metrics_global_peak5_std.post(np.std(data.metrics.global_peak5), timestamp=time.time())
         dev_metrics_reduced_mean_avg.post(np.mean(data.metrics.reduced_mean), timestamp=time.time())
         dev_metrics_reduced_mean_std.post(np.std(data.metrics.reduced_mean), timestamp=time.time())
     
@@ -309,10 +329,24 @@ if __name__ == "__main__":
                   initial="Diode Multi-Function PVA Server, 20240328")      # setting initial value also open()'s
     dev_rec_on = SharedPV(nt=NTScalar('?'), # scalar boolean
                   initial=True)      # setting initial value also open()'s
+    dev_metrics_global_peak5_avg = SharedPV(nt=NTScalar('d'), # scalar double
+                  initial=0.0)      # setting initial value also open()'s
+    dev_metrics_global_peak5_std = SharedPV(nt=NTScalar('d'), # scalar double
+                  initial=0.0)      # setting initial value also open()'s
     dev_metrics_reduced_mean_avg = SharedPV(nt=NTScalar('d'), # scalar double
                   initial=0.0)      # setting initial value also open()'s
     dev_metrics_reduced_mean_std = SharedPV(nt=NTScalar('d'), # scalar double
                   initial=0.0)      # setting initial value also open()'s
+
+    @dev_metrics_global_peak5_avg.put
+    def dev_metrics_global_peak5_avg_handle(pv, op):
+        pv.post(op.value()) # just store and update subscribers
+        op.done()
+
+    @dev_metrics_global_peak5_std.put
+    def dev_metrics_global_peak5_std_handle(pv, op):
+        pv.post(op.value()) # just store and update subscribers
+        op.done()
 
     @dev_metrics_reduced_mean_std.put
     def dev_metrics_reduced_mean_std_handle(pv, op):
@@ -332,6 +366,7 @@ if __name__ == "__main__":
     providers = {
         DEVICE_NAME + ':info': dev_info,
         DEVICE_NAME + ':RECORDER:on': dev_rec_on,
+        DEVICE_NAME + ':METRICS:global_peak5:avg': dev_metrics_global_peak5_avg,
         DEVICE_NAME + ':METRICS:reduced_mean:avg': dev_metrics_reduced_mean_avg,
         DEVICE_NAME + ':METRICS:reduced_mean:std': dev_metrics_reduced_mean_std,
     }

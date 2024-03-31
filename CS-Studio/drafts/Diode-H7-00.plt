@@ -5,9 +5,9 @@
   <grid>true</grid>
   <update_period>0.25</update_period>
   <scroll_step>5</scroll_step>
-  <scroll>false</scroll>
-  <start>2024-03-28 01:35:21.831</start>
-  <end>2024-03-28 01:39:57.862</end>
+  <scroll>true</scroll>
+  <start>-6 minutes -50.684 seconds</start>
+  <end>now</end>
   <archive_rescale>STAGGER</archive_rescale>
   <foreground>
     <red>0</red>
@@ -35,8 +35,8 @@
         <green>0</green>
         <blue>0</blue>
       </color>
-      <min>-0.020195857631625642</min>
-      <max>0.026269313476837742</max>
+      <min>-7018.054862842895</min>
+      <max>88021.9451371571</max>
       <grid>false</grid>
       <autoscale>false</autoscale>
       <log_scale>false</log_scale>
@@ -46,19 +46,19 @@
   </annotations>
   <pvlist>
     <pv>
-      <display_name>pva://DIODE-H7-00:METRICS:reduced_mean:avg</display_name>
+      <display_name>DIODE-H7-00 Global Peak5</display_name>
       <visible>true</visible>
-      <name>pva://DIODE-H7-00:METRICS:reduced_mean:avg</name>
+      <name>pva://DIODE-H7-00:METRICS:global_peak5:avg</name>
       <axis>0</axis>
       <color>
         <red>255</red>
         <green>0</green>
         <blue>0</blue>
       </color>
-      <trace_type>AREA</trace_type>
+      <trace_type>NONE</trace_type>
       <linewidth>2</linewidth>
       <line_style>SOLID</line_style>
-      <point_type>NONE</point_type>
+      <point_type>CIRCLES</point_type>
       <point_size>2</point_size>
       <waveform_index>0</waveform_index>
       <period>0.0</period>
