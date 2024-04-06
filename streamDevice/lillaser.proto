@@ -1,5 +1,6 @@
-# Teensy Rosie Generator protocol file
+# DolphinDAQ Lil Laser protocol file
 # Built by examining examples at: https://paulscherrerinstitute.github.io/StreamDevice/protocol.html#gen
+# And also by examining input/output formats at https://paulscherrerinstitute.github.io/StreamDevice/formats.html
 
 Terminator = CR LF;
 
@@ -17,43 +18,64 @@ debug {
    in "%39c";
 }
 
-TriggerCountQ {
+TrigCountQ {
         out ":TRIGger:COUNt?";
         in "%u";
     }
 
-TriggerCount {
+TrigCount {
         out ":TRIGger:COUNt %u";
-        @init { TriggerCountQ; }
+        @init { TrigCountQ; }
     }
 
-TriggerDecimationQ {
-        out ":TRIGger:DECimation?";
+#### Lil Laser #####
+
+OutEnabledQ {
+        out ":OUTPut:ENABled?";
+        in "%b";
+    }
+
+OutEnabled {
+        out ":OUTPut:ENABled %b";
+        @init { OutEnabledQ; }
+    }
+
+PrePwrQ {
+        out ":LASer:PRE:POWer?";
+        in "%f";
+    }
+
+PrePwr {
+        out ":LASer:PRE:POWer %f";
+        @init { PrePwrQ; }
+    }
+
+MainPwrQ {
+        out ":LASer:MAIN:POWer?";
+        in "%f";
+    }
+
+MainPwr {
+        out ":LASer:MAIN:POWer %f";
+        @init { MainPwrQ; }
+    }
+
+PreDurQ {
+        out ":LASer:PRE:DURation?";
         in "%u";
     }
 
-TriggerDecimation {
-        out ":TRIGger:DECimation %u";
-        @init {TriggerDecimationQ;}
+PreDur {
+        out ":LASer:PRE:DURation %u";
+        @init { PreDurQ; }
     }
 
-##### TeensyRosie-Specific #####
-RosieOutputEnabledQ {
-        out ":ROSie:OUTPut:ENabled?";
-        in "%i";
-    }
-
-RosieOutputEnabled {
-        out ":ROSie:OUTPut:ENabled %i";
-        @init { RosieOutputEnabledQ; }
-    }
-
-RosieOutputFirstQ {
-        out ":ROSie:OUTPut:FIRSt?";
+MainDurQ {
+        out ":LASer:MAIN:DURation?";
         in "%u";
     }
 
-RosieOutputCountQ {
-        out ":ROSie:OUTPut:COUNt?";
-        in "%u";
+MainDur {
+        out ":LASer:MAIN:DURation %u";
+        @init { MainDurQ; }
     }

@@ -1,25 +1,21 @@
 exec O.$EPICS_HOST_ARCH/streamApp $0
+
 dbLoadDatabase "O.Common/streamApp.dbd"
 streamApp_registerRecordDeviceDriver
 
-
 epicsEnvSet "STREAM_PROTOCOL_PATH","."
 
-drvAsynSerialPortConfigure("teensydiode_ino","/dev/ttyUSB-teensy1.2")
-asynSetOption("teensydiode_ino",0,"baud","115200")
-asynSetOption("teensydiode_ino",0,"bits","8")
-asynSetOption("teensydiode_ino",0,"parity","none")
-asynSetOption("teensydiode_ino",0,"stop","1")
-asynSetOption("teensydiode_ino",0,"clocal","Y")
-asynSetOption("teensydiode_ino",0,"crtscts","N")
+drvAsynSerialPortConfigure("io1","/dev/ttyUSB-teensy1.1")
+asynSetOption("io1",0,"baud","115200")
+asynSetOption("io1",0,"bits","8")
+asynSetOption("io1",0,"parity","none")
+asynSetOption("io1",0,"stop","1")
+asynSetOption("io1",0,"clocal","Y")
+asynSetOption("io1",0,"crtscts","N")
 
-epicsThreadSleep(5) # May not still be needed; was empirically necessary to pause here, to avoid communication timeout on first SCPI commands to Arduinos, circa April 2022 for sidekick system
-
-dbLoadRecords "teensydiode.db"
-
-#log debug output to file
-#streamSetLogfile StreamDebug.log
+dbLoadRecords "teensydiode.db", "P=TEENSYDIODE,BUS=io1"
 
 iocInit
 
-#var streamDebug 1
+# Enable StreamDevice Debugging output (1) or disable output (0)
+var streamDebug 0

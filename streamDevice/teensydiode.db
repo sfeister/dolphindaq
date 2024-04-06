@@ -4,74 +4,67 @@
 
 ##### Common #####
 
-record(stringin,"TEENSYDIODE:info"){
+record(stringin,"$(P):info"){
     field(DESC,"Device identification")
 	field(DTYP,"stream")
-	field(INP,"@teensydiode.proto info teensydiode_ino")
+	field(INP,"@teensydiode.proto info $(BUS)")
     field(PINI,"YES")
 }
 
-record(stringin,"TEENSYDIODE:debug"){
+record(stringin,"$(P):debug"){
 	field(DTYP,"stream")
-	field(INP,"@teensydiode.proto debug teensydiode_ino")
+	field(INP,"@teensydiode.proto debug $(BUS)")
 }
 
 #### Photodiode #####
 
-record(int64in,"TEENSYDIODE:trigger:count"){
+record(int64in,"$(P):trigger:count"){
     field(DESC,"Get global trigger count")
     field(SCAN,"1 second")
 	field(DTYP,"stream")
 	field(EGU,"trigger events")
-    field(INP,"@teensydiode.proto DAQ_TriggerCountQ teensydiode_ino")
+    field(INP,"@teensydiode.proto DAQ_TriggerCountQ $(BUS)")
 }
 
 
-record(int64out,"TEENSYDIODE:trigger:count:set"){
+record(int64out,"$(P):trigger:count:set"){
 	field(DTYP,"stream")
 	field(DRVL,"0")
 	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
 	field(EGU,"trigger events")
-    field(OUT,"@teensydiode.proto DAQ_TriggerCount teensydiode_ino")
+    field(OUT,"@teensydiode.proto DAQ_TriggerCount $(BUS)")
 }
 
-record(ai,"TEENSYDIODE:trace:dt"){
+record(ai,"$(P):trace:dt"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-    field(INP,"@teensydiode.proto DAQ_DiodeTraceDtQ teensydiode_ino")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceDtQ $(BUS)")
 }
 
-record(ai,"TEENSYDIODE:trace:nt"){
+record(int64in,"$(P):trace:nt"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-    field(INP,"@teensydiode.proto DAQ_DiodeTraceNtQ teensydiode_ino")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceNtQ $(BUS)")
 }
 
-record(ai,"TEENSYDIODE:trace:ymin"){
+record(ai,"$(P):trace:ymin"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-    field(INP,"@teensydiode.proto DAQ_DiodeTraceYminQ teensydiode_ino")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceYminQ $(BUS)")
 }
 
-record(ai,"TEENSYDIODE:trace:ymax"){
+record(ai,"$(P):trace:ymax"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
 	field(EGU,"Volts")
-    field(INP,"@teensydiode.proto DAQ_DiodeTraceYmaxQ teensydiode_ino")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceYmaxQ $(BUS)")
 }
 
-record(aai,"TEENSYDIODE:trace:yarr"){
+record(aai,"$(P):trace:yarr"){
     field(SCAN,".1 second")
 	field(DTYP,"stream")
 	field(EGU,"ADC units")
 	field(NELM,100)
     field(FTVL,"USHORT")
-    field(INP,"@teensydiode.proto DAQ_DiodeTraceYarrayQ teensydiode_ino")
-}
-
-record(ai,"TEENSYDIODE:trace:ymax"){
-    field(SCAN,"1 second")
-	field(DTYP,"stream")
-	field(EGU,"Volts")
-    field(INP,"@teensydiode.proto DAQ_DiodeTraceYmaxQ teensydiode_ino")
+    field(INP,"@teensydiode.proto DAQ_DiodeTraceYarrayQ $(BUS)")
 }

@@ -10,9 +10,9 @@
     Tested to work fine at repetition rates up to or even slightly beyond 1 kHz.
 
     PINS:
-      23    |   Input, external trigger (optional; internally triggered by default)
+      23    |   Input, external trigger
       19    |   Output, reference trigger (optional usage for internal triggering is to bridge pins 19 and 23). User-configurable repetition rate.
-      14     |   Output, Pen laser control (this PWM output goes to the base of a transistor which switches the actual laser)
+      22     |   Output, Pen laser control (this PWM output goes to the base of a transistor which switches the actual laser)
       built-in LED     |   Output, green status LED, heartbeat. Flashes once per second reliably.
             
     Written using the other existing DolphinDAQ projects (PulseGenerator, BlinkSync, and Rosie) as computer code templates.

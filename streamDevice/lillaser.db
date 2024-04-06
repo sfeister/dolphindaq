@@ -1,74 +1,98 @@
+# DolphinDAQ Lil Laser database file
+# Matches up with the proto file of the same name
+# Built by checking against supported record types at https://paulscherrerinstitute.github.io/StreamDevice/recordtypes.html
 
 ##### Common #####
 
-record(stringin,"TEENSYROSIE:info"){
+record(stringin,"$(P):info"){
     field(DESC,"Device identification")
-    field(SCAN,"10 second")
 	field(DTYP,"stream")
-	field(INP,"@teensyrosie.proto info teensyrosie_ino")
+	field(INP,"@lillaser.proto info $(BUS)")
     field(PINI,"YES")
 }
 
-record(stringin,"TEENSYROSIE:debug"){
+record(stringin,"$(P):debug"){
 	field(DTYP,"stream")
-	field(INP,"@teensyrosie.proto debug teensyrosie_ino")
+	field(INP,"@lillaser.proto debug $(BUS)")
 }
 
-record(int64in,"TEENSYROSIE:trigger:count"){
+record(int64in,"$(P):trigger:count"){
     field(DESC,"Get global trigger count")
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-    field(INP,"@teensyrosie.proto TriggerCountQ teensyrosie_ino")
-    }
+	field(EGU,"trigger events")
+    field(INP,"@lillaser.proto TrigCountQ $(BUS)")
+}
 
-record(int64out,"TEENSYROSIE:trigger:count:set"){
-    field(DESC,"Set global trigger count")
+
+record(int64out,"$(P):trigger:count:set"){
 	field(DTYP,"stream")
-    field(OUT,"@teensyrosie.proto TriggerCount teensyrosie_ino")
-    }
+	field(DRVL,"0")
+	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
+	field(EGU,"trigger events")
+    field(OUT,"@lillaser.proto TrigCount $(BUS)")
+}
 
-record(int64in,"TEENSYROSIE:trigger:decimation"){
-    field(DESC,"Get trigger decimation")
+#### Lil Laser #####
+
+record(int64in,"$(P):main:duration"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-    field(INP,"@teensyrosie.proto TriggerDecimationQ teensyrosie_ino")
-    }
+    field(INP,"@lillaser.proto MainDurQ $(BUS)")
+}
 
-record(int64out,"TEENSYROSIE:trigger:decimation:set"){
-    field(DESC,"Set trigger decimation")
+record(int64out,"$(P):main:duration:set"){
 	field(DTYP,"stream")
-    field(DRVL,"1") # can't set values less than 1 - a value of 1 means no decimation
-    field(DRVH,"100000") # even for 1kHz, a decimation of 100k gives a pulse less than once per minute; seems a reasonable upper bound
-    field(OUT,"@teensyrosie.proto TriggerDecimation teensyrosie_ino")
-    }
+	field(DRVL,"0")
+    field(OUT,"@lillaser.proto MainDur $(BUS)")
+}
 
-##### TeensyRosie-Specific #####
-
-record(bi,"TEENSYROSIE:rosie:output:enabled"){
-    field(DESC,"Get whether TTL pulse output is enabled")
+record(int64in,"$(P):pre:duration"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-	field(ZNAM,"False")
-	field(ONAM,"True")
-    field(INP,"@teensyrosie.proto RosieOutputEnabledQ teensyrosie_ino")
-    }
+    field(INP,"@lillaser.proto PreDurQ $(BUS)")
+}
 
-record(bo,"TEENSYROSIE:rosie:output:enabled:set"){
-    field(DESC,"Set whether TTL pulse output is enabled")
+record(int64out,"$(P):pre:duration:set"){
 	field(DTYP,"stream")
-	field(ZNAM,"False")
-	field(ONAM,"True")
-    field(OUT,"@teensyrosie.proto RosieOutputEnabled teensyrosie_ino")
-    }
+	field(DRVL,"0")
+    field(OUT,"@lillaser.proto PreDur $(BUS)")
+}
 
-record(int64in,"TEENSYROSIE:rosie:output:first"){
+
+record(ai,"$(P):pre:power"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-    field(INP,"@teensyrosie.proto RosieOutputFirstQ teensyrosie_ino")
-    }
+    field(INP,"@lillaser.proto PrePwrQ $(BUS)")
+}
 
-record(int64in,"TEENSYROSIE:rosie:output:count"){
+record(ao,"$(P):pre:power:set"){
+	field(DTYP,"stream")
+	field(DRVL,"0")
+    field(OUT,"@lillaser.proto PrePwr $(BUS)")
+}
+
+record(ai,"$(P):main:power"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
-    field(INP,"@teensyrosie.proto RosieOutputCountQ teensyrosie_ino")
-    }
+    field(INP,"@lillaser.proto MainPwrQ $(BUS)")
+}
+
+record(ao,"$(P):main:power:set"){
+	field(DTYP,"stream")
+	field(DRVL,"0")
+    field(OUT,"@lillaser.proto MainPwr $(BUS)")
+}
+
+record(bi,"$(P):output:enabled"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@lillaser.proto OutEnabledQ $(BUS)")
+}
+
+record(bo,"$(P):output:enabled:set"){
+	field(DTYP,"stream")
+    field(OUT,"@lillaser.proto OutEnabled $(BUS)")
+}
+
+
