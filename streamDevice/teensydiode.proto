@@ -32,6 +32,16 @@ DAQ_TriggerCount {
 
 #### Photodiode #####
 
+DAQ_DiodeDtQ {
+        out "DIODe:DT?";
+        in "%f";
+    }
+
+DAQ_DiodeDt {
+        out "DIODe:DT %f";
+        @init { DAQ_DiodeDtQ; }
+    }
+
 DAQ_DiodeTraceDtQ {
         out "DIODe:TRACe:DT?";
         in "%f";

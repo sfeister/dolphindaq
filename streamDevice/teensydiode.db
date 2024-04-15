@@ -35,8 +35,24 @@ record(int64out,"$(P):trigger:count:set"){
     field(OUT,"@teensydiode.proto DAQ_TriggerCount $(BUS)")
 }
 
+record(ai,"$(P):dt"){
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+	field(DTYP,"stream")
+    field(INP,"@teensydiode.proto DAQ_DiodeDtQ $(BUS)")
+}
+
+record(ao,"$(P):dt:set"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+	field(DRVL,"10.0e-6")
+	field(DRVH,"10.0e-3") # this is not a strict device limit but seems reasonable for applications
+    field(OUT,"@teensydiode.proto DAQ_DiodeDt $(BUS)")
+}
+
 record(ai,"$(P):trace:dt"){
     field(SCAN,"1 second")
+	field(EGU,"seconds")
 	field(DTYP,"stream")
     field(INP,"@teensydiode.proto DAQ_DiodeTraceDtQ $(BUS)")
 }
@@ -49,12 +65,14 @@ record(int64in,"$(P):trace:nt"){
 
 record(ai,"$(P):trace:ymin"){
     field(SCAN,"1 second")
+	field(EGU,"Volts")
 	field(DTYP,"stream")
     field(INP,"@teensydiode.proto DAQ_DiodeTraceYminQ $(BUS)")
 }
 
 record(ai,"$(P):trace:ymax"){
     field(SCAN,"1 second")
+	field(EGU,"Volts")
 	field(DTYP,"stream")
 	field(EGU,"Volts")
     field(INP,"@teensydiode.proto DAQ_DiodeTraceYmaxQ $(BUS)")

@@ -30,26 +30,20 @@ using namespace TeensyTimerTool;
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN LED_BUILTIN
 #define LASER_PIN 22 // Note, must avoid PWM clashes: https://github.com/luni64/TeensyTimerTool/wiki/Avoid-PWM-timer-clashes#teensy-41
-#define TRACE_NT 70 // Number of steps in the laser temporal profile array
-#define TRACE_DT 10 // Microseconds between steps in the laser temporal profile array
-#define DAC_NSTEPS 100 // Number of steps in the DAC temporal profile array
-#define DAC_US 5 // Number of microseconds between updates to the DAC
+#define DAC_NT 100 // Number of steps in the DAC temporal profile array
 
-extern const int32_t settings_dac_nsteps = DAC_NSTEPS;
-extern const int32_t settings_dac_us = DAC_US;
+extern const int settings_dac_nt = DAC_NT;
+uint32_t settings_dac_dt; // Number of microseconds between updates to the DAC
+uint32_t settings_dac_dt_pr; // Preload
 
 bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
 volatile uint32_t dac_index = 0; // Incrementing index specifying which element of the dac_powers array we are currently on
 // declared "volatile" for compiler as this value is updated within interrupts
 
-// Powers (0.0 to 1.0) that form the laser temporal profile
-float powers[TRACE_NT];
-float powers_pr[TRACE_NT]; // preload
-
 // Powers (0 to 255) that form the laser temporal profile
-uint8_t dac_powers[DAC_NSTEPS];
-uint8_t dac_powers_pr[DAC_NSTEPS]; // preload
+uint8_t dac_powers[settings_dac_nt];
+uint8_t dac_powers_pr[settings_dac_nt]; // preload
 
 // Boolean: 1 if LilLaser's optical flashes are enabled.
 bool out_enabled;
@@ -74,7 +68,7 @@ void ISR_exttrig() {
 // repeatedly called until all elements of dac_powers array have been written
 void dac_callback()
 {
-  if (dac_index < DAC_NSTEPS) {
+  if (dac_index < settings_dac_nt) {
     analogWrite(LASER_PIN, dac_powers[dac_index]);
     //Serial.println(dac_powers[dac_index]);
     dac_index++;
@@ -89,23 +83,17 @@ void dac_callback()
 void setup() {
   // set up preload values
   out_enabled_pr = true;
+  settings_dac_dt_pr = 5;
 
-  for (int i = 0; i < TRACE_NT; i++) {
-    powers_pr[i] = i / 255.; // a recognizable initialization of powers to an incrementing value
-  }
-
-  for (int i = 0; i < DAC_NSTEPS; i++) {
+  for (int i = 0; i < settings_dac_nt; i++) {
     dac_powers_pr[i] = i; // a recognizable initialization of DAC powers to an incrementing value
   }
 
   // Load in active values from preload values
   out_enabled = out_enabled_pr;
-  
-  for (int i = 0; i < TRACE_NT; i++) {
-    powers[i] = powers_pr[i];
-  }
+  settings_dac_dt = settings_dac_dt_pr;
 
-  for (int i = 0; i < DAC_NSTEPS; i++) {
+  for (int i = 0; i < settings_dac_nt; i++) {
     dac_powers[i] = dac_powers_pr[i];
   }
 
@@ -117,7 +105,7 @@ void setup() {
   analogWrite(LASER_PIN, 0); // make sure we start things off with no laser output
 
   // Setup the output timers
-  dacTimer.begin(dac_callback, DAC_US, false);
+  dacTimer.begin(dac_callback, settings_dac_dt, false);
   // TODO: laser output is time-sensitive! high priority, higher than communication priority. 
 
   // attach the external interrupt
@@ -142,12 +130,10 @@ void loop() {
 
       // Load in active values from preload values
       out_enabled = out_enabled_pr;
+      settings_dac_dt = settings_dac_dt_pr;
+      dacTimer.setPeriod(settings_dac_dt);
       
-      for (int i = 0; i < TRACE_NT; i++) {
-        powers[i] = powers_pr[i];
-      }
-
-      for (int i = 0; i < DAC_NSTEPS; i++) {
+      for (int i = 0; i < settings_dac_nt; i++) {
         dac_powers[i] = dac_powers_pr[i];
       }
            

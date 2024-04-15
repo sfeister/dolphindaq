@@ -49,17 +49,17 @@ dma_adc_buff1[buffer_size];
 AnalogBufferDMA abdma1(dma_adc_buff1, buffer_size);
 // END ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
 
-uint16_t imgbuf_trace[TRACE_NT];
+volatile uint16_t imgbuf_trace[TRACE_NT];
 
 
-bool lock_adc = false; // Boolean: 1 if adc_buffer is currently being written to
-bool lock_trace = false; // Boolean: 1 if trace is currently being written to
-bool ripe_trace = false; // Boolean: 1 if Trace block is filled and ready (a new trace is "ripe" for transfer)
-bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
-uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
-uint64_t trigcnt_adc = 0; // Trigger ID that matches the trace held in adc_buf array, updated prior to buffer being filled
-uint64_t trigcnt_trace = 0; // Trigger ID that matches the trace held in trace (until it's filled into the trace object)
-uint16_t imgbuf_adc[TRACE_NT]; // Buffer completely re-filled by the ADC during each acquisition. Used within the ADC block of the timing.
+volatile bool lock_adc = false; // Boolean: 1 if adc_buffer is currently being written to
+volatile bool lock_trace = false; // Boolean: 1 if trace is currently being written to
+volatile bool ripe_trace = false; // Boolean: 1 if Trace block is filled and ready (a new trace is "ripe" for transfer)
+volatile bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
+volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
+volatile uint64_t trigcnt_adc = 0; // Trigger ID that matches the trace held in adc_buf array, updated prior to buffer being filled
+volatile uint64_t trigcnt_trace = 0; // Trigger ID that matches the trace held in trace (until it's filled into the trace object)
+volatile uint16_t imgbuf_adc[TRACE_NT]; // Buffer completely re-filled by the ADC during each acquisition. Used within the ADC block of the timing.
 
 // Instantiate a Chrono object for the led heartbeat and LED trigger display
 Chrono heartbeatChrono; 
@@ -78,7 +78,7 @@ uint32_t settings_len;
 bool settings_status;
 
 dolphindaq_diode_Settings settings = dolphindaq_diode_Settings_init_zero;
-dolphindaq_diode_Settings settings_pr = dolphindaq_diode_Settings_init_zero; // preload settings
+dolphindaq_diode_Settings settings_pr = dolphindaq_diode_Settings_init_zero; // preload settings (currently unused)
 pb_ostream_t settings_stream;
 
 /** Initialize Diode (Trace) Data Protobuffer **/
@@ -96,12 +96,12 @@ void ISR_exttrig() {
     // (1) Increment trigger counter
     trigcnt++;
 
-    // (2) Activate the ADC (TODO)
+    // (2) Activate the ADC
     if (!lock_adc) {
       lock_adc = true;
       trigcnt_adc = trigcnt;
       adc->adc0->startSingleRead(readPin_adc_0);
-      adc->adc0->startTimer(100000); // frequency in Hz
+      adc->adc0->startTimer(static_cast<uint32_t>(1.0 / settings.dt)); // frequency in Hz
       digitalToggleFast(DEBUG_PIN);
     }
 
@@ -121,6 +121,13 @@ void update_settings(dolphindaq_diode_Settings* settings_ptr) {
   s->has_trace_nt = true;
   s->trace_nt = TRACE_NT;
 
+  if (!s->has_dt) {
+    s->has_dt = true;
+    s->dt = 10.0e-6; // default dt of 10 microseconds
+  }
+  s->has_trace_dt = true;
+  s->trace_dt = s->dt;
+
   // Y axis limits
   s->has_trace_ymin = true;
   s->trace_ymin = 0.0; // TODO: Confirm that "0" in ADC actually matches this voltage (or grab it from the chip)
@@ -133,6 +140,9 @@ void setup() {
 
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
+
+  // initialize settings
+  update_settings(&settings);
 
   // ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
@@ -148,15 +158,13 @@ void setup() {
   adc->adc0->startSingleRead(
       readPin_adc_0); // call this to setup everything before the Timer starts,
                       // differential is also possible
-  adc->adc0->startTimer(50000); // frequency in Hz
+  adc->adc0->startTimer(50000); // frequency in Hz - I don't think this is actually used since it's set later
 
   // end ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
 
   // attach the external interrupt
   pinMode(EXTTRIG_PIN, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(EXTTRIG_PIN), ISR_exttrig, RISING);
-
-  update_settings(&settings);
 
   // Initialize SCPI interface
   SCPI_Arduino_Setup(); // note, begins Serial if communication style is Serial
@@ -172,7 +180,8 @@ void loop() {
   // Check for settings updates
   if (await_update) {
     delayMicroseconds(100); // short delay to clear out any existing triggered pulses
-    // TODO: Implement all updates
+    // Implement all updates
+    update_settings(&settings);
     await_update = false;
   }
   

@@ -45,12 +45,12 @@
 
 #include <SCPI_Parser.h>
 
-#define SCPI_INPUT_BUFFER_LENGTH 256
+#define SCPI_INPUT_BUFFER_LENGTH  1500 // bumped up from 256 to handle long strings of laser power arrays!
 #define SCPI_ERROR_QUEUE_SIZE 17
 #define SCPI_IDN1 "DOLPHINDAQ"
 #define SCPI_IDN2 "LilLaser"
 #define SCPI_IDN3 "00"
-#define SCPI_IDN4 "20240413"
+#define SCPI_IDN4 "20240414"
 
 extern const scpi_command_t scpi_commands[];
 extern scpi_interface_t scpi_interface;

@@ -51,10 +51,15 @@ Powers {
     separator=",";
     @init { PowersQ; }
 }
-    
+   
 PowersDtQ {
     out ":LASer:POWers:DT?";
     in "%u";
+}
+
+PowersDt {
+    out ":LASer:POWers:DT %u";
+    @init { PowersDtQ; }
 }
 
 PowersNtQ {

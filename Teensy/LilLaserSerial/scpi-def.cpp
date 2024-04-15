@@ -51,14 +51,14 @@
 extern uint64_t trigcnt;
 extern bool await_update;
 
-extern const int32_t settings_dac_nsteps;
-extern const int32_t settings_dac_us;
-
 extern uint8_t dac_powers_pr[];
 extern bool out_enabled_pr;
+extern uint32_t settings_dac_dt_pr;
 
 extern const uint8_t dac_powers[];
 extern const bool out_enabled;
+extern const int settings_dac_nt;
+extern const uint32_t settings_dac_dt;
 
 static scpi_result_t DAQ_TriggerCountQ(scpi_t * context) {
     SCPI_ResultUInt64(context, trigcnt);
@@ -107,13 +107,13 @@ static scpi_result_t DAQ_OutputEnabledQ(scpi_t * context) {
 
 // LILLASER Specific
 static scpi_result_t DAQ_LaserPowersQ(scpi_t * context) {
-    SCPI_ResultArrayUInt8(context, &dac_powers[0], settings_dac_nsteps, SCPI_FORMAT_ASCII);
+    SCPI_ResultArrayUInt8(context, &dac_powers[0], settings_dac_nt, SCPI_FORMAT_ASCII);
 
     return SCPI_RES_OK;
 }
 
 static scpi_result_t DAQ_LaserPowers(scpi_t * context) {
-    const size_t input_count = settings_dac_nsteps;
+    const size_t input_count = settings_dac_nt;
     size_t output_count;
     int32_t myvals[input_count];
 
@@ -124,7 +124,7 @@ static scpi_result_t DAQ_LaserPowers(scpi_t * context) {
 
     // TODO: Throw SCPI error when output count doesn't equal input count
 
-    for (int i = 0; i < settings_dac_nsteps; i++) {
+    for (int i = 0; i < settings_dac_nt; i++) {
       dac_powers_pr[i] = myvals[i];
     }
 
@@ -134,13 +134,27 @@ static scpi_result_t DAQ_LaserPowers(scpi_t * context) {
 }
 
 static scpi_result_t DAQ_LaserPowersDtQ(scpi_t * context) {
-    SCPI_ResultUInt32(context, settings_dac_us);
+    SCPI_ResultUInt32(context, settings_dac_dt);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_LaserPowersDt(scpi_t * context) {
+    uint32_t param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamUInt32(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    settings_dac_dt_pr = param1;
+    await_update = true;
 
     return SCPI_RES_OK;
 }
 
 static scpi_result_t DAQ_LaserPowersNtQ(scpi_t * context) {
-    SCPI_ResultUInt32(context, settings_dac_nsteps);
+    SCPI_ResultUInt32(context, settings_dac_nt);
 
     return SCPI_RES_OK;
 }
@@ -183,6 +197,7 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "LASer:POWers:YARRay?", .callback = DAQ_LaserPowersQ,},
     {.pattern = "LASer:POWers:YARRay", .callback = DAQ_LaserPowers,},
     {.pattern = "LASer:POWers:DT?", .callback = DAQ_LaserPowersDtQ,},
+    {.pattern = "LASer:POWers:DT", .callback = DAQ_LaserPowersDt,},
     {.pattern = "LASer:POWers:NT?", .callback = DAQ_LaserPowersNtQ,},
 
     {"SYSTem:COMMunication:TCPIP:CONTROL?", SCPI_SystemCommTcpipControlQ, 0},

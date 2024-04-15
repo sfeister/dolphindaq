@@ -51,7 +51,6 @@
 /// EXTERNAL VARIABLES (from DiodeSerial.ino)
 extern uint64_t trigcnt;
 extern dolphindaq_diode_Settings settings;
-extern dolphindaq_diode_Settings settings_pr;
 extern uint16_t imgbuf_trace[];
 extern bool await_update;
 
@@ -77,6 +76,26 @@ static scpi_result_t DAQ_TriggerCount(scpi_t * context) {
 // DIODE Specific
 static scpi_result_t DAQ_DiodeTraceDtQ(scpi_t * context) {
     SCPI_ResultDouble(context, settings.trace_dt);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_DiodeDt(scpi_t * context) {
+    double param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamDouble(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    settings.dt = param1;
+    await_update = true;
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_DiodeDtQ(scpi_t * context) {
+    SCPI_ResultDouble(context, settings.dt);
 
     return SCPI_RES_OK;
 }
@@ -136,6 +155,8 @@ const scpi_command_t scpi_commands[] = {
     /* DAQ */
     {.pattern = "TRIGger:COUNt?", .callback = DAQ_TriggerCountQ,},
     {.pattern = "TRIGger:COUNt", .callback = DAQ_TriggerCount,},
+    {.pattern = "DIODe:DT", .callback = DAQ_DiodeDt,},
+    {.pattern = "DIODe:DT?", .callback = DAQ_DiodeDtQ,},
     {.pattern = "DIODe:TRACe:DT?", .callback = DAQ_DiodeTraceDtQ,},
     {.pattern = "DIODe:TRACe:NT?", .callback = DAQ_DiodeTraceNtQ,},
     {.pattern = "DIODe:TRACe:YMIN?", .callback = DAQ_DiodeTraceYminQ,},

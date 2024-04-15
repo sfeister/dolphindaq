@@ -53,6 +53,14 @@ record(longin,"$(P):powers:dt"){
     field(INP,"@lillaser.proto PowersDtQ $(BUS)")
 }
 
+record(longout,"$(P):powers:dt:set"){
+	field(DTYP,"stream")
+	field(EGU,"MICROS")
+	field(DRVH,"10000")
+	field(DRVL,"5")
+    field(OUT,"@lillaser.proto PowersDt $(BUS)")
+}
+
 record(longin,"$(P):powers:nt"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
