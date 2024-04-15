@@ -35,55 +35,6 @@ record(int64out,"$(P):trigger:count:set"){
 
 #### Lil Laser #####
 
-record(int64in,"$(P):main:duration"){
-    field(SCAN,"1 second")
-	field(DTYP,"stream")
-    field(INP,"@lillaser.proto MainDurQ $(BUS)")
-}
-
-record(int64out,"$(P):main:duration:set"){
-	field(DTYP,"stream")
-	field(DRVL,"0")
-    field(OUT,"@lillaser.proto MainDur $(BUS)")
-}
-
-record(int64in,"$(P):pre:duration"){
-    field(SCAN,"1 second")
-	field(DTYP,"stream")
-    field(INP,"@lillaser.proto PreDurQ $(BUS)")
-}
-
-record(int64out,"$(P):pre:duration:set"){
-	field(DTYP,"stream")
-	field(DRVL,"0")
-    field(OUT,"@lillaser.proto PreDur $(BUS)")
-}
-
-
-record(ai,"$(P):pre:power"){
-    field(SCAN,"1 second")
-	field(DTYP,"stream")
-    field(INP,"@lillaser.proto PrePwrQ $(BUS)")
-}
-
-record(ao,"$(P):pre:power:set"){
-	field(DTYP,"stream")
-	field(DRVL,"0")
-    field(OUT,"@lillaser.proto PrePwr $(BUS)")
-}
-
-record(ai,"$(P):main:power"){
-    field(SCAN,"1 second")
-	field(DTYP,"stream")
-    field(INP,"@lillaser.proto MainPwrQ $(BUS)")
-}
-
-record(ao,"$(P):main:power:set"){
-	field(DTYP,"stream")
-	field(DRVL,"0")
-    field(OUT,"@lillaser.proto MainPwr $(BUS)")
-}
-
 record(bi,"$(P):output:enabled"){
     field(SCAN,"1 second")
 	field(DTYP,"stream")
@@ -93,6 +44,36 @@ record(bi,"$(P):output:enabled"){
 record(bo,"$(P):output:enabled:set"){
 	field(DTYP,"stream")
     field(OUT,"@lillaser.proto OutEnabled $(BUS)")
+}
+
+record(longin,"$(P):powers:dt"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"MICROS")
+    field(INP,"@lillaser.proto PowersDtQ $(BUS)")
+}
+
+record(longin,"$(P):powers:nt"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@lillaser.proto PowersNtQ $(BUS)")
+}
+
+record(aai,"$(P):powers"){
+    field(SCAN,".1 second")
+	field(DTYP,"stream")
+	field(EGU,"ADC units")
+	field(NELM,100)
+    field(FTVL,"USHORT")
+    field(INP,"@lillaser.proto PowersQ $(BUS)")
+}
+
+record(aao,"$(P):powers:set"){
+	field(DTYP,"stream")
+	field(EGU,"ADC units")
+	field(NELM,100)
+    field(FTVL,"USHORT")
+    field(OUT,"@lillaser.proto Powers $(BUS)")
 }
 
 

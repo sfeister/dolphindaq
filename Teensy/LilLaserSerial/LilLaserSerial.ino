@@ -11,7 +11,6 @@
 
     PINS:
       23    |   Input, external trigger
-      19    |   Output, reference trigger (optional usage for internal triggering is to bridge pins 19 and 23). User-configurable repetition rate.
       22     |   Output, Pen laser control (this PWM output goes to the base of a transistor which switches the actual laser)
       built-in LED     |   Output, green status LED, heartbeat. Flashes once per second reliably.
             
@@ -19,7 +18,7 @@
 
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
     
-    Written by Scott Feister on September 23, 2023.
+    Written by Scott Feister on September 23, 2023. (and continued improvement through 2024)
 */
 
 #include <Arduino.h>
@@ -28,96 +27,98 @@
 #include "TeensyTimerTool.h"
 using namespace TeensyTimerTool;
 
-#define REF_PIN 19 // reference / internal trigger pin
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN LED_BUILTIN
 #define LASER_PIN 22 // Note, must avoid PWM clashes: https://github.com/luni64/TeensyTimerTool/wiki/Avoid-PWM-timer-clashes#teensy-41
-#define MAIN_WIDTH_US 10 // (lower bound for) main-pulse width in microseconds
-#define PRE_WIDTH_US 10 // (lower bound for) pre-pulse width in microseconds
+#define TRACE_NT 70 // Number of steps in the laser temporal profile array
+#define TRACE_DT 10 // Microseconds between steps in the laser temporal profile array
+#define DAC_NSTEPS 100 // Number of steps in the DAC temporal profile array
+#define DAC_US 5 // Number of microseconds between updates to the DAC
 
-IntervalTimer periodTimer;
-OneShotTimer t1; // pre-pulse timer  // Note, must avoid PWM clashes: https://github.com/luni64/TeensyTimerTool/wiki/Avoid-PWM-timer-clashes#teensy-41
-OneShotTimer t2; // main pulse timer  // Note, must avoid PWM clashes: https://github.com/luni64/TeensyTimerTool/wiki/Avoid-PWM-timer-clashes#teensy-41
-OneShotTimer tref; // internal trigger reference timer  // Note, must avoid PWM clashes: https://github.com/luni64/TeensyTimerTool/wiki/Avoid-PWM-timer-clashes#teensy-41
+extern const int32_t settings_dac_nsteps = DAC_NSTEPS;
+extern const int32_t settings_dac_us = DAC_US;
 
 bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
-uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
+volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
+volatile uint32_t dac_index = 0; // Incrementing index specifying which element of the dac_powers array we are currently on
+// declared "volatile" for compiler as this value is updated within interrupts
 
- // preload values
-bool out_enabled_pr = true; // Boolean: 1 if LilLaser's optical flashes are enabled.
-uint32_t prepulse_us_pr = 300; // Pre-pulse pulse duration, in microseconds
-uint32_t mainpulse_us_pr = 100; // Main pulse pulse duration, in microseconds
-double prepulse_power_pr = 0.1; // Pre-pulse power (W), on a scale from zero to one
-double mainpulse_power_pr = 0.9; // Main pulse power (W), on a scale from zero to one
-uint32_t refreprate_hz_pr = 20; // Start out at 20 Hz repetition rate for reference pulses
+// Powers (0.0 to 1.0) that form the laser temporal profile
+float powers[TRACE_NT];
+float powers_pr[TRACE_NT]; // preload
 
-// Load in active values from preload values
-bool out_enabled = out_enabled_pr;
-uint32_t prepulse_us = prepulse_us_pr;
-uint32_t mainpulse_us = mainpulse_us_pr;
-double prepulse_power = prepulse_power_pr;
-double mainpulse_power = mainpulse_power_pr;
-uint32_t refreprate_hz = refreprate_hz_pr;
-uint32_t refperiod_us = (1.0 / refreprate_hz) * 1000000; // convert frequency (Hz) to time (microseconds);
+// Powers (0 to 255) that form the laser temporal profile
+uint8_t dac_powers[DAC_NSTEPS];
+uint8_t dac_powers_pr[DAC_NSTEPS]; // preload
 
-// Instantiate a Chrono object for the led heartbeat and LED trigger display
+// Boolean: 1 if LilLaser's optical flashes are enabled.
+bool out_enabled;
+bool out_enabled_pr; // preload
+
+// Chrono object for the led heartbeat and LED trigger display
 Chrono heartbeatChrono; 
+
+// Interrupt-based periodic timer for timing the digital-to-analog conversion (not a real DAC, but a PWM-based DAC)
+PeriodicTimer dacTimer;
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
   trigcnt++;
   if ((!await_update) && out_enabled) {
-      // Start the pre-pulse laser output
-      analogWrite(LASER_PIN, round(prepulse_power * 255));
-      t1.trigger(prepulse_us);
+      // Start the laser output
+      dac_index = 0;
+      dacTimer.start();
   }
 }
 
-// The reference-trigger period callback sets the internal reference trigger to high
-void ref_trig_callback() {
-  if (!await_update) {
-    digitalWriteFast(REF_PIN, HIGH);
-    tref.trigger(10);
+// repeatedly called until all elements of dac_powers array have been written
+void dac_callback()
+{
+  if (dac_index < DAC_NSTEPS) {
+    analogWrite(LASER_PIN, dac_powers[dac_index]);
+    //Serial.println(dac_powers[dac_index]);
+    dac_index++;
+  } else {
+    analogWrite(LASER_PIN, 0);
+    dacTimer.stop(); // end of array; stop the DAC
+    //Serial.println("STOPPED.");
+    // digitalWriteFast(LASER_PIN, LOW); // zero the laser output
   }
-}
-
-// The reference-trigger timer callback only exists to pull the internal reference trigger back to low
-void tref_callback()
-{
-  digitalWriteFast(REF_PIN, LOW);    
-}
-
-// The pre-pulse and main pulse timer callbacks are each called exactly once per pulse fire
-void t1_callback()
-{
-  // Pre-pulse timer expired, start the main pulse laser output
-  analogWrite(LASER_PIN, round(mainpulse_power * 255));
-  t2.trigger(mainpulse_us);
-}
-
-void t2_callback()
-{
-  // Main pulse timer expired, stop all laser output
-  analogWrite(LASER_PIN, 0);
 }
 
 void setup() {
+  // set up preload values
+  out_enabled_pr = true;
+
+  for (int i = 0; i < TRACE_NT; i++) {
+    powers_pr[i] = i / 255.; // a recognizable initialization of powers to an incrementing value
+  }
+
+  for (int i = 0; i < DAC_NSTEPS; i++) {
+    dac_powers_pr[i] = i; // a recognizable initialization of DAC powers to an incrementing value
+  }
+
+  // Load in active values from preload values
+  out_enabled = out_enabled_pr;
+  
+  for (int i = 0; i < TRACE_NT; i++) {
+    powers[i] = powers_pr[i];
+  }
+
+  for (int i = 0; i < DAC_NSTEPS; i++) {
+    dac_powers[i] = dac_powers_pr[i];
+  }
+
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
-  pinMode(REF_PIN, OUTPUT);
 
   // set laser as an output
   analogWriteFrequency(LASER_PIN, 2000000); // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
   analogWrite(LASER_PIN, 0); // make sure we start things off with no laser output
 
-
   // Setup the output timers
-  t1.begin(t1_callback);
-  t2.begin(t2_callback);
-  tref.begin(tref_callback);
-
-  periodTimer.priority(255); // set the long timescale timer interrupt to low priority, so it doesn't interfere with the higher-precision timing
-  periodTimer.begin(ref_trig_callback, refperiod_us);
+  dacTimer.begin(dac_callback, DAC_US, false);
+  // TODO: laser output is time-sensitive! high priority, higher than communication priority. 
 
   // attach the external interrupt
   pinMode(EXTTRIG_PIN, INPUT_PULLDOWN);
@@ -132,32 +133,25 @@ void loop() {
   if (heartbeatChrono.hasPassed(500)) { // check if the 500 milliseconds of heartbeat have elapsed
     digitalToggleFast(HEARTBEAT_LED_PIN); // write LED state to pin
     heartbeatChrono.restart();
-    Serial.println(round(mainpulse_power * 255));
   }
     
   if (await_update) {
-      periodTimer.end();
-      tref.stop();
-      t1.stop();
-      t2.stop();
-
-      delayMicroseconds(100); // short superstitious delay to clear things out
-
-      // Bring all outputs back to low, in case they were stuck high when we cut them off
-      digitalWriteFast(REF_PIN, LOW);
+      // stop the laser output
+      dacTimer.stop();
       digitalWriteFast(LASER_PIN, LOW);
 
       // Load in active values from preload values
       out_enabled = out_enabled_pr;
-      prepulse_us = prepulse_us_pr;
-      mainpulse_us = mainpulse_us_pr;
-      prepulse_power = prepulse_power_pr;
-      mainpulse_power = mainpulse_power_pr;
-      refreprate_hz = refreprate_hz_pr;
-      refperiod_us = (1.0 / refreprate_hz) * 1000000; // convert frequency (Hz) to time (microseconds)
+      
+      for (int i = 0; i < TRACE_NT; i++) {
+        powers[i] = powers_pr[i];
+      }
+
+      for (int i = 0; i < DAC_NSTEPS; i++) {
+        dac_powers[i] = dac_powers_pr[i];
+      }
            
       await_update = false;
-      periodTimer.begin(ref_trig_callback, refperiod_us);
   }
 
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands

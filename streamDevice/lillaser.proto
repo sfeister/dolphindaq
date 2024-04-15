@@ -19,63 +19,46 @@ debug {
 }
 
 TrigCountQ {
-        out ":TRIGger:COUNt?";
-        in "%u";
-    }
+    out ":TRIGger:COUNt?";
+    in "%u";
+}
 
 TrigCount {
-        out ":TRIGger:COUNt %u";
-        @init { TrigCountQ; }
-    }
+    out ":TRIGger:COUNt %u";
+    @init { TrigCountQ; }
+}
 
 #### Lil Laser #####
 
 OutEnabledQ {
-        out ":OUTPut:ENABled?";
-        in "%b";
-    }
+    out ":OUTPut:ENABled?";
+    in "%b";
+}
 
 OutEnabled {
-        out ":OUTPut:ENABled %b";
-        @init { OutEnabledQ; }
-    }
+    out ":OUTPut:ENABled %b";
+    @init { OutEnabledQ; }
+}
 
-PrePwrQ {
-        out ":LASer:PRE:POWer?";
-        in "%f";
-    }
+PowersQ {
+    out ":LASer:POWers:YARRay?";
+    separator=",";
+    in "%u";
+}
+    
+Powers {
+    out ":LASer:POWers:YARRay %u";
+    separator=",";
+    @init { PowersQ; }
+}
+    
+PowersDtQ {
+    out ":LASer:POWers:DT?";
+    in "%u";
+}
 
-PrePwr {
-        out ":LASer:PRE:POWer %f";
-        @init { PrePwrQ; }
-    }
+PowersNtQ {
+    out ":LASer:POWers:NT?";
+    in "%u";
+}
 
-MainPwrQ {
-        out ":LASer:MAIN:POWer?";
-        in "%f";
-    }
-
-MainPwr {
-        out ":LASer:MAIN:POWer %f";
-        @init { MainPwrQ; }
-    }
-
-PreDurQ {
-        out ":LASer:PRE:DURation?";
-        in "%u";
-    }
-
-PreDur {
-        out ":LASer:PRE:DURation %u";
-        @init { PreDurQ; }
-    }
-
-MainDurQ {
-        out ":LASer:MAIN:DURation?";
-        in "%u";
-    }
-
-MainDur {
-        out ":LASer:MAIN:DURation %u";
-        @init { MainDurQ; }
-    }

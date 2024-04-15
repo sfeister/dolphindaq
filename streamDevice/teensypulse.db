@@ -28,7 +28,7 @@ record(int64out,"$(P):trigger:count:set"){
     }
 
 record(bi,"$(P):output:enabled"){
-    field(DESC,"Get whether TTL pulse output is enabled")
+    field(DESC,"Get whether outputs enabled")
     field(SCAN,"1 second")
 	field(DTYP,"stream")
 	field(ZNAM,"False")
@@ -37,7 +37,7 @@ record(bi,"$(P):output:enabled"){
     }
 
 record(bo,"$(P):output:enabled:set"){
-    field(DESC,"Set whether TTL pulse output is enabled")
+    field(DESC,"Set whether outputs enabled")
 	field(DTYP,"stream")
 	field(ZNAM,"False")
 	field(ONAM,"True")
@@ -45,7 +45,7 @@ record(bo,"$(P):output:enabled:set"){
     }
 
 record(ao,"$(P):reprate:set"){
-    field (DESC, "Set current repetition rate of pulse generator")
+    field (DESC, "Set rep rate of outputs")
 	field(DTYP,"stream")
     field(DRVL,"0")
 	field(EGU,"Hz")
@@ -53,7 +53,7 @@ record(ao,"$(P):reprate:set"){
 }
 
 record(ai,"$(P):reprate"){
-    field (DESC, "Get current repetition rate of pulse generator")
+    field (DESC, "Get rep rates of outputs")
     field(SCAN,"1 second")
 	field(DTYP,"stream")
 	field(EGU,"Hz")
