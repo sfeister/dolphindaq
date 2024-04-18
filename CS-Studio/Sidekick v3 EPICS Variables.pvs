@@ -158,56 +158,35 @@
         </pv>
         <pv>
             <selected>false</selected>
-            <name>LASER:main:duration</name>
+            <name>LASER:powers:nt</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
         <pv>
             <selected>false</selected>
-            <name>LASER:main:duration:set</name>
+            <name>LASER:powers:dt</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
         <pv>
             <selected>false</selected>
-            <name>LASER:pre:duration</name>
+            <name>LASER:powers:dt:set</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
         <pv>
             <selected>false</selected>
-            <name>LASER:pre:duration:set</name>
+            <name>LASER:powers</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
         <pv>
             <selected>false</selected>
-            <name>LASER:main:power</name>
-            <tolerance>0.1</tolerance>
-            <saved_value_timestamp/>
-            <completion>true</completion>
-        </pv>
-        <pv>
-            <selected>false</selected>
-            <name>LASER:main:power:set</name>
-            <tolerance>0.1</tolerance>
-            <saved_value_timestamp/>
-            <completion>true</completion>
-        </pv>
-        <pv>
-            <selected>false</selected>
-            <name>LASER:pre:power</name>
-            <tolerance>0.1</tolerance>
-            <saved_value_timestamp/>
-            <completion>true</completion>
-        </pv>
-        <pv>
-            <selected>false</selected>
-            <name>LASER:pre:power:set</name>
+            <name>LASER:powers:set</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
@@ -236,6 +215,20 @@
         <pv>
             <selected>false</selected>
             <name>ELECTRON:trigger:count:set</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
+            <name>ELECTRON:dt</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
+            <name>ELECTRON:dt:set</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
@@ -299,6 +292,20 @@
         <pv>
             <selected>false</selected>
             <name>PROTON:trigger:count:set</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
+            <name>PROTON:dt</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
+            <name>PROTON:dt:set</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
