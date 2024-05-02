@@ -14,6 +14,8 @@
     Part of DolphinDAQ. No serial communication needed here, at least for now. It's more of a standalone device.
     
     Written by Scott Feister on September 25, 2023.
+
+    MODIFIED FOR SIDEKICK MODEL 4 to reverse phototransistor polarization expectations. E.g. 1023 becomes 0, and 0 becomes 1023.
 */
 
 #include <Arduino.h>
@@ -24,7 +26,7 @@
 #define ANALOG_WRITE_PWM_HZ 1000000
 
 int laser_raw, electron_raw, proton_raw;
-double laser_power, electron_current, proton_current;
+double laser_power, laser_power_tmp, electron_current, proton_current;
 
 void setup() {
   analogWriteFrequency(PROTON_PIN, ANALOG_WRITE_PWM_HZ); // try and smooth the PWM of the leds
@@ -34,7 +36,8 @@ void setup() {
 void loop() {
   // Read in the laser power
   laser_raw = analogRead(PHOTOTRANSISTOR_PIN);
-  laser_power = laser_raw / 1023.0; // the power of the laser at this moment, on a scale of 0 to 1; assumes 10-bit analogRead, the default for Teensy 4.0 and Arduino
+  laser_power_tmp = laser_raw / 1023.0; // the power of the laser at this moment, on a scale of 0 to 1; assumes 10-bit analogRead, the default for Teensy 4.0 and Arduino
+  laser_power = -(laser_power_tmp - 1.0); // flip polarity for Sidekick Model 4
 
   // Compute electron and proton current based on the current laser power (TODO: based also on the running average of laser power)
   electron_current = laser_power; // emitted electron beam current at this moment, on a scale of 0 to 1

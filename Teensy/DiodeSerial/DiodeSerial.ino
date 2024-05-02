@@ -13,6 +13,8 @@
     Followed (and copied portions of code from) ADC tutorials at https://github.com/pedvide/ADC
 
     Written by Scott Feister on October 11, 2023.
+
+    MODIFIED FOR SIDEKICK MODEL 4 by SWITCHING PHOTOTRANSISTOR POLARITIES
 */
 
 #include <Arduino.h>
@@ -214,7 +216,7 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
     lock_trace = true;
     trigcnt_trace = trigcnt_adc;
     for (int i = 0; i < TRACE_NT; i++) {
-      imgbuf_trace[i] = *pbuffer;
+      imgbuf_trace[i] = -(*pbuffer - 1023); // POLARITY IS SWAPPED (assuming 12-bit ADC value) due for SIDEKICK MODEL 4
       pbuffer++;
     }
     pabdma->clearInterrupt();
