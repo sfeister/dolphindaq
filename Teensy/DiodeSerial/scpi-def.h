@@ -50,7 +50,7 @@
 #define SCPI_IDN1 "DOLPHINDAQ"
 #define SCPI_IDN2 "TeensyDiodeSK4"
 #define SCPI_IDN3 "00"
-#define SCPI_IDN4 "20240501-3"
+#define SCPI_IDN4 "20240501-4"
 
 extern const scpi_command_t scpi_commands[];
 extern scpi_interface_t scpi_interface;
