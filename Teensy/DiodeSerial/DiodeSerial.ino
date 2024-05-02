@@ -215,8 +215,12 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
   if (!lock_trace) {
     lock_trace = true;
     trigcnt_trace = trigcnt_adc;
+    int adcval;
+
     for (int i = 0; i < TRACE_NT; i++) {
-      imgbuf_trace[i] = -(*pbuffer - 1023); // POLARITY IS SWAPPED (assuming 12-bit ADC value) due for SIDEKICK MODEL 4
+      // POLARITY IS SWAPPED (assuming 12-bit ADC value) due for SIDEKICK MODEL 4
+      adcval = *pbuffer;
+      imgbuf_trace[i] = -(adcval - 1023); 
       pbuffer++;
     }
     pabdma->clearInterrupt();
