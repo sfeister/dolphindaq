@@ -30,7 +30,6 @@ uint16_t system_mode = 0; // 0 for regular mode, 1 for debug mode
 void setup() {
   analogWriteFrequency(PROTON_PIN, analog_write_hz);
   analogWriteFrequency(ELECTRON_PIN, analog_write_hz);
-
   // Initialize SCPI interface
   SCPI_Arduino_Setup(); // note, begins Serial if communication style is Serial
 }

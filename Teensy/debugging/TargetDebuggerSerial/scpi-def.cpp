@@ -71,8 +71,12 @@ static scpi_result_t OutputFrequency(scpi_t * context) {
     }
 
     analog_write_hz = param1;
-    analogWriteFrequency(proton_pin, analog_write_hz);
+    pinMode(electron_pin, OUTPUT);    // takes out of PWM mode
     analogWriteFrequency(electron_pin, analog_write_hz);
+    pinMode(electron_pin, OUTPUT);    // takes out of PWM mode
+    pinMode(proton_pin, OUTPUT);    // takes out of PWM mode
+    analogWriteFrequency(proton_pin, analog_write_hz);
+    pinMode(proton_pin, OUTPUT);    // takes out of PWM mode
 
     return SCPI_RES_OK;
 }
@@ -97,7 +101,7 @@ static scpi_result_t ElectronPower(scpi_t * context) {
 }
 
 static scpi_result_t ProtonPowerQ(scpi_t * context) {
-    SCPI_ResultUInt32(context, electron_power_debug);
+    SCPI_ResultUInt32(context, proton_power_debug);
 
     return SCPI_RES_OK;
 }
