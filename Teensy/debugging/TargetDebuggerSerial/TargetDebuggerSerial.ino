@@ -19,6 +19,7 @@
 #define PHOTOTRANSISTOR_PIN A0
 #define ELECTRON_PIN 9
 #define PROTON_PIN 10
+#define MILLIS_AVG 2 // milliseconds for which to hang software and average the ADC value
 
 uint32_t analog_write_hz = 10000;  // deliberately send out fairly rough PWM signals
 uint16_t electron_power_debug = 255;
@@ -28,6 +29,8 @@ double laser_power, laser_power_tmp, electron_current, proton_current;
 int proton_pin = PROTON_PIN;
 int electron_pin = ELECTRON_PIN;
 uint16_t system_mode = 0; // 0 for regular mode, 1 for debug mode
+
+Chrono avgChrono; 
 
 // ADC SETUP FROM EXAMPLE
 const int readPin_adc_0 = PHOTOTRANSISTOR_PIN;
@@ -45,7 +48,7 @@ void setup() {
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
   adc->adc0->setAveraging(32);   // set number of averages // bumped up here for dealing with PWM input
   adc->adc0->setResolution(10); // set bits of resolution
-  adc->adc0->setSamplingSpeed(ADC_settings::ADC_SAMPLING_SPEED::VERY_LOW_SPEED); // set lowest possible sampling speed (24 units)
+  adc->adc0->setSamplingSpeed(ADC_settings::ADC_SAMPLING_SPEED::VERY_HIGH_SPEED); // set high sampling speed to get a better average
   // end ADC SETUP FROM EXAMPLE
 
   // Initialize SCPI interface
@@ -65,8 +68,19 @@ void loop() {
     Serial.println(laser_raw);
     delay(1); // delay for stability (don't want to push the SCPI too hard!)
   } else { // REGULAR mode
-    // Read in the laser power
-    laser_raw = adc->adc0->analogRead(PHOTOTRANSISTOR_PIN);
+    // Read in the laser power for 1 millisecond
+    uint64_t laser_raw_sum = 0;
+    
+    avgChrono.restart();
+    int counter = 0;
+    do {
+      laser_raw_sum += adc->adc0->analogRead(PHOTOTRANSISTOR_PIN);
+      counter++;
+    }
+    while (!avgChrono.hasPassed(MILLIS_AVG));
+
+    double laser_raw_avg = laser_raw_sum / double(counter);
+    laser_raw = round(laser_raw_avg);
     laser_power_tmp = laser_raw / 1023.0; // the power of the laser at this moment, on a scale of 0 to 1; assumes 10-bit analogRead, the default for Teensy 4.0 and Arduino
     laser_power = -(laser_power_tmp - 1.0); // flip polarity for Sidekick Model 4
 
