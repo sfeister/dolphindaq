@@ -40,6 +40,8 @@ bool await_update = false; // Boolean: 1 if there are new updates to the device 
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
 volatile uint32_t dac_index = 0; // Incrementing index specifying which element of the dac_powers array we are currently on
 // declared "volatile" for compiler as this value is updated within interrupts
+uint32_t analog_write_hz; // PWM frequency, in Hz, for output laser
+uint32_t analog_write_hz_pr;
 
 // Powers (0 to 255) that form the laser temporal profile
 uint8_t dac_powers[settings_dac_nt];
@@ -84,14 +86,18 @@ void setup() {
   // set up preload values
   out_enabled_pr = true;
   settings_dac_dt_pr = 5;
+  analog_write_hz_pr = 2000000; // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
 
+  // a recognizable initialization of DAC powers to a decrementing value
+  // (decrementing for better intial power-on behavior of a strong flash)
   for (int i = 0; i < settings_dac_nt; i++) {
-    dac_powers_pr[i] = i; // a recognizable initialization of DAC powers to an incrementing value
+    dac_powers_pr[i] = 255 - i;
   }
 
   // Load in active values from preload values
   out_enabled = out_enabled_pr;
   settings_dac_dt = settings_dac_dt_pr;
+  analog_write_hz = analog_write_hz_pr;
 
   for (int i = 0; i < settings_dac_nt; i++) {
     dac_powers[i] = dac_powers_pr[i];
@@ -101,7 +107,7 @@ void setup() {
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
 
   // set laser as an output
-  analogWriteFrequency(LASER_PIN, 2000000); // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
+  analogWriteFrequency(LASER_PIN, analog_write_hz);
   analogWrite(LASER_PIN, 0); // make sure we start things off with no laser output
 
   // Setup the output timers
@@ -126,12 +132,15 @@ void loop() {
   if (await_update) {
       // stop the laser output
       dacTimer.stop();
-      digitalWriteFast(LASER_PIN, LOW);
+      analogWrite(LASER_PIN, 0); // halt laser output
 
       // Load in active values from preload values
       out_enabled = out_enabled_pr;
       settings_dac_dt = settings_dac_dt_pr;
+      analog_write_hz = analog_write_hz_pr;
+
       dacTimer.setPeriod(settings_dac_dt);
+      analogWriteFrequency(LASER_PIN, analog_write_hz);
       
       for (int i = 0; i < settings_dac_nt; i++) {
         dac_powers[i] = dac_powers_pr[i];

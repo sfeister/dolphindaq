@@ -47,121 +47,22 @@
 #include <SCPI_Parser.h>
 #include "scpi-def.h"
 
-/// EXTERNAL VARIABLES (from LilLaserSerial.ino)
-extern uint64_t trigcnt;
-extern bool await_update;
+/// EXTERNAL VARIABLES (from TargetDebuggerSerial.ino)
+extern uint32_t analog_write_hz;
+extern uint16_t electron_power_debug;
+extern uint16_t proton_power_debug;
+extern int electron_pin;
+extern int proton_pin;
+extern uint16_t laser_raw;
+extern uint16_t system_mode;
 
-extern uint8_t dac_powers_pr[];
-extern bool out_enabled_pr;
-extern uint32_t settings_dac_dt_pr;
-extern uint32_t analog_write_hz_pr;
-
-extern const uint8_t dac_powers[];
-extern const bool out_enabled;
-extern const uint32_t analog_write_hz;
-extern const int settings_dac_nt;
-extern const uint32_t settings_dac_dt;
-
-static scpi_result_t DAQ_TriggerCountQ(scpi_t * context) {
-    SCPI_ResultUInt64(context, trigcnt);
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_TriggerCount(scpi_t * context) {
-    uint64_t param1;
-
-    /* read first parameter if present */
-    if (!SCPI_ParamUInt64(context, &param1, TRUE)) {
-        return SCPI_RES_ERR;
-    }
-
-    trigcnt = param1;
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_AwaitQ(scpi_t * context) {
-    SCPI_ResultBool(context, await_update);
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_OutputEnabled(scpi_t * context) {
-    bool param1;
-
-    /* read first parameter if present */
-    if (!SCPI_ParamBool(context, &param1, TRUE)) {
-        return SCPI_RES_ERR;
-    }
-
-    out_enabled_pr = param1;
-    await_update = true;
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_OutputEnabledQ(scpi_t * context) {
-    SCPI_ResultBool(context, out_enabled);
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_OutputPWMFrequency(scpi_t * context) {
-    uint32_t param1;
-
-    /* read first parameter if present */
-    if (!SCPI_ParamUInt32(context, &param1, TRUE)) {
-        return SCPI_RES_ERR;
-    }
-
-    analog_write_hz_pr = param1;
-    await_update = true;
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_OutputPWMFrequencyQ(scpi_t * context) {
+static scpi_result_t OutputFrequencyQ(scpi_t * context) {
     SCPI_ResultUInt32(context, analog_write_hz);
 
     return SCPI_RES_OK;
 }
 
-// LILLASER Specific
-static scpi_result_t DAQ_LaserPowersQ(scpi_t * context) {
-    SCPI_ResultArrayUInt8(context, &dac_powers[0], settings_dac_nt, SCPI_FORMAT_ASCII);
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_LaserPowers(scpi_t * context) {
-    const size_t input_count = settings_dac_nt;
-    size_t output_count;
-    int32_t myvals[input_count];
-
-    /* read parameter if present */
-    if (!SCPI_ParamArrayInt32(context, &myvals[0], input_count, &output_count, SCPI_FORMAT_ASCII, TRUE)) {
-        return SCPI_RES_ERR;
-    }
-
-    // TODO: Throw SCPI error when output count doesn't equal input count
-
-    for (int i = 0; i < settings_dac_nt; i++) {
-      dac_powers_pr[i] = myvals[i];
-    }
-
-    await_update = true;
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_LaserPowersDtQ(scpi_t * context) {
-    SCPI_ResultUInt32(context, settings_dac_dt);
-
-    return SCPI_RES_OK;
-}
-
-static scpi_result_t DAQ_LaserPowersDt(scpi_t * context) {
+static scpi_result_t OutputFrequency(scpi_t * context) {
     uint32_t param1;
 
     /* read first parameter if present */
@@ -169,18 +70,75 @@ static scpi_result_t DAQ_LaserPowersDt(scpi_t * context) {
         return SCPI_RES_ERR;
     }
 
-    settings_dac_dt_pr = param1;
-    await_update = true;
+    analog_write_hz = param1;
+    analogWriteFrequency(proton_pin, analog_write_hz);
+    analogWriteFrequency(electron_pin, analog_write_hz);
 
     return SCPI_RES_OK;
 }
 
-static scpi_result_t DAQ_LaserPowersNtQ(scpi_t * context) {
-    SCPI_ResultUInt32(context, settings_dac_nt);
+static scpi_result_t ElectronPowerQ(scpi_t * context) {
+    SCPI_ResultUInt32(context, electron_power_debug);
 
     return SCPI_RES_OK;
 }
 
+static scpi_result_t ElectronPower(scpi_t * context) {
+    uint32_t param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamUInt32(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    electron_power_debug = param1;
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t ProtonPowerQ(scpi_t * context) {
+    SCPI_ResultUInt32(context, electron_power_debug);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t ProtonPower(scpi_t * context) {
+    uint32_t param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamUInt32(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    proton_power_debug = param1;
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t PhotodiodeValueQ(scpi_t * context) {
+    SCPI_ResultUInt32(context, laser_raw);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t SystemModeQ(scpi_t * context) {
+    SCPI_ResultUInt32(context, system_mode);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t SystemMode(scpi_t * context) {
+    uint32_t param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamUInt32(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    system_mode = param1;
+
+    return SCPI_RES_OK;
+}
 
 
 const scpi_command_t scpi_commands[] = {
@@ -211,18 +169,15 @@ const scpi_command_t scpi_commands[] = {
 
     /* My instrument */
     /* DAQ */
-    {.pattern = "TRIGger:COUNt?", .callback = DAQ_TriggerCountQ,},
-    {.pattern = "TRIGger:COUNt", .callback = DAQ_TriggerCount,},
-    {.pattern = "AWAIT?", .callback = DAQ_AwaitQ,},
-    {.pattern = "OUTPut:ENABled?", .callback = DAQ_OutputEnabledQ,},
-    {.pattern = "OUTPut:ENABled", .callback = DAQ_OutputEnabled,},
-    {.pattern = "OUTPut:PWM:FREQuency?", .callback = DAQ_OutputPWMFrequencyQ,},
-    {.pattern = "OUTPut:PWM:FREQuency", .callback = DAQ_OutputPWMFrequency,},
-    {.pattern = "LASer:POWers:YARRay?", .callback = DAQ_LaserPowersQ,},
-    {.pattern = "LASer:POWers:YARRay", .callback = DAQ_LaserPowers,},
-    {.pattern = "LASer:POWers:DT?", .callback = DAQ_LaserPowersDtQ,},
-    {.pattern = "LASer:POWers:DT", .callback = DAQ_LaserPowersDt,},
-    {.pattern = "LASer:POWers:NT?", .callback = DAQ_LaserPowersNtQ,},
+    {.pattern = "OUTPut:FREQuency?", .callback = OutputFrequencyQ,},
+    {.pattern = "OUTPut:FREQuency", .callback = OutputFrequency,},
+    {.pattern = "ELECtron:POWer?", .callback = ElectronPowerQ,},
+    {.pattern = "ELECtron:POWer", .callback = ElectronPower,},
+    {.pattern = "PROTon:POWer?", .callback = ProtonPowerQ,},
+    {.pattern = "PROTon:POWer", .callback = ProtonPower,},
+    {.pattern = "PHOTodiode:VALue?", .callback = PhotodiodeValueQ,},
+    {.pattern = "SYSTem:MODE?", .callback = SystemModeQ,},
+    {.pattern = "SYSTem:MODE", .callback = SystemMode,},
 
     {"SYSTem:COMMunication:TCPIP:CONTROL?", SCPI_SystemCommTcpipControlQ, 0},
 
