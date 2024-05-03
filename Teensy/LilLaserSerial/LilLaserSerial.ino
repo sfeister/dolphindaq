@@ -86,7 +86,7 @@ void setup() {
   // set up preload values
   out_enabled_pr = true;
   settings_dac_dt_pr = 5;
-  analog_write_hz_pr = 2000000; // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
+  analog_write_hz_pr = 10000; // deliberately rough to let the PWM signal through
 
   // a recognizable initialization of DAC powers to a decrementing value
   // (decrementing for better intial power-on behavior of a strong flash)
@@ -140,6 +140,7 @@ void loop() {
       analog_write_hz = analog_write_hz_pr;
 
       dacTimer.setPeriod(settings_dac_dt);
+      pinMode(LASER_PIN, OUTPUT);    // take out of PWM mode prior to PWM frequency change
       analogWriteFrequency(LASER_PIN, analog_write_hz);
       
       for (int i = 0; i < settings_dac_nt; i++) {

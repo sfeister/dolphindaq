@@ -18,7 +18,7 @@
 #define ELECTRON_PIN 9
 #define PROTON_PIN 10
 
-uint32_t analog_write_hz = 2000000;  // try and smooth the PWM of the leds
+uint32_t analog_write_hz = 10000;  // deliberately send out fairly rough PWM signals
 uint16_t electron_power_debug = 255;
 uint16_t proton_power_debug = 255;
 uint16_t laser_raw;
