@@ -125,7 +125,7 @@ void update_settings(dolphindaq_diode_Settings* settings_ptr) {
 
   if (!s->has_dt) {
     s->has_dt = true;
-    s->dt = 10.0e-6; // default dt of 10 microseconds
+    s->dt = 1.0e-3; // default dt of 1.0 milliseconds
   }
   s->has_trace_dt = true;
   s->trace_dt = s->dt;
@@ -148,8 +148,9 @@ void setup() {
 
   // ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
-  adc->adc0->setAveraging(4);   // set number of averages
+  adc->adc0->setAveraging(32);   // set number of averages // bumped up here for dealing with PWM input
   adc->adc0->setResolution(10); // set bits of resolution
+  adc->adc0->setSamplingSpeed(ADC_settings::ADC_SAMPLING_SPEED::VERY_LOW_SPEED); // set lowest possible sampling speed (24 units)
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0 /*, DMAMUX_SOURCE_ADC_ETC*/);
