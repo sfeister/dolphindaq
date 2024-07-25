@@ -38,7 +38,7 @@ uint32_t settings_dac_dt_pr; // Preload
 
 bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
-volatile uint32_t dac_index = 0; // Incrementing index specifying which element of the dac_powers array we are currently on
+volatile int32_t dac_index = 0; // Incrementing index specifying which element of the dac_powers array we are currently on
 // declared "volatile" for compiler as this value is updated within interrupts
 
 // Powers (0 to 255) that form the laser temporal profile
@@ -101,7 +101,10 @@ void setup() {
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
 
   // set laser as an output
-  analogWriteFrequency(LASER_PIN, 2000000); // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
+  analogWriteFrequency(LASER_PIN, 454545.4545); // this 455kHz frequency is tuned for the PWM cycle to last 2.20 us, which matches what we will do as far as ADC sampling on the diode
+  //analogWriteFrequency(LASER_PIN, 2*585937.5); // ideal frequency for 8-bit PWM is 585937.5, any higher will reduce bit range
+    // as stated at https://www.pjrc.com/teensy/td_pulse.html
+    // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
   analogWrite(LASER_PIN, 0); // make sure we start things off with no laser output
 
   // Setup the output timers
