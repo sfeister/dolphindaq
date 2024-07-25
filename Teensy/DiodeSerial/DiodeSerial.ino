@@ -125,7 +125,7 @@ void update_settings(dolphindaq_diode_Settings* settings_ptr) {
 
   if (!s->has_dt) {
     s->has_dt = true;
-    s->dt = 10.0e-6; // default dt of 10 microseconds
+    s->dt = 5.0e-6; // default dt of 5 microseconds
   }
   s->has_trace_dt = true;
   s->trace_dt = s->dt;
@@ -159,8 +159,8 @@ void setup() {
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
   adc->adc0->setAveraging(0);   // set number of averages
   adc->adc0->setResolution(10); // set bits of resolution
-  adc->adc0->setConversionSpeed(ADACK_10); // change the ADC Clock (ADCK) to the ADC asynchronous clock of 10 MHz (https://forum.pjrc.com/index.php?threads/adc-library-with-support-for-teensy-4-3-x-and-lc.25532/)
-  adc->adc0->setSamplingSpeed(VERY_LOW_SPEED); // is the lowest possible sampling speed (+22 ADCK, 24 in total) (at 10 MHz, this means we sample for 2.20 us and then convert for 0.20 us. This allows us to average out the PWM signal. Maximum DT should be 2.5 us)
+  adc->adc0->setConversionSpeed(ADC_settings::ADC_CONVERSION_SPEED::ADACK_10); // change the ADC Clock (ADCK) to the ADC asynchronous clock of 10 MHz (https://forum.pjrc.com/index.php?threads/adc-library-with-support-for-teensy-4-3-x-and-lc.25532/)
+  adc->adc0->setSamplingSpeed(ADC_settings::ADC_SAMPLING_SPEED::VERY_LOW_SPEED); // is the lowest possible sampling speed (+22 ADCK, 24 in total) (at 10 MHz, this means we sample for 2.20 us and then convert for 0.20 us. This allows us to average out the PWM signal. Maximum DT should be 2.5 us)
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0 /*, DMAMUX_SOURCE_ADC_ETC*/);

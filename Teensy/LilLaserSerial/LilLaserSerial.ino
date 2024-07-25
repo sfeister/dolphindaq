@@ -102,7 +102,7 @@ void setup() {
 
   // set laser as an output
   analogWriteFrequency(LASER_PIN, 454545.4545); // this 455kHz frequency is tuned for the PWM cycle to last 2.20 us, which matches what we will do as far as ADC sampling on the diode
-  //analogWriteFrequency(LASER_PIN, 2*585937.5); // ideal frequency for 8-bit PWM is 585937.5, any higher will reduce bit range
+  //analogWriteFrequency(LASER_PIN, 585937.5); // ideal frequency for 8-bit PWM is 585937.5, any higher will reduce bit range
     // as stated at https://www.pjrc.com/teensy/td_pulse.html
     // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
   analogWrite(LASER_PIN, 0); // make sure we start things off with no laser output
