@@ -13,6 +13,8 @@
     Followed (and copied portions of code from) ADC tutorials at https://github.com/pedvide/ADC
 
     Written by Scott Feister on October 11, 2023.
+    On July 24, 2024, updated to a Dual Serial approach so I can send data at faster rates via PVaccess.
+    Make sure to set up for Dual USB in Arduino IDE menu bar: "Tools" --> "USB Type" --> "Dual Serial"
 */
 
 #include <Arduino.h>
@@ -141,8 +143,17 @@ void setup() {
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
 
-  // initialize settings
+  // Fill in setting's structured data, and encode the protobuf message
   update_settings(&settings);
+  settings_stream = pb_ostream_from_buffer(settings_buf, sizeof(settings_buf));
+  settings_status = pb_encode(&settings_stream, dolphindaq_diode_Settings_fields, &settings);
+  settings_len = settings_stream.bytes_written;
+#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
+  SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to start transmission
+  SerialUSB1.println("settings");
+  //SerialUSB1.print(settings_len); // note: will block if no space, such that it can eventually send
+  //SerialUSB1.write(settings_buf, settings_len);
+#endif
 
   // ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
@@ -182,6 +193,15 @@ void loop() {
     delayMicroseconds(100); // short delay to clear out any existing triggered pulses
     // Implement all updates
     update_settings(&settings);
+    settings_stream = pb_ostream_from_buffer(settings_buf, sizeof(settings_buf));
+    settings_status = pb_encode(&settings_stream, dolphindaq_diode_Settings_fields, &settings);
+    settings_len = settings_stream.bytes_written;
+#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
+    SerialUSB1.println("settings");
+    SerialUSB1.println(settings_len);
+    SerialUSB1.write(settings_buf, settings_len);
+#endif
+
     await_update = false;
   }
   
@@ -195,8 +215,28 @@ void loop() {
 
   if (ripe_trace) {
     encode_trace(); // Transfers Trace block into Trace-Proto block, and also clears ripe_trace and lock_trace flags.
-    // TODO: Attempt to transfer data across the network
+    // Transmit protobuf data over second serial port
+#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
+    if (SerialUSB1.availableForWrite() > static_cast<int>(data_len + 30)) {
+      SerialUSB1.println("data");
+      SerialUSB1.println(data_len);
+      SerialUSB1.write(data_buf, data_len);
+    }
+#endif
   }
+
+// Send settings on demand
+#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
+  if (SerialUSB1.available() > 0) {
+    while (SerialUSB1.available() > 0) {
+      SerialUSB1.read();
+    }
+    SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to reset transmission
+    SerialUSB1.println("settings");
+    SerialUSB1.println(settings_len); // note: will block if no space, such that it can eventually send
+    SerialUSB1.write(settings_buf, settings_len);
+  }
+#endif
 
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }
@@ -224,13 +264,12 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
 // END ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
 
 // Works with the global variable imgbuf_trace and TRACE_NT
-/*bool encode_imgbuf_trace(pb_ostream_t *stream, const pb_field_t *field, void * const *arg);
-{
-    if (!pb_encode_tag_for_field(stream, field))
-        return false;
+bool encode_imgbuf_trace(pb_ostream_t *stream, const pb_field_t *field, void * const *arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+      return false;
 
-    return pb_encode_string(stream, &imgbuf_trace, TRACE_NT*sizeof(uint16_t));
-} */
+  return pb_encode_string(stream, const_cast<pb_byte_t*>(reinterpret_cast<volatile pb_byte_t*>(&imgbuf_trace)), TRACE_NT*sizeof(uint16_t));
+}
 
 // Fills in structured data of an already-created data_t protobuffer (data trace protobuffer)
 void update_data_t(dolphindaq_diode_Data* data_ptr, dolphindaq_diode_Trace* trace_ptr) {
@@ -238,8 +277,8 @@ void update_data_t(dolphindaq_diode_Data* data_ptr, dolphindaq_diode_Trace* trac
   data_ptr->trace = *trace_ptr;
   data_ptr->trace.has_shot_num = true;
   data_ptr->trace.shot_num = trigcnt_trace;
-  //data_ptr->trace.yvals.funcs.encode = &encode_imgbuf_trace;
-  //data_ptr->trace.has_shot_time = true;
+  data_ptr->trace.yvals.funcs.encode = &encode_imgbuf_trace;
+  // data_ptr->trace.has_shot_time = true;
   //data_ptr->trace.shot_time = to_timestamp(trigtime_trace);
 }
 
