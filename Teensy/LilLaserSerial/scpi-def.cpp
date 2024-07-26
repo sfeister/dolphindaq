@@ -54,11 +54,13 @@ extern bool await_update;
 extern uint8_t dac_powers_pr[];
 extern bool out_enabled_pr;
 extern uint32_t settings_dac_dt_pr;
+extern double settings_pwm_hz_pr;
 
 extern const uint8_t dac_powers[];
 extern const bool out_enabled;
 extern const int settings_dac_nt;
 extern const uint32_t settings_dac_dt;
+extern const double settings_pwm_hz;
 
 static scpi_result_t DAQ_TriggerCountQ(scpi_t * context) {
     SCPI_ResultUInt64(context, trigcnt);
@@ -153,6 +155,26 @@ static scpi_result_t DAQ_LaserPowersDt(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+static scpi_result_t DAQ_OutputPWMHzQ(scpi_t * context) {
+    SCPI_ResultDouble(context, settings_pwm_hz);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_OutputPWMHz(scpi_t * context) {
+    double param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamDouble(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    settings_pwm_hz_pr = param1;
+    await_update = true;
+
+    return SCPI_RES_OK;
+}
+
 static scpi_result_t DAQ_LaserPowersNtQ(scpi_t * context) {
     SCPI_ResultUInt32(context, settings_dac_nt);
 
@@ -194,6 +216,8 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "AWAIT?", .callback = DAQ_AwaitQ,},
     {.pattern = "OUTPut:ENABled?", .callback = DAQ_OutputEnabledQ,},
     {.pattern = "OUTPut:ENABled", .callback = DAQ_OutputEnabled,},
+    {.pattern = "OUTPut:PWM:HZ?", .callback = DAQ_OutputPWMHzQ,},
+    {.pattern = "OUTPut:PWM:HZ", .callback = DAQ_OutputPWMHz,},
     {.pattern = "LASer:POWers:YARRay?", .callback = DAQ_LaserPowersQ,},
     {.pattern = "LASer:POWers:YARRay", .callback = DAQ_LaserPowers,},
     {.pattern = "LASer:POWers:DT?", .callback = DAQ_LaserPowersDtQ,},

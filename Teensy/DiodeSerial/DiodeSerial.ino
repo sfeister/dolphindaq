@@ -7,7 +7,7 @@
       23    |   Input, external trigger
       14 (A0) |   Input, phototransistor pin
       built-in LED     |   Output, green status LED, heartbeat. Flashes once per second reliably.
-      19    |   Output, Debug. HIGH when an acquisition starts, LOW when the acquisition stops
+      4    |   Output, Debug (configured as needed)
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
     Followed (and copied portions of code from) ADC tutorials at https://github.com/pedvide/ADC
@@ -15,6 +15,8 @@
     Written by Scott Feister on October 11, 2023.
     On July 24, 2024, updated to a Dual Serial approach so I can send data at faster rates via PVaccess.
     Make sure to set up for Dual USB in Arduino IDE menu bar: "Tools" --> "USB Type" --> "Dual Serial"
+    Dt was tested down to 1 microsecond and works fine
+    Drift in start/end time of aquisition will be proportional to dt, since ADC conversions happen continuously
 */
 
 #include <Arduino.h>
@@ -42,7 +44,6 @@ OneShotTimer t1;
 #include <DMAChannel.h>
 const int readPin_adc_0 = A0;
 ADC *adc = new ADC(); // adc object
-const uint32_t initial_average_value = 2048;
 extern void dumpDMA_structures(DMABaseClass *dmabc);
 
 const uint32_t buffer_size = TRACE_NT;
@@ -95,18 +96,21 @@ dolphindaq_diode_Trace trace = dolphindaq_diode_Trace_init_zero;
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
+    digitalWriteFast(DEBUG_PIN, HIGH); // DEBUG
     // (1) Increment trigger counter
     trigcnt++;
 
-    // (2) Activate the ADC
+    // (2) Activate the DMA from the continuous ADC
     if (!lock_adc) {
       lock_adc = true;
       trigcnt_adc = trigcnt;
-      adc->adc0->startSingleRead(readPin_adc_0);
-      adc->adc0->startTimer(static_cast<uint32_t>(1.0 / settings.dt)); // frequency in Hz
-      digitalToggleFast(DEBUG_PIN);
+      abdma1.clearCompletion(); // start DMA
     }
+}
 
+// every single ADC conversion completion (each element of array) will call this function
+void ISR_ADCconv() {
+  digitalToggleFast(DEBUG_PIN); // DEBUG
 }
 
 // Fills in structured data of an already-created settings protobuffer
@@ -159,19 +163,19 @@ void setup() {
   pinMode(readPin_adc_0, INPUT_DISABLE); // Not sure this does anything for us
   adc->adc0->setAveraging(0);   // set number of averages
   adc->adc0->setResolution(10); // set bits of resolution
-  adc->adc0->setConversionSpeed(ADC_settings::ADC_CONVERSION_SPEED::ADACK_10); // change the ADC Clock (ADCK) to the ADC asynchronous clock of 10 MHz (https://forum.pjrc.com/index.php?threads/adc-library-with-support-for-teensy-4-3-x-and-lc.25532/)
-  adc->adc0->setSamplingSpeed(ADC_settings::ADC_SAMPLING_SPEED::VERY_LOW_SPEED); // is the lowest possible sampling speed (+22 ADCK, 24 in total) (at 10 MHz, this means we sample for 2.20 us and then convert for 0.20 us. This allows us to average out the PWM signal. Maximum DT should be 2.5 us)
+  // adc->adc0->setConversionSpeed(ADC_settings::ADC_CONVERSION_SPEED::ADACK_20); // change the ADC Clock (ADCK) to the ADC asynchronous clock of 20 MHz (https://forum.pjrc.com/index.php?threads/adc-library-with-support-for-teensy-4-3-x-and-lc.25532/)
+  adc->adc0->setConversionSpeed(ADC_settings::ADC_CONVERSION_SPEED::VERY_HIGH_SPEED); // Should be about 40 MHz (https://forum.pjrc.com/index.php?threads/adc-library-with-support-for-teensy-4-3-x-and-lc.25532/)
+  adc->adc0->setSamplingSpeed(ADC_settings::ADC_SAMPLING_SPEED::VERY_HIGH_SPEED); // is the highest possible sampling speed (+0 ADCK, 2 in total. If ADCK is 20 MHz, this means each measurement takes 100 nanoseconds. For 32 averages that is 3.2 us)
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0 /*, DMAMUX_SOURCE_ADC_ETC*/);
-  abdma1.userData(initial_average_value); // save away initial starting average
+
+  // adc->adc0->enableInterrupts(&ISR_ADCconv, 255);
 
   // Start the dma operation..
   lock_adc = true;
-  adc->adc0->startSingleRead(
-      readPin_adc_0); // call this to setup everything before the Timer starts,
-                      // differential is also possible
-  adc->adc0->startTimer(50000); // frequency in Hz - I don't think this is actually used since it's set later
+  adc->adc0->startSingleRead(readPin_adc_0); // call this to setup everything before the Timer starts,
+  adc->adc0->startTimer(static_cast<uint32_t>(1.0 / settings.dt)); // frequency in Hz
 
   // end ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino
 
@@ -184,6 +188,7 @@ void setup() {
 }
 
 void loop() {
+  // digitalToggleFast(DEBUG_PIN); // DEBUG
   // Blink the heartbeat LED
   if (heartbeatChrono.hasPassed(500)) { // check if the 500 milliseconds of heartbeat have elapsed
     digitalToggleFast(HEARTBEAT_LED_PIN); // write LED state to pin
@@ -193,6 +198,10 @@ void loop() {
   // Check for settings updates
   if (await_update) {
     delayMicroseconds(100); // short delay to clear out any existing triggered pulses
+
+    // Stop the ADC
+    adc->adc0->stopTimer();
+
     // Implement all updates
     update_settings(&settings);
     settings_stream = pb_ostream_from_buffer(settings_buf, sizeof(settings_buf));
@@ -204,15 +213,21 @@ void loop() {
     SerialUSB1.write(settings_buf, settings_len);
 #endif
 
+    // Restart the ADC with new settings
+    adc->adc0->startSingleRead(readPin_adc_0); // call this to setup everything before the Timer starts,
+    adc->adc0->startTimer(static_cast<uint32_t>(1.0 / settings.dt)); // frequency in Hz
+
     await_update = false;
   }
   
   if (abdma1.interrupted()) {
-    digitalToggleFast(DEBUG_PIN);
+    //digitalToggleFast(DEBUG_PIN, HIGH);
     ProcessAnalogData(&abdma1, 0);
-    adc->adc0->stopTimer();
-    abdma1.clearCompletion();
+      // pabdma->clearInterrupt();
+
+    abdma1.clearInterrupt();
     lock_adc = false;
+    digitalWriteFast(DEBUG_PIN, LOW);
   }
 
   if (ripe_trace) {
@@ -259,7 +274,6 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
       imgbuf_trace[i] = *pbuffer;
       pbuffer++;
     }
-    pabdma->clearInterrupt();
     ripe_trace = true; // indicate that Trace block is filled and ready for usage
   }
 }

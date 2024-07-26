@@ -35,6 +35,8 @@ using namespace TeensyTimerTool;
 extern const int settings_dac_nt = DAC_NT;
 uint32_t settings_dac_dt; // Number of microseconds between updates to the DAC
 uint32_t settings_dac_dt_pr; // Preload
+double settings_pwm_hz; // Frequency (Hz) of the output laser PWM signal output (analogWrite)
+double settings_pwm_hz_pr; // Preload
 
 bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
@@ -84,6 +86,7 @@ void setup() {
   // set up preload values
   out_enabled_pr = true;
   settings_dac_dt_pr = 5;
+  settings_pwm_hz_pr = 4.0 * 585937.5; // ideal frequency for 8-bit PWM is 585937.5, any higher will reduce bit range as stated at https://www.pjrc.com/teensy/td_pulse.html
 
   for (int i = 0; i < settings_dac_nt; i++) {
     dac_powers_pr[i] = i; // a recognizable initialization of DAC powers to an incrementing value
@@ -92,6 +95,7 @@ void setup() {
   // Load in active values from preload values
   out_enabled = out_enabled_pr;
   settings_dac_dt = settings_dac_dt_pr;
+  settings_pwm_hz = settings_pwm_hz_pr;
 
   for (int i = 0; i < settings_dac_nt; i++) {
     dac_powers[i] = dac_powers_pr[i];
@@ -101,10 +105,7 @@ void setup() {
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
 
   // set laser as an output
-  analogWriteFrequency(LASER_PIN, 454545.4545); // this 455kHz frequency is tuned for the PWM cycle to last 2.20 us, which matches what we will do as far as ADC sampling on the diode
-  //analogWriteFrequency(LASER_PIN, 585937.5); // ideal frequency for 8-bit PWM is 585937.5, any higher will reduce bit range
-    // as stated at https://www.pjrc.com/teensy/td_pulse.html
-    // smooths out the laser profile sufficiently to avoid seeing the PWM artifacts
+  analogWriteFrequency(LASER_PIN, settings_pwm_hz); // ideal frequency for 8-bit PWM is 585937.5, any higher will reduce bit range
   analogWrite(LASER_PIN, 0); // make sure we start things off with no laser output
 
   // Setup the output timers
@@ -134,11 +135,15 @@ void loop() {
       // Load in active values from preload values
       out_enabled = out_enabled_pr;
       settings_dac_dt = settings_dac_dt_pr;
-      dacTimer.setPeriod(settings_dac_dt);
-      
+      settings_pwm_hz = settings_pwm_hz_pr;
+
       for (int i = 0; i < settings_dac_nt; i++) {
         dac_powers[i] = dac_powers_pr[i];
       }
+
+      // Update settings themselves on device
+      analogWriteFrequency(LASER_PIN, settings_pwm_hz);
+      dacTimer.setPeriod(settings_dac_dt);
            
       await_update = false;
   }
