@@ -96,7 +96,6 @@ dolphindaq_diode_Trace trace = dolphindaq_diode_Trace_init_zero;
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
-    digitalWriteFast(DEBUG_PIN, HIGH); // DEBUG
     // (1) Increment trigger counter
     trigcnt++;
 
@@ -108,10 +107,20 @@ void ISR_exttrig() {
     }
 }
 
-// every single ADC conversion completion (each element of array) will call this function
-void ISR_ADCconv() {
-  digitalToggleFast(DEBUG_PIN); // DEBUG
+// Interrupt to be called at the end of DMA transfer
+void ISR_abdma1() {
+    abdma1.adc_0_dmaISR(); // this is the original ISR that ours replaced, so call it first
+    
+    // Now we do some of our own stuff!
+    ProcessAnalogData(&abdma1, 0);
+    abdma1.clearInterrupt();
+    lock_adc = false;
 }
+
+// every single ADC conversion completion (each element of array) will call this function
+// void ISR_ADCconv() {
+  // digitalToggleFast(DEBUG_PIN); // DEBUG
+// }
 
 // Fills in structured data of an already-created settings protobuffer
 // Also serves to initialize the settings, in some cases
@@ -169,6 +178,7 @@ void setup() {
   // setup a DMA Channel.
   // Now lets see the different things that RingbufferDMA setup for us before
   abdma1.init(adc, ADC_0 /*, DMAMUX_SOURCE_ADC_ETC*/);
+  abdma1._dmachannel_adc.attachInterrupt(&ISR_abdma1); // put in our own interrupt
 
   // adc->adc0->enableInterrupts(&ISR_ADCconv, 255);
 
@@ -193,6 +203,28 @@ void loop() {
   if (heartbeatChrono.hasPassed(500)) { // check if the 500 milliseconds of heartbeat have elapsed
     digitalToggleFast(HEARTBEAT_LED_PIN); // write LED state to pin
     heartbeatChrono.restart();
+#if defined(USB_TRIPLE_SERIAL)
+    SerialUSB2.print("lock_adc: ");
+    SerialUSB2.print(lock_adc);
+    SerialUSB2.print(", lock_trace: ");
+    SerialUSB2.print(lock_trace);
+    SerialUSB2.print(", abdma1 interrupted: ");
+    SerialUSB2.print(abdma1.interrupted());
+    SerialUSB2.print(", abdma1 interrupt Count: ");
+    SerialUSB2.print(abdma1.interruptCount());
+    SerialUSB2.print(", abdma1 buffer Count: ");
+    SerialUSB2.print(abdma1.bufferCountLastISRFilled());
+    SerialUSB2.print(", abdma1 delta Time: ");
+    SerialUSB2.print(abdma1.interruptDeltaTime());
+    SerialUSB2.print(", trigcnt: ");
+    SerialUSB2.print(trigcnt);
+    SerialUSB2.print(", trigcnt_adc: ");
+    SerialUSB2.print(trigcnt_adc);
+    SerialUSB2.print(", trigcnt_trace: ");
+    SerialUSB2.print(trigcnt_trace);
+    SerialUSB2.println("");
+#endif
+
   }
 
   // Check for settings updates
@@ -220,15 +252,17 @@ void loop() {
     await_update = false;
   }
   
+  /*
   if (abdma1.interrupted()) {
+    digitalToggleFast(DEBUG_PIN); // DEBUG
     //digitalToggleFast(DEBUG_PIN, HIGH);
     ProcessAnalogData(&abdma1, 0);
-      // pabdma->clearInterrupt();
 
     abdma1.clearInterrupt();
     lock_adc = false;
-    digitalWriteFast(DEBUG_PIN, LOW);
+    //digitalWriteFast(DEBUG_PIN, LOW);
   }
+  */
 
   if (ripe_trace) {
     encode_trace(); // Transfers Trace block into Trace-Proto block, and also clears ripe_trace and lock_trace flags.
@@ -260,6 +294,7 @@ void loop() {
 
 // ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino (with some modifications now)
 void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
+  //digitalWriteFast(DEBUG_PIN, HIGH); // DEBUG
   volatile uint16_t *pbuffer = pabdma->bufferLastISRFilled();
   //Serial.println(pabdma->bufferCountLastISRFilled());
 
@@ -275,6 +310,7 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
       pbuffer++;
     }
     ripe_trace = true; // indicate that Trace block is filled and ready for usage
+    //digitalWriteFast(DEBUG_PIN, LOW); // DEBUG
   }
 }
 // END ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino

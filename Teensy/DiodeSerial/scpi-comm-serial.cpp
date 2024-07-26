@@ -71,7 +71,7 @@ void SCPI_Arduino_Setup() {
           scpi_input_buffer, SCPI_INPUT_BUFFER_LENGTH,
           scpi_error_queue_data, SCPI_ERROR_QUEUE_SIZE);
 
-  Serial.begin(115200);
+  Serial.begin(9600);
   unsigned long tstart = millis();
   while (!Serial and (millis() - tstart) < 3000); // wait for serial to finish initializing, up to three seconds timeout before moving on
 }

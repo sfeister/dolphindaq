@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-07-25 19:41:34 by scott-->
+<display version="2.0.0">
+  <name>Sidekick v3 Command Center</name>
+  <width>920</width>
+  <height>670</height>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <class>TITLE</class>
+    <text>Sidekick Facility: Command Center </text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>550</width>
+    <height>31</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+  </widget>
+  <widget type="xyplot" version="3.0.0">
+    <x>40</x>
+    <y>70</y>
+    <width>720</width>
+    <height>400</height>
+    <x_axis>
+      <title>Time (in units of dt)</title>
+      <autoscale>false</autoscale>
+      <log_scale>false</log_scale>
+      <minimum>0.0</minimum>
+      <maximum>100.0</maximum>
+      <show_grid>false</show_grid>
+      <title_font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </title_font>
+      <scale_font>
+        <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+        </font>
+      </scale_font>
+      <visible>true</visible>
+    </x_axis>
+    <y_axes>
+      <y_axis>
+        <title>Raw ADC Value</title>
+        <autoscale>false</autoscale>
+        <log_scale>false</log_scale>
+        <minimum>0.0</minimum>
+        <maximum>1024.0</maximum>
+        <show_grid>false</show_grid>
+        <title_font>
+          <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+          </font>
+        </title_font>
+        <scale_font>
+          <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+          </font>
+        </scale_font>
+        <on_right>false</on_right>
+        <visible>true</visible>
+        <color>
+          <color name="Text" red="0" green="0" blue="0">
+          </color>
+        </color>
+      </y_axis>
+    </y_axes>
+    <traces>
+      <trace>
+        <name>Protons</name>
+        <x_pv></x_pv>
+        <y_pv>pva://PROTON-PVA:trace</y_pv>
+        <err_pv></err_pv>
+        <axis>0</axis>
+        <trace_type>1</trace_type>
+        <color>
+          <color red="0" green="0" blue="255">
+          </color>
+        </color>
+        <line_width>1</line_width>
+        <line_style>0</line_style>
+        <point_type>0</point_type>
+        <point_size>10</point_size>
+        <visible>true</visible>
+      </trace>
+      <trace>
+        <name>Electrons</name>
+        <x_pv></x_pv>
+        <y_pv>ELECTRON:trace:yarr</y_pv>
+        <err_pv></err_pv>
+        <axis>0</axis>
+        <trace_type>1</trace_type>
+        <color>
+          <color red="51" green="102" blue="51">
+          </color>
+        </color>
+        <line_width>1</line_width>
+        <line_style>0</line_style>
+        <point_type>0</point_type>
+        <point_size>10</point_size>
+        <visible>true</visible>
+      </trace>
+    </traces>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count</name>
+    <pv_name>PULSEGEN:trigger:count</pv_name>
+    <x>50</x>
+    <y>577</y>
+    <width>130</width>
+    <height>29</height>
+    <format>1</format>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_4</name>
+    <text>Global Trigger Count</text>
+    <x>50</x>
+    <y>560</y>
+    <width>130</width>
+    <height>17</height>
+  </widget>
+  <widget type="scaledslider" version="2.0.0">
+    <name>Ch3_Delay_Slider</name>
+    <pv_name>PULSEGEN:CH3:delay:set</pv_name>
+    <x>510</x>
+    <y>520</y>
+    <width>210</width>
+    <height>20</height>
+    <level_hihi>490.0</level_hihi>
+    <level_high>480.0</level_high>
+    <show_hihi>false</show_hihi>
+    <show_high>false</show_high>
+    <show_low>false</show_low>
+    <show_lolo>false</show_lolo>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <increment>10.0</increment>
+    <maximum>500.0</maximum>
+    <limits_from_pv>false</limits_from_pv>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>repratelabel_1</name>
+    <text>CH3 Delay (us)</text>
+    <x>500</x>
+    <y>490</y>
+    <width>250</width>
+    <height>30</height>
+    <font>
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>repratelabel_2</name>
+    <text>CH1 Delay (us)</text>
+    <x>230</x>
+    <y>490</y>
+    <width>250</width>
+    <height>30</height>
+    <font>
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="scaledslider" version="2.0.0">
+    <name>Ch1_Delay_Slider</name>
+    <pv_name>PULSEGEN:CH1:delay:set</pv_name>
+    <x>240</x>
+    <y>520</y>
+    <width>210</width>
+    <height>20</height>
+    <level_hihi>490.0</level_hihi>
+    <level_high>480.0</level_high>
+    <show_hihi>false</show_hihi>
+    <show_high>false</show_high>
+    <show_low>false</show_low>
+    <show_lolo>false</show_lolo>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <increment>10.0</increment>
+    <maximum>500.0</maximum>
+    <limits_from_pv>false</limits_from_pv>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>repratelabel_3</name>
+    <text>CH2 Delay (us)</text>
+    <x>230</x>
+    <y>560</y>
+    <width>250</width>
+    <height>30</height>
+    <font>
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="scaledslider" version="2.0.0">
+    <name>Ch2_Delay_Slider</name>
+    <pv_name>PULSEGEN:CH2:delay:set</pv_name>
+    <x>240</x>
+    <y>590</y>
+    <width>210</width>
+    <height>20</height>
+    <level_hihi>490.0</level_hihi>
+    <level_high>480.0</level_high>
+    <show_hihi>false</show_hihi>
+    <show_high>false</show_high>
+    <show_low>false</show_low>
+    <show_lolo>false</show_lolo>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <increment>10.0</increment>
+    <maximum>500.0</maximum>
+    <limits_from_pv>false</limits_from_pv>
+  </widget>
+  <widget type="scaledslider" version="2.0.0">
+    <name>Ch3_Delay_Slider_2</name>
+    <pv_name>PULSEGEN:CH4:delay:set</pv_name>
+    <x>510</x>
+    <y>590</y>
+    <width>210</width>
+    <height>20</height>
+    <level_hihi>490.0</level_hihi>
+    <level_high>480.0</level_high>
+    <show_hihi>false</show_hihi>
+    <show_high>false</show_high>
+    <show_low>false</show_low>
+    <show_lolo>false</show_lolo>
+    <border_alarm_sensitive>false</border_alarm_sensitive>
+    <increment>10.0</increment>
+    <maximum>500.0</maximum>
+    <limits_from_pv>false</limits_from_pv>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>repratelabel_4</name>
+    <text>CH4 Delay (us)</text>
+    <x>500</x>
+    <y>560</y>
+    <width>250</width>
+    <height>30</height>
+    <font>
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_5</name>
+    <text>Rep Rate</text>
+    <x>50</x>
+    <y>500</y>
+    <width>130</width>
+    <height>17</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_1</name>
+    <pv_name>PULSEGEN:reprate</pv_name>
+    <x>50</x>
+    <y>517</y>
+    <width>130</width>
+    <height>29</height>
+    <format>1</format>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_2</name>
+    <pv_name>ELECTRON:dt</pv_name>
+    <x>760</x>
+    <y>517</y>
+    <width>130</width>
+    <height>29</height>
+    <format>1</format>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_6</name>
+    <text>Time steps dt</text>
+    <x>760</x>
+    <y>500</y>
+    <width>130</width>
+    <height>17</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_3</name>
+    <pv_name>PROTON:dt</pv_name>
+    <x>760</x>
+    <y>546</y>
+    <width>130</width>
+    <height>29</height>
+    <format>1</format>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_4</name>
+    <pv_name>LASER:powers:dt</pv_name>
+    <x>760</x>
+    <y>575</y>
+    <width>130</width>
+    <height>29</height>
+    <format>1</format>
+  </widget>
+</display>

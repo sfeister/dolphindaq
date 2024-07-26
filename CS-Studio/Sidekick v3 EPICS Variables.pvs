@@ -299,7 +299,7 @@
         <pv>
             <selected>false</selected>
             <name>PROTON:dt</name>
-            <tolerance>0.1</tolerance>
+            <tolerance>1.0E-5</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
@@ -341,6 +341,20 @@
         <pv>
             <selected>false</selected>
             <name>PROTON:trace:yarr</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>true</selected>
+            <name>pva://PROTON-PVA:info</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>true</selected>
+            <name>pva://PROTON-PVA:trace</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
