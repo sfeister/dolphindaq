@@ -347,14 +347,14 @@
         </pv>
         <pv>
             <selected>true</selected>
-            <name>pva://PROTON-PVA:info</name>
+            <name>pva://PROTON-DAQ:info</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
         <pv>
             <selected>true</selected>
-            <name>pva://PROTON-PVA:trace</name>
+            <name>pva://PROTON-DAQ:trace</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
