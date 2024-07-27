@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="647.55511mm"
-   height="438.22263mm"
-   viewBox="0 0 647.55511 438.22263"
+   width="651.12366mm"
+   height="430.80536mm"
+   viewBox="0 0 651.12365 430.80536"
    version="1.1"
    id="svg1"
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
@@ -25,12 +25,12 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="0.57669925"
-     inkscape:cx="1609.1576"
-     inkscape:cy="874.80606"
+     inkscape:cx="1178.2571"
+     inkscape:cy="954.57034"
      inkscape:window-width="3840"
-     inkscape:window-height="2066"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:window-height="2100"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -40,7 +40,7 @@
        xlink:href="#Terrain"
        preserveAspectRatio="xMidYMid"
        id="pattern56"
-       patternTransform="matrix(0.4,0,0,0.4,909.96215,46.355732)"
+       patternTransform="translate(909.96215,46.355732)"
        x="0"
        y="0" />
     <pattern
@@ -49,7 +49,7 @@
        width="237.35618"
        height="237.35619"
        patternTransform="translate(909.96215,46.355732)"
-       style="fill:#000000"
+       style="fill:#a300a8"
        id="Terrain"
        inkscape:collect="always"
        inkscape:isstock="true"
@@ -755,92 +755,76 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(277.96189,54.600412)">
+     transform="translate(277.96189,47.183137)">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="73.155106"
-       y="124.0188"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="74.452759"
+       y="114.28642"
        id="text1"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="73.155106"
-         y="124.0188"
-         id="tspan2">Frame Aggegator</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="73.155106"
-         y="134.01878"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="74.452759"
+         y="114.28642"
          id="tspan7">Creates batches of 2000 frames</tspan><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="73.155106"
-         y="144.01877"
-         id="tspan8">1 batch per two seconds</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="74.452759"
+         y="124.86976"
+         id="tspan8">One batch per two seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="73.559059"
-       y="106.10602"
-       id="text1-9"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="73.559059"
-         y="106.10602"
-         id="tspan2-4">Data Frame Buffer</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
        x="75.900398"
        y="31.501499"
        id="text1-9-2"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="75.900398"
          y="31.501499"
          id="tspan2-4-5">Physics Experiment</tspan><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="75.900398"
-         y="41.501488"
+         y="42.084831"
          id="tspan6">1000 repetitions per second</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="56.868366"
-       y="82.102806"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="52.002174"
+       y="80.480743"
        id="text1-9-2-5"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="56.868366"
-         y="82.102806"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="52.002174"
+         y="80.480743"
          id="tspan6-0">Stream Width: 1 data frame</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="66.784149"
-       y="160.25342"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="62.242363"
+       y="151.81868"
        id="text1-9-2-5-4"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="66.784149"
-         y="160.25342"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="62.242363"
+         y="151.81868"
          id="tspan6-0-7">Stream Width: 1 data batch</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
        x="75.201042"
        y="55.913536"
        id="text1-9-2-7"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="75.201042"
          y="55.913536"
-         id="tspan2-4-5-8">Scientific Data Source #1 (e.g. Camera)</tspan><tspan
+         id="tspan2-4-5-8">Scientific Data Source #1 </tspan><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="75.201042"
-         y="65.913521"
+         y="66.496872"
          id="tspan5">1000 frames per second</tspan></text>
     <text
        xml:space="preserve"
@@ -851,10 +835,10 @@
        transform="translate(3.8929547,-2.5953031)"><tspan
          x="-92.538292"
          y="78.475838"
-         id="tspan3">Scientific Data </tspan><tspan
+         id="tspan2">Scientific Data </tspan><tspan
          x="-92.538292"
          y="88.475824"
-         id="tspan4">Source #2</tspan></text>
+         id="tspan3">Source #2</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;white-space:pre;inline-size:68.4894;display:inline;stroke-width:0.264583"
@@ -864,10 +848,10 @@
        transform="translate(-61.359035,194.41105)"><tspan
          x="-92.538292"
          y="78.475838"
-         id="tspan9">Scientific Data </tspan><tspan
+         id="tspan4">Scientific Data </tspan><tspan
          x="-92.538292"
          y="88.475824"
-         id="tspan10">Source #3</tspan></text>
+         id="tspan9">Source #3</tspan></text>
     <rect
        style="fill:#ffffff;stroke:#c40000;stroke-width:1"
        id="rect1"
@@ -875,6 +859,25 @@
        height="20.438013"
        x="31.468048"
        y="120.12585"
+       ry="2.7151213" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="37.60231"
+       y="131.57967"
+       id="text1-9-22"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="37.60231"
+         y="131.57967"
+         id="tspan58-3">Batch Maker</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#c40000;stroke-width:1"
+       id="rect1-5"
+       width="36.820862"
+       height="20.438013"
+       x="248.84225"
+       y="103.00365"
        ry="2.7151213" />
     <rect
        style="fill:#ffffff;stroke:#c40000;stroke-width:1"
@@ -885,7 +888,60 @@
        y="92.807648"
        ry="2.7151213" />
     <rect
-       style="fill:#ffffff;stroke:#c40000;stroke-width:1"
+       style="fill:none;stroke:#c40000;stroke-width:1;stroke-dasharray:1, 1;stroke-dashoffset:0"
+       id="rect1-9-6"
+       width="42.335876"
+       height="54.825771"
+       x="28.787354"
+       y="88.579132"
+       ry="2.7151213" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1-9-6-91"
+       width="40.713814"
+       height="38.280716"
+       x="248.1889"
+       y="53.846962"
+       ry="2.7151213" />
+    <rect
+       style="fill:none;stroke:#c40000;stroke-width:1;stroke-dasharray:1, 1;stroke-dashoffset:0"
+       id="rect1-9-6-2"
+       width="42.335876"
+       height="54.825771"
+       x="-163.26645"
+       y="17.98366"
+       ry="2.7151213"
+       transform="rotate(-45.546969)" />
+    <rect
+       style="fill:none;stroke:#c40000;stroke-width:1;stroke-dasharray:1, 1;stroke-dashoffset:0"
+       id="rect1-9-6-2-0"
+       width="42.335876"
+       height="54.825771"
+       x="-215.31442"
+       y="-183.67274"
+       ry="2.7151213"
+       transform="rotate(-105.20844)" />
+    <rect
+       style="fill:none;stroke:#1582cb;stroke-width:1;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1-9-6-9"
+       width="47.526485"
+       height="47.688679"
+       x="28.536106"
+       y="296.98642"
+       ry="2.7151213"
+       rx="0" />
+    <rect
+       style="fill:none;stroke:#1582cb;stroke-width:1;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1-9-6-9-9"
+       width="47.526485"
+       height="47.688679"
+       x="116.52598"
+       y="262.19443"
+       ry="2.7151213"
+       rx="0"
+       transform="rotate(33.022515)" />
+    <rect
+       style="fill:#ffffff;stroke:#c40000;stroke-width:1.9;stroke-dasharray:0.95, 0.95;stroke-dashoffset:0"
        id="rect1-9-5-0"
        width="36.820862"
        height="20.438013"
@@ -929,25 +985,28 @@
        transform="translate(-4.9646203,131.37959)">
       <path
          style="fill:none;stroke:#000000;stroke-width:1.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ArrowTriangleStylized-7-7)"
-         d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
+         d="m 49.635171,49.067447 c 0,11.922176 0,23.844347 0,35.766523"
          id="path6-1-4"
          inkscape:path-effect="#path-effect6-30-7"
-         inkscape:original-d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
-         transform="translate(-0.53797375,71.024129)" />
+         inkscape:original-d="m 49.635171,49.067447 c 0,11.922176 0,23.844347 0,35.766523"
+         transform="translate(-0.53797375,71.024129)"
+         sodipodi:nodetypes="cc" />
       <path
          style="fill:none;stroke:#000000;stroke-width:1.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ArrowTriangleStylized-7-9-33)"
-         d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
+         d="m 49.635171,49.067447 c 0,11.922176 0,23.844347 0,35.766523"
          id="path6-1-0-0"
          inkscape:path-effect="#path-effect6-30-6-6"
-         inkscape:original-d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
-         transform="translate(5.9356349,70.9564)" />
+         inkscape:original-d="m 49.635171,49.067447 c 0,11.922176 0,23.844347 0,35.766523"
+         transform="translate(5.9356349,70.9564)"
+         sodipodi:nodetypes="cc" />
       <path
          style="fill:none;stroke:#000000;stroke-width:1.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ArrowTriangleStylized-7-4-6)"
-         d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
+         d="m 49.635171,49.067447 c 0,11.922176 0,23.844347 0,35.766523"
          id="path6-1-5-15"
          inkscape:path-effect="#path-effect6-30-0-8"
-         inkscape:original-d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
-         transform="translate(11.961222,70.931135)" />
+         inkscape:original-d="m 49.635171,49.067447 c 0,11.922176 0,23.844347 0,35.766523"
+         transform="translate(11.961222,70.931135)"
+         sodipodi:nodetypes="cc" />
     </g>
     <rect
        style="fill:#ffffff;stroke:#c40000;stroke-width:1"
@@ -968,7 +1027,7 @@
        ry="2.7151213"
        transform="rotate(-45)" />
     <rect
-       style="fill:#ffffff;stroke:#c40000;stroke-width:1"
+       style="fill:#ffffff;stroke:#c40000;stroke-width:1.9;stroke-dasharray:0.95, 0.95;stroke-dashoffset:0"
        id="rect1-9-5-0-1"
        width="36.820862"
        height="20.438013"
@@ -977,7 +1036,7 @@
        ry="2.7151213"
        transform="rotate(-45)" />
     <rect
-       style="fill:#ffffff;stroke:#1582cb;stroke-width:1;stroke-opacity:1"
+       style="fill:#ffffff;stroke:#1582cb;stroke-width:1.9;stroke-dasharray:0.95, 0.95;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1-9-5-0-1-9"
        width="36.820862"
        height="20.438013"
@@ -985,17 +1044,37 @@
        y="18.38389"
        ry="2.7151213"
        transform="rotate(-5.4089134)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="-56.265404"
+       y="33.125496"
+       id="text1-9-9-5"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="-56.265404"
+         y="33.125496"
+         id="tspan58-4-0">(e.g. Motor)</tspan></text>
     <rect
-       style="fill:#ffffff;stroke:#1582cb;stroke-width:1;stroke-opacity:1"
+       style="fill:#1582cb;fill-opacity:1;stroke:#1582cb;stroke-width:1;stroke-opacity:1"
        id="rect1-9-5-0-1-9-21"
-       width="36.820862"
-       height="20.438013"
-       x="84.859215"
-       y="-54.022442"
-       ry="2.7151213"
+       width="7.6330538"
+       height="6.1447101"
+       x="276.46408"
+       y="-25.024094"
+       ry="0.81050313"
        transform="rotate(-0.03755742)" />
     <rect
-       style="fill:#ffffff;stroke:#1582cb;stroke-width:1;stroke-opacity:1"
+       style="fill:#a300a8;fill-opacity:1;stroke:#a300a8;stroke-width:1;stroke-opacity:1"
+       id="rect1-9-5-0-1-9-21-1"
+       width="8.6069145"
+       height="5.1721096"
+       x="275.9603"
+       y="1.1909269"
+       ry="0.81050313"
+       transform="rotate(-0.03755742)" />
+    <rect
+       style="fill:#ffffff;stroke:#1582cb;stroke-width:1.9;stroke-dasharray:0.95, 0.95;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1-9-5-0-1-9-2"
        width="36.820862"
        height="20.438013"
@@ -1054,7 +1133,7 @@
        ry="2.7151213"
        transform="rotate(-105)" />
     <rect
-       style="fill:#ffffff;stroke:#c40000;stroke-width:1"
+       style="fill:#ffffff;stroke:#c40000;stroke-width:1.9;stroke-dasharray:0.95, 0.95;stroke-dashoffset:0"
        id="rect1-9-5-0-1-0"
        width="36.820862"
        height="20.438013"
@@ -1102,6 +1181,25 @@
        x="-31.468052"
        y="187.02402"
        ry="1.5409611" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="-17.291361"
+       y="222.81177"
+       id="text1-9-25-8"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46667px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="-17.291361"
+         y="222.81177"
+         id="tspan68">Experiment Orchestrator</tspan></text>
+    <rect
+       style="fill:none;stroke:#a300a8;stroke-width:1.265;stroke-dasharray:1.265, 1.265;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect12-5"
+       width="142.57945"
+       height="90.99781"
+       x="-53.110283"
+       y="163.58205"
+       ry="1.5409611" />
     <rect
        style="fill:#ffffff;stroke:#c40000;stroke-width:1.265;stroke-dasharray:none"
        id="rect12-2"
@@ -1109,22 +1207,6 @@
        height="17.031679"
        x="27.275419"
        y="166.14201"
-       ry="1.5409611" />
-    <rect
-       style="fill:#ffffff;stroke:#1582cb;stroke-width:1.265;stroke-dasharray:none;stroke-opacity:1"
-       id="rect12-2-7"
-       width="42.498093"
-       height="17.031679"
-       x="28.6478"
-       y="251.65295"
-       ry="1.5409611" />
-    <rect
-       style="fill:#ffffff;stroke:#1582cb;stroke-width:1.265;stroke-dasharray:none;stroke-opacity:1"
-       id="rect12-2-7-9"
-       width="42.498093"
-       height="17.031679"
-       x="-17.994659"
-       y="252.00665"
        ry="1.5409611" />
     <rect
        style="fill:#ffffff;stroke:#1582cb;stroke-width:1.265;stroke-dasharray:none;stroke-opacity:1"
@@ -1139,9 +1221,20 @@
        id="rect12-2-7-9-8-6-1"
        width="42.498093"
        height="17.031679"
-       x="30.170519"
-       y="320.49683"
+       x="31.143757"
+       y="322.7677"
        ry="1.5409611" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="37.059586"
+       y="332.11661"
+       id="text1-9-22-8"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="37.059586"
+         y="332.11661"
+         id="tspan58-3-3">Batch Splitter</tspan></text>
     <g
        id="g58"
        transform="rotate(33.843932,-9.6610648,249.13548)">
@@ -1150,25 +1243,28 @@
          transform="translate(-51.133711,130.73073)">
         <path
            style="fill:none;stroke:#000000;stroke-width:1.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ArrowTriangleStylized-7-7-5)"
-           d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
+           d="m 49.341792,46.048049 c 0.09779,12.928642 0.195586,25.857279 0.293379,38.785921"
            id="path6-1-4-2"
            inkscape:path-effect="#path-effect6-30-7-8"
-           inkscape:original-d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
-           transform="translate(-0.53797375,71.024129)" />
+           inkscape:original-d="m 49.341792,46.048049 c 0.09779,12.928642 0.195586,25.857279 0.293379,38.785921"
+           transform="translate(-0.53797375,71.024129)"
+           sodipodi:nodetypes="cc" />
         <path
            style="fill:none;stroke:#000000;stroke-width:1.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ArrowTriangleStylized-7-9-33-6)"
-           d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
+           d="m 49.599456,41.481061 c 0.0119,14.450972 0.02381,28.901938 0.03571,43.352909"
            id="path6-1-0-0-1"
            inkscape:path-effect="#path-effect6-30-6-6-7"
-           inkscape:original-d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
-           transform="translate(5.9356349,70.9564)" />
+           inkscape:original-d="m 49.599456,41.481061 c 0.0119,14.450972 0.02381,28.901938 0.03571,43.352909"
+           transform="translate(5.9356349,70.9564)"
+           sodipodi:nodetypes="cc" />
         <path
            style="fill:none;stroke:#000000;stroke-width:1.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#ArrowTriangleStylized-7-4-6-7)"
-           d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
+           d="m 49.294471,36.803114 c 0.113567,16.010288 0.227133,32.020569 0.3407,48.030856"
            id="path6-1-5-15-4"
            inkscape:path-effect="#path-effect6-30-0-8-6"
-           inkscape:original-d="m 49.635171,71.53304 c 0,4.433644 0,8.867286 0,13.30093"
-           transform="translate(11.961222,70.931135)" />
+           inkscape:original-d="m 49.294471,36.803114 c 0.113567,16.010288 0.227133,32.020569 0.3407,48.030856"
+           transform="translate(11.961222,70.931135)"
+           sodipodi:nodetypes="cc" />
       </g>
       <rect
          style="fill:#ffffff;stroke:#1582cb;stroke-width:1.265;stroke-dasharray:none;stroke-opacity:1"
@@ -1207,69 +1303,76 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="91.449036"
-       y="197.33797"
+       x="95.017578"
+       y="201.81058"
        id="text1-5"><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="91.449036"
-         y="197.33797"
-         id="tspan13">Experiment-Level Analysis.</tspan><tspan
+         x="95.017578"
+         y="201.81058"
+         id="tspan16">Consumes one batch from each DAQ device per two seconds</tspan><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="91.449036"
-         y="207.33795"
-         id="tspan16">With an internal data pipeline:</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="91.449036"
-         y="217.33794"
+         x="95.017578"
+         y="211.81056"
          id="tspan14">(1) Create multi-instrument batches (2000 multi-instrument frames per batch)</tspan><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="91.449036"
-         y="227.33794"
+         x="95.017578"
+         y="221.81055"
          id="tspan8-5">(2) Analyze multi-instrument batches (2000 multi-instrument frames per batch)</tspan><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="91.449036"
-         y="237.33792"
+         x="95.017578"
+         y="231.81055"
          id="tspan15">(3) Create future control sequence batches (20 control frames per batch)</tspan><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="91.449036"
-         y="247.33791"
-         id="tspan17">Analyzes 10 batches per second</tspan></text>
+         x="95.017578"
+         y="241.81053"
+         id="tspan17">Emits one batch for each Control device per two seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="73.695457"
-       y="178.46176"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="41.578579"
+       y="176.19087"
        id="text1-9-25"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="73.695457"
-         y="178.46176"
-         id="tspan2-4-54">Data-Batch Buffer(s)</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="41.578579"
+         y="176.19087"
+         id="tspan60">Buffer</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="-16.682365"
+       y="176.22914"
+       id="text1-9-25-3"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="-16.682365"
+         y="176.22914"
+         id="tspan60-0">Buffer</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="-218.48483"
+       y="-40.805901"
+       id="text1-9-25-3-0"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="-218.48483"
+         y="-40.805901"
+         id="tspan60-0-4">Buffer</tspan></text>
     <path
-       style="fill:url(#pattern56);fill-opacity:1;stroke:#a300a8;stroke-width:0.665;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:url(#pattern56);fill-opacity:1;stroke:#a300a8;stroke-width:0.665;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;stroke-dashoffset:0"
        d="m 63.85527,24.817586 c -7.29929,-0.270344 -22.438255,0.59474 -54.053774,2.521111 -31.615519,1.92637 -79.703978,4.913807 -111.613226,22.599919 -31.90925,17.686112 -47.63543,50.069214 -59.06636,77.723994 -11.43093,27.65478 -18.56612,50.5801 -19.91695,72.04589 -1.35083,21.46579 3.08255,41.47006 5.13727,51.58141 2.05471,10.11134 1.73032,10.3276 4.43385,9.7869 2.70353,-0.5407 8.43455,-1.83829 11.08396,-3.2441 2.64941,-1.40581 2.21687,-2.91968 0.0771,-10.37594 -2.13978,-7.45627 -5.98663,-20.85438 -6.36511,-38.21031 -0.37848,-17.35593 2.71143,-38.66961 10.87535,-61.08552 8.16393,-22.4159 21.40099,-45.93199 38.11561,-64.158977 16.71463,-18.226988 36.904847,-31.162715 62.082857,-37.221639 25.17801,-6.058924 55.34180218,-5.240331 77.29356,-4.375237 21.951757,0.865094 35.691355,1.776683 42.345111,-0.633214 6.653756,-2.409898 6.221223,-8.140953 6.275294,-11.709568 0.05407,-3.568614 0.594748,-4.974375 -6.704542,-5.244719 z"
        id="path21"
        inkscape:path-effect="#path-effect21"
        inkscape:original-d="m 71.695249,23.682141 c -15.139269,0.865101 -30.278234,1.730185 -45.417804,2.595303 -48.091468,2.987623 -96.179927,5.97506 -144.271515,8.962691 -15.7269,32.384595 -31.45308,64.767695 -47.17966,97.151605 -7.13529,22.92565 -14.27047,45.85097 -21.40584,68.77686 4.4337,20.00569 8.86709,40.00996 13.30094,60.01637 -0.32443,0.21628 -0.64882,0.43254 -0.97325,0.64883 5.73149,-1.2977 11.46251,-2.59528 17.19389,-3.89295 -0.43256,-1.51395 -0.86509,-3.02782 -1.29766,-4.54178 -3.84698,-13.39857 -7.69384,-26.79668 -11.54071,-40.19483 3.08991,-21.31371 6.17982,-42.62739 9.26982,-63.94171 13.23785,-23.51749 26.47491,-47.03358 39.71276,-70.55107 20.1914,-12.936483 40.381617,-25.872212 60.572983,-38.808676 30.164654,0.818616 60.32844617,1.637209 90.492296,2.455803 13.739665,0.911594 27.479263,1.823183 41.219335,2.734804 -0.43256,-5.731416 -0.865093,-11.462471 -1.297652,-17.193882 0.5407,-1.405818 1.081378,-2.811579 1.622067,-4.217368 z"
        sodipodi:nodetypes="ccccccccccccccccc"
        transform="translate(0,7.4083335)" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="77.337204"
-       y="263.85437"
-       id="text1-9-25-9"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="77.337204"
-         y="263.85437"
-         id="tspan2-4-54-7">Control-Batch Buffer(s)</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
@@ -1309,14 +1412,14 @@
        sodipodi:nodetypes="cccccccc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="61.82188"
-       y="283.94037"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="60.848644"
+       y="272.91031"
        id="text1-9-25-9-2"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="61.82188"
-         y="283.94037"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="60.848644"
+         y="272.91031"
          id="tspan2-4-54-7-0">Stream Width: 1 control batch</tspan></text>
     <text
        xml:space="preserve"
@@ -1332,14 +1435,19 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="-52.195808"
-       y="15.17877"
+       x="-53.817871"
+       y="7.0684481"
        id="text1-9-25-9-1-4-5"><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="-52.195808"
-         y="15.17877"
-         id="tspan56-4-1">Scientific Control #1 (e.g. Motor)</tspan></text>
+         x="-53.817871"
+         y="7.0684481"
+         id="tspan56-4-1">Scientific Control #1</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="-53.817871"
+         y="17.068436"
+         id="tspan69">Updates at 10 Hz</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
@@ -1350,47 +1458,161 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="-248.34792"
          y="145.02519"
-         id="tspan56-4-1-3">Scientific Control #2</tspan></text>
+         id="tspan70">Scientific Control #2</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="25.167124"
-       y="373.07629"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="23.869473"
+       y="369.18335"
        id="text1-9-25-9-2-5"><tspan
          sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="25.167124"
-         y="373.07629"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.35px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="23.869473"
+         y="369.18335"
          id="tspan2-4-54-7-0-4">Stream Width: 1 control frame</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="126.67057"
-       y="-15.316021"
+       x="290.49908"
+       y="-7.5301118"
        id="text1-9-2-6"><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="126.67057"
-         y="-15.316021"
+         x="290.49908"
+         y="-7.5301118"
          id="tspan6-5">Data Acquisition</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
-       x="127.0446"
-       y="-41.845974"
+       x="290.55234"
+       y="6.6819057"
+       id="text1-9-2-6-6"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="290.55234"
+         y="6.6819057"
+         id="tspan6-5-8">Both / All</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="290.87311"
+       y="-20.434723"
        id="text1-9-2-6-7"><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="127.0446"
-         y="-41.845974"
+         x="290.87311"
+         y="-20.434723"
          id="tspan6-5-6">Control System</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="244.16696"
+       y="-41.640175"
+       id="text1-9-2-6-7-97"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="244.16696"
+         y="-41.640175"
+         id="tspan6-5-6-1">LEGEND</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="292.86752"
+       y="66.29229"
+       id="text1-9-2-6-7-9"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="292.86752"
+         y="66.29229"
+         id="tspan6-5-6-9">Single-Board</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="292.86752"
+         y="76.292274"
+         id="tspan62">Computer,</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="292.86752"
+         y="86.292267"
+         id="tspan63">PC, or Server</tspan></text>
     <rect
-       style="fill:#ffffff;stroke:#c40000;stroke-width:1"
+       style="fill:#c40000;fill-opacity:1;stroke:#c40000;stroke-width:1"
        id="rect1-9-5-0-8"
+       width="8.2725115"
+       height="5.5150204"
+       x="276.12991"
+       y="-12.483585"
+       ry="0.97323942" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="43.38866"
+       y="105.45719"
+       id="text1-9"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="43.38866"
+         y="105.45719"
+         id="tspan58">Buffer</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="37.648811"
+       y="58.734295"
+       id="text1-9-9"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="37.648811"
+         y="58.734295"
+         id="tspan58-4">(e.g. Camera)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="45.240665"
+       y="310.23849"
+       id="text1-9-25-5-0"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="45.240665"
+         y="310.23849"
+         id="tspan60-8-1">Buffer</tspan></text>
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.9;stroke-dasharray:0.95, 0.95;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1-9-5-0-4"
        width="36.820862"
        height="20.438013"
-       x="85.375122"
-       y="-28.055405"
+       x="249.22978"
+       y="18.647497"
        ry="2.7151213" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;white-space:pre;inline-size:81.0896;display:inline;stroke-width:0.264583"
+       x="282.43237"
+       y="21.793329"
+       id="text1-9-2-6-7-9-3"
+       transform="translate(10.0568,4.2173676)"><tspan
+         x="282.43237"
+         y="21.793329"
+         id="tspan10">Low-Level Device
+</tspan><tspan
+         x="282.43237"
+         y="31.793317"
+         id="tspan11">with Firmware</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;line-height:1.25;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;stroke-width:0.264583"
+       x="293.41858"
+       y="111.32619"
+       id="text1-9-2-6-7-9-1"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="293.41858"
+         y="111.32619"
+         id="tspan63-7">Software</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.99999px;font-family:'Vesper Libre';-inkscape-font-specification:'Vesper Libre, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="293.41858"
+         y="121.32617"
+         id="tspan67">Element</tspan></text>
   </g>
 </svg>
