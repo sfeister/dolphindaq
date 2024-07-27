@@ -96,7 +96,7 @@ if __name__ == "__main__":
                                 data = diode_pb2.Data()
                                 data.ParseFromString(msg)
                                 pva_handle_data(data) # Do anything pva-style with this data in EPICS
-                                print(data.trace.shot_num)
+                                #print(data.trace.shot_num)
                                 #print(data)
                                 #print("Better yvals:")
                                 #print(np.frombuffer(data.trace.yvals, dtype=np.uint16))

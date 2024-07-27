@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2024-07-25 19:41:34 by scott-->
+<!--Saved on 2024-07-26 14:26:10 by scott-->
 <display version="2.0.0">
   <name>Sidekick v3 Command Center</name>
   <width>920</width>
@@ -72,7 +72,7 @@
       <trace>
         <name>Protons</name>
         <x_pv></x_pv>
-        <y_pv>pva://PROTON-PVA:trace</y_pv>
+        <y_pv>pva://PROTON-DAQ:trace</y_pv>
         <err_pv></err_pv>
         <axis>0</axis>
         <trace_type>1</trace_type>
@@ -89,7 +89,7 @@
       <trace>
         <name>Electrons</name>
         <x_pv></x_pv>
-        <y_pv>ELECTRON:trace:yarr</y_pv>
+        <y_pv>pva://ELECTRON-DAQ:trace</y_pv>
         <err_pv></err_pv>
         <axis>0</axis>
         <trace_type>1</trace_type>

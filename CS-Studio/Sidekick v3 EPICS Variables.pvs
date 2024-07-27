@@ -359,5 +359,19 @@
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
+        <pv>
+            <selected>true</selected>
+            <name>pva://ELECTRON-DAQ:info</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>true</selected>
+            <name>pva://ELECTRON-DAQ:trace</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
     </pvlist>
 </pvtable>

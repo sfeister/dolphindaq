@@ -10,4 +10,4 @@ workon daq
 
 # Run the python script within the dolhindaq folder so it can find its dependencies
 cd ${DOLPHINDAQ_ROOT}/Python
-python diode-teensy-serial-pva-server.py --prefix "TEENSYDIODE-DAQ" --tty "/dev/ttyACM2"
+python diode-teensy-serial-pva-server.py --prefix "TEENSYDIODE-DAQ" --tty "/dev/ttyUSB-teensy1.3-02"
