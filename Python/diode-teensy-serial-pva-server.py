@@ -4,7 +4,7 @@
 diode-teensy-serial-pva.py: PVA server for the TEENSYDIODE SERIAL device.
 
 Example Command Line Usage:
-    python diode-teensy-serial-pva.py -p "DIODE-01"
+    python diode-teensy-serial-pva-server.py --prefix "DIODE-01" --tty "/dev/ttyACM1"
 
 Forked by Scott Feister on July 24, 2024.
 """
@@ -25,6 +25,7 @@ from p4p.nt import NTScalar, NTNDArray
 from p4p.server import Server
 from p4p.server.thread import SharedPV
 from p4p.client.thread import Context
+from ScottNTNDArray import ScottNTNDArray # a slight modification on NTNDArray that allows the uniqueId and dataTimeStamp keywords
 
 import argparse
 
@@ -58,11 +59,26 @@ def recvmsg(ser):
             msg += msg_tmp
     return msg
 
-def pva_handle_data(data):
+def pva_handle_data(data, settings=None):
     global dev_trace # PVA
-    
+    now = time.time()
     if data.HasField("trace"):
-        dev_trace.post(np.frombuffer(data.trace.yvals, dtype=np.uint16), attrib = {"shot_num": data.trace.shot_num})
+        attrib = {"shot_num" : data.trace.shot_num} # attributes
+        if settings is not None:
+            attrib.update({
+                "start_shot_num" : settings.start_shot_num,
+                "trace_nt" : settings.trace_nt,
+                "dt" : settings.dt,
+                "trace_dt" : settings.trace_dt,
+                "trace_ymin" : settings.trace_ymin,
+                "trace_ymax" : settings.trace_ymax})
+
+        dev_trace.post(
+            np.frombuffer(data.trace.yvals, dtype=np.uint16),
+            uniqueId=data.trace.shot_num,
+            dataTimeStamp=now,
+            timestamp=now,
+            attrib=attrib)
 
 if __name__ == "__main__":
 
@@ -71,7 +87,7 @@ if __name__ == "__main__":
     ctxt = Context('pva')
     dev_info = SharedPV(nt=NTScalar('s'), # scalar string
                   initial="Diode Teensy-Serial PVA Server, 20240724")      # setting initial value also open()'s
-    dev_trace = SharedPV(nt=NTNDArray(),
+    dev_trace = SharedPV(nt=ScottNTNDArray(),
                   initial=np.zeros(8).astype("uint16")) # TODO: Create more options
 
     providers = {
@@ -79,10 +95,13 @@ if __name__ == "__main__":
         DEVICE_NAME + ':trace': dev_trace,
     }
 
+    settings = None
+    
     with Server(providers=[providers]) as S:
         while True: ## run forever!
             try:
                 with serial.Serial(SERIAL_PORT) as ser:
+                    ser.write(b'A') # any serial message will initiate a new settings protobuf to be sent from the DiodeTeensySerial Teensy firmware
                     while True:
                         line = ser.readline()
                         if line:
@@ -90,12 +109,13 @@ if __name__ == "__main__":
                                 msg = recvmsg(ser)
                                 settings = diode_pb2.Settings()
                                 settings.ParseFromString(msg)
+                                print("Settings updated.")
                                 #print(settings)
                             elif line.endswith("data\r\n".encode('utf-8')):
                                 msg = recvmsg(ser)
                                 data = diode_pb2.Data()
                                 data.ParseFromString(msg)
-                                pva_handle_data(data) # Do anything pva-style with this data in EPICS
+                                pva_handle_data(data, settings=settings) # Do anything pva-style with this data in EPICS
                                 #print(data.trace.shot_num)
                                 #print(data)
                                 #print("Better yvals:")
