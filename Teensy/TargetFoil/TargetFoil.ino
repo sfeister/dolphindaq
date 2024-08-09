@@ -14,6 +14,7 @@
     Part of DolphinDAQ. No serial communication needed here, at least for now. It's more of a standalone device.
     
     Written by Scott Feister on September 25, 2023.
+    Updated 2024-08-07 for increased PWM rate.
 */
 
 #include <Arduino.h>
@@ -21,7 +22,7 @@
 #define PHOTOTRANSISTOR_PIN A0
 #define ELECTRON_PIN 9
 #define PROTON_PIN 10
-#define ANALOG_WRITE_PWM_HZ 1000000
+#define ANALOG_WRITE_PWM_HZ 2343750
 
 int laser_raw, electron_raw, proton_raw;
 double laser_power, electron_current, proton_current;

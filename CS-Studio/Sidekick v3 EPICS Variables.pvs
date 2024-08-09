@@ -179,14 +179,14 @@
         </pv>
         <pv>
             <selected>false</selected>
-            <name>LASER:powers</name>
+            <name>LASER:powers:set</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
         <pv>
             <selected>false</selected>
-            <name>LASER:powers:set</name>
+            <name>LASER:powers</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
