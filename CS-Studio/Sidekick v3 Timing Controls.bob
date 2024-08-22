@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Saved on 2024-08-08 18:42:53 by scott-->
+<display version="2.0.0">
+  <name>Timing Mission Control</name>
+  <width>1080</width>
+  <height>450</height>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <class>TITLE</class>
+    <text>Mission Control: Timing and Data Recorders</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>1030</width>
+    <height>31</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+    <vertical_alignment>1</vertical_alignment>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_15</name>
+    <pv_name>ca://MIGHTEX1:FRAME:trigevt</pv_name>
+    <x>460</x>
+    <y>200</y>
+    <width>240</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_16</name>
+    <pv_name>ca://MIGHTEX2FRAME:trigevt</pv_name>
+    <x>460</x>
+    <y>240</y>
+    <width>240</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_17</name>
+    <pv_name>ca://COUNTER-00:count</pv_name>
+    <x>460</x>
+    <y>160</y>
+    <width>240</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_18</name>
+    <pv_name>ca://DIODE-00:trigger:count</pv_name>
+    <x>460</x>
+    <y>280</y>
+    <width>240</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_19</name>
+    <pv_name>ca://DIODE-01:trigger:count</pv_name>
+    <x>460</x>
+    <y>320</y>
+    <width>240</width>
+    <height>30</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Text Update_20</name>
+    <pv_name>ca://ROSIE-03:trigger:count</pv_name>
+    <x>460</x>
+    <y>360</y>
+    <width>240</width>
+    <height>30</height>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_7</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>ca://COUNTER-00:count:set</pv_name>
+        <value>0</value>
+        <description>Zero Counter-00</description>
+      </action>
+    </actions>
+    <x>730</x>
+    <y>160</y>
+    <width>110</width>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_10</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>ca://DIODE-00:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero Diode-00</description>
+      </action>
+    </actions>
+    <x>730</x>
+    <y>280</y>
+    <width>110</width>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_11</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>ca://DIODE-01:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero Diode-01</description>
+      </action>
+    </actions>
+    <x>730</x>
+    <y>320</y>
+    <width>110</width>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Action Button_12</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>ca://ROSIE-03:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero Rosie-03</description>
+      </action>
+    </actions>
+    <x>730</x>
+    <y>360</y>
+    <width>110</width>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="bool_button" version="2.0.0">
+    <name>Boolean Button_9</name>
+    <pv_name>ca://MIGHTEX1:ENABLE</pv_name>
+    <x>730</x>
+    <y>200</y>
+    <width>110</width>
+    <off_label>DISABLED</off_label>
+    <on_label>ENABLED</on_label>
+  </widget>
+  <widget type="bool_button" version="2.0.0">
+    <name>Boolean Button_10</name>
+    <pv_name>ca://MIGHTEX2:ENABLE</pv_name>
+    <x>730</x>
+    <y>240</y>
+    <width>110</width>
+    <off_label>DISABLED</off_label>
+    <on_label>ENABLED</on_label>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_32</name>
+    <text>Are the trigger counts synchronized?</text>
+    <x>470</x>
+    <y>90</y>
+    <width>200</width>
+    <height>50</height>
+    <font>
+      <font name="Header 2" family="Liberation Sans" style="BOLD" size="18.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_34</name>
+    <text>Zero those counts!</text>
+    <x>730</x>
+    <y>90</y>
+    <width>140</width>
+    <height>50</height>
+    <font>
+      <font name="Header 2" family="Liberation Sans" style="BOLD" size="18.0">
+      </font>
+    </font>
+  </widget>
+</display>
