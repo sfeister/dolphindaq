@@ -2487,16 +2487,6 @@
 	)
 	(wire
 		(pts
-			(xy 143.51 119.38) (xy 158.75 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2fed1b00-2e66-4fb8-bf8f-7a483832fed0")
-	)
-	(wire
-		(pts
 			(xy 41.91 176.53) (xy 55.88 176.53)
 		)
 		(stroke
@@ -2717,6 +2707,16 @@
 	)
 	(wire
 		(pts
+			(xy 143.51 119.38) (xy 143.51 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5544722-8290-47b7-ad0f-8b7ed9114da9")
+	)
+	(wire
+		(pts
 			(xy 116.84 154.94) (xy 120.65 154.94)
 		)
 		(stroke
@@ -2737,13 +2737,13 @@
 	)
 	(wire
 		(pts
-			(xy 143.51 121.92) (xy 143.51 119.38)
+			(xy 158.75 119.38) (xy 151.13 119.38)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d1f8b767-dcfd-4c5f-8a99-5e7271d90e8a")
+		(uuid "cd2a8df5-5f5d-4018-b15c-34b4e82dc00e")
 	)
 	(wire
 		(pts
@@ -4467,7 +4467,7 @@
 				)
 			)
 		)
-		(property "Value" "1K"
+		(property "Value" "6.7K"
 			(at 132.08 123.19 90)
 			(effects
 				(font
@@ -4781,6 +4781,74 @@
 			(project "TeensyVariety"
 				(path "/2fb4ce1b-d967-452b-a6a8-6c10cc605e92"
 					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 147.32 119.38 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "529c6052-f418-4cbf-85f6-46b78231352a")
+		(property "Reference" "R13"
+			(at 147.32 113.03 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10R"
+			(at 147.32 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 147.32 117.602 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 147.32 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 147.32 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9d5e1678-08a9-4c11-91bb-2c5ba712d5c1")
+		)
+		(pin "2"
+			(uuid "25bb55ea-9a4e-4a77-bc6c-4cd8d5e6abfa")
+		)
+		(instances
+			(project "TeensyVariety"
+				(path "/2fb4ce1b-d967-452b-a6a8-6c10cc605e92"
+					(reference "R13")
 					(unit 1)
 				)
 			)

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2024-08-08 18:40:23 by scott-->
+<!--Saved on 2024-08-22 18:31:20 by scott-->
 <display version="2.0.0">
   <name>Sidekick v3 Command Center</name>
-  <width>920</width>
-  <height>670</height>
+  <width>900</width>
+  <height>796</height>
   <widget type="label" version="2.0.0">
     <name>Label</name>
     <class>TITLE</class>
@@ -107,217 +107,102 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>Trigger Count</name>
-    <pv_name>PULSEGEN:trigger:count</pv_name>
-    <x>50</x>
-    <y>577</y>
+    <pv_name>LASER:trigger:count</pv_name>
+    <x>130</x>
+    <y>710</y>
     <width>130</width>
     <height>29</height>
     <format>1</format>
   </widget>
   <widget type="label" version="2.0.0">
     <name>Label_4</name>
-    <text>Global Trigger Count</text>
+    <text>Trigger Counting &amp; Sync.</text>
     <x>50</x>
-    <y>560</y>
-    <width>130</width>
-    <height>17</height>
-  </widget>
-  <widget type="scaledslider" version="2.0.0">
-    <name>Ch3_Delay_Slider</name>
-    <pv_name>PULSEGEN:CH3:delay:set</pv_name>
-    <x>510</x>
-    <y>520</y>
-    <width>210</width>
-    <height>20</height>
-    <level_hihi>490.0</level_hihi>
-    <level_high>480.0</level_high>
-    <show_hihi>false</show_hihi>
-    <show_high>false</show_high>
-    <show_low>false</show_low>
-    <show_lolo>false</show_lolo>
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <increment>10.0</increment>
-    <maximum>500.0</maximum>
-    <limits_from_pv>false</limits_from_pv>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>repratelabel_1</name>
-    <text>CH3 Delay (us)</text>
-    <x>500</x>
-    <y>490</y>
-    <width>250</width>
+    <y>660</y>
+    <width>310</width>
     <height>30</height>
     <font>
-      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
-      </font>
-    </font>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>repratelabel_2</name>
-    <text>CH1 Delay (us)</text>
-    <x>230</x>
-    <y>490</y>
-    <width>250</width>
-    <height>30</height>
-    <font>
-      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
-      </font>
-    </font>
-  </widget>
-  <widget type="scaledslider" version="2.0.0">
-    <name>Ch1_Delay_Slider</name>
-    <pv_name>PULSEGEN:CH1:delay:set</pv_name>
-    <x>240</x>
-    <y>520</y>
-    <width>210</width>
-    <height>20</height>
-    <level_hihi>490.0</level_hihi>
-    <level_high>480.0</level_high>
-    <show_hihi>false</show_hihi>
-    <show_high>false</show_high>
-    <show_low>false</show_low>
-    <show_lolo>false</show_lolo>
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <increment>10.0</increment>
-    <maximum>500.0</maximum>
-    <limits_from_pv>false</limits_from_pv>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>repratelabel_3</name>
-    <text>CH2 Delay (us)</text>
-    <x>230</x>
-    <y>560</y>
-    <width>250</width>
-    <height>30</height>
-    <font>
-      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
-      </font>
-    </font>
-  </widget>
-  <widget type="scaledslider" version="2.0.0">
-    <name>Ch2_Delay_Slider</name>
-    <pv_name>PULSEGEN:CH2:delay:set</pv_name>
-    <x>240</x>
-    <y>590</y>
-    <width>210</width>
-    <height>20</height>
-    <level_hihi>490.0</level_hihi>
-    <level_high>480.0</level_high>
-    <show_hihi>false</show_hihi>
-    <show_high>false</show_high>
-    <show_low>false</show_low>
-    <show_lolo>false</show_lolo>
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <increment>10.0</increment>
-    <maximum>500.0</maximum>
-    <limits_from_pv>false</limits_from_pv>
-  </widget>
-  <widget type="scaledslider" version="2.0.0">
-    <name>Ch3_Delay_Slider_2</name>
-    <pv_name>PULSEGEN:CH4:delay:set</pv_name>
-    <x>510</x>
-    <y>590</y>
-    <width>210</width>
-    <height>20</height>
-    <level_hihi>490.0</level_hihi>
-    <level_high>480.0</level_high>
-    <show_hihi>false</show_hihi>
-    <show_high>false</show_high>
-    <show_low>false</show_low>
-    <show_lolo>false</show_lolo>
-    <border_alarm_sensitive>false</border_alarm_sensitive>
-    <increment>10.0</increment>
-    <maximum>500.0</maximum>
-    <limits_from_pv>false</limits_from_pv>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>repratelabel_4</name>
-    <text>CH4 Delay (us)</text>
-    <x>500</x>
-    <y>560</y>
-    <width>250</width>
-    <height>30</height>
-    <font>
-      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      <font name="Header 2" family="Liberation Sans" style="BOLD" size="18.0">
       </font>
     </font>
   </widget>
   <widget type="label" version="2.0.0">
     <name>Label_5</name>
-    <text>Rep Rate</text>
-    <x>50</x>
-    <y>500</y>
+    <text>Readback:</text>
+    <x>790</x>
+    <y>140</y>
     <width>130</width>
     <height>17</height>
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>Trigger Count_1</name>
     <pv_name>PULSEGEN:reprate</pv_name>
-    <x>50</x>
-    <y>517</y>
-    <width>130</width>
-    <height>29</height>
+    <x>790</x>
+    <y>157</y>
+    <width>90</width>
+    <height>33</height>
     <format>1</format>
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>Trigger Count_2</name>
     <pv_name>ELECTRON:dt</pv_name>
-    <x>760</x>
-    <y>517</y>
+    <x>770</x>
+    <y>297</y>
     <width>130</width>
     <height>29</height>
-    <format>1</format>
+    <format>2</format>
   </widget>
   <widget type="label" version="2.0.0">
     <name>Label_6</name>
     <text>Time steps dt</text>
-    <x>760</x>
-    <y>500</y>
+    <x>770</x>
+    <y>280</y>
     <width>130</width>
     <height>17</height>
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>Trigger Count_3</name>
     <pv_name>PROTON:dt</pv_name>
-    <x>760</x>
-    <y>546</y>
+    <x>770</x>
+    <y>326</y>
     <width>130</width>
     <height>29</height>
-    <format>1</format>
+    <format>2</format>
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>Trigger Count_4</name>
     <pv_name>LASER:powers:dt</pv_name>
-    <x>760</x>
-    <y>575</y>
+    <x>770</x>
+    <y>355</y>
     <width>130</width>
     <height>29</height>
-    <format>1</format>
+    <format>2</format>
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>Trigger Count_5</name>
-    <pv_name>pva://PROTON-DAQ:trace/uniqueId</pv_name>
-    <x>50</x>
-    <y>606</y>
+    <pv_name>ELECTRON:trigger:count</pv_name>
+    <x>130</x>
+    <y>739</y>
     <width>130</width>
-    <height>29</height>
+    <height>24</height>
     <format>1</format>
   </widget>
   <widget type="combo" version="2.0.0">
     <name>Combo Box</name>
     <pv_name>PULSEGEN:reprate:set</pv_name>
-    <x>780</x>
-    <y>90</y>
+    <x>790</x>
+    <y>100</y>
     <items>
       <item>1</item>
       <item>10</item>
       <item>100</item>
       <item>1000</item>
     </items>
+    <confirm_message>Are you sure you want to do this?</confirm_message>
   </widget>
   <widget type="label" version="2.0.0">
     <name>repratelabel_5</name>
-    <text>Rep Rate</text>
+    <text>Rep. Rate</text>
     <x>790</x>
     <y>50</y>
     <width>110</width>
@@ -326,5 +211,252 @@
       <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
       </font>
     </font>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Pause Trigs</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>PULSEGEN:output:enabled:set</pv_name>
+        <value>0</value>
+        <description>Pause Triggers</description>
+      </action>
+    </actions>
+    <x>290</x>
+    <y>690</y>
+    <width>130</width>
+    <height>31</height>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Zero Trigs</name>
+    <actions execute_as_one="true">
+      <action type="write_pv">
+        <pv_name>LASER:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero LASER Trigger</description>
+      </action>
+      <action type="write_pv">
+        <pv_name>ELECTRON:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero ELECTRON Trigger</description>
+      </action>
+      <action type="write_pv">
+        <pv_name>PROTON:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero PROTON Trigger</description>
+      </action>
+    </actions>
+    <text>Zero Trigger Counts</text>
+    <x>290</x>
+    <y>721</y>
+    <width>130</width>
+    <height>31</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>Resume Trigs</name>
+    <actions>
+      <action type="write_pv">
+        <pv_name>PULSEGEN:output:enabled:set</pv_name>
+        <value>1</value>
+        <description>Resume Triggers</description>
+      </action>
+    </actions>
+    <x>290</x>
+    <y>752</y>
+    <width>130</width>
+    <height>31</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_6</name>
+    <pv_name>PROTON:trigger:count</pv_name>
+    <x>130</x>
+    <y>763</y>
+    <width>130</width>
+    <height>24</height>
+    <format>1</format>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_1</name>
+    <text>LASER</text>
+    <x>50</x>
+    <y>710</y>
+    <width>80</width>
+    <height>29</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_2</name>
+    <text>ELECTRON</text>
+    <x>50</x>
+    <y>739</y>
+    <width>80</width>
+    <height>16</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_3</name>
+    <text>PROTON</text>
+    <x>50</x>
+    <y>763</y>
+    <width>60</width>
+    <height>16</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_7</name>
+    <text>Trig. Count</text>
+    <x>160</x>
+    <y>690</y>
+    <width>80</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_8</name>
+    <text>Device</text>
+    <x>60</x>
+    <y>690</y>
+    <width>80</width>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_9</name>
+    <text>Setpoint:</text>
+    <x>790</x>
+    <y>80</y>
+    <width>130</width>
+    <height>17</height>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_10</name>
+    <text>Trigger Delays</text>
+    <x>50</x>
+    <y>480</y>
+    <width>310</width>
+    <height>30</height>
+    <font>
+      <font name="Header 2" family="Liberation Sans" style="BOLD" size="18.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="group" version="3.0.0">
+    <name>Group</name>
+    <x>60</x>
+    <y>510</y>
+    <width>490</width>
+    <height>120</height>
+    <style>3</style>
+    <transparent>true</transparent>
+    <widget type="scaledslider" version="2.0.0">
+      <name>Ch3_Delay_Slider</name>
+      <pv_name>PULSEGEN:CH3:delay:set</pv_name>
+      <x>280</x>
+      <y>30</y>
+      <width>210</width>
+      <height>20</height>
+      <level_hihi>490.0</level_hihi>
+      <level_high>480.0</level_high>
+      <show_hihi>false</show_hihi>
+      <show_high>false</show_high>
+      <show_low>false</show_low>
+      <show_lolo>false</show_lolo>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <increment>10.0</increment>
+      <maximum>1500.0</maximum>
+      <limits_from_pv>false</limits_from_pv>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>repratelabel_1</name>
+      <text>CH3 Delay (us)</text>
+      <x>270</x>
+      <width>190</width>
+      <height>30</height>
+      <font>
+        <font name="Header 3" family="Liberation Sans" style="BOLD" size="16.0">
+        </font>
+      </font>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>repratelabel_2</name>
+      <text>CH1 Delay (us)</text>
+      <width>250</width>
+      <height>30</height>
+      <font>
+        <font name="Header 3" family="Liberation Sans" style="BOLD" size="16.0">
+        </font>
+      </font>
+    </widget>
+    <widget type="scaledslider" version="2.0.0">
+      <name>Ch1_Delay_Slider</name>
+      <pv_name>PULSEGEN:CH1:delay:set</pv_name>
+      <x>10</x>
+      <y>30</y>
+      <width>210</width>
+      <height>20</height>
+      <level_hihi>490.0</level_hihi>
+      <level_high>480.0</level_high>
+      <show_hihi>false</show_hihi>
+      <show_high>false</show_high>
+      <show_low>false</show_low>
+      <show_lolo>false</show_lolo>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <increment>10.0</increment>
+      <maximum>1500.0</maximum>
+      <limits_from_pv>false</limits_from_pv>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>repratelabel_3</name>
+      <text>CH2 Delay (us)</text>
+      <y>70</y>
+      <width>250</width>
+      <height>30</height>
+      <font>
+        <font name="Header 3" family="Liberation Sans" style="BOLD" size="16.0">
+        </font>
+      </font>
+    </widget>
+    <widget type="scaledslider" version="2.0.0">
+      <name>Ch2_Delay_Slider</name>
+      <pv_name>PULSEGEN:CH2:delay:set</pv_name>
+      <x>10</x>
+      <y>100</y>
+      <width>210</width>
+      <height>20</height>
+      <level_hihi>490.0</level_hihi>
+      <level_high>480.0</level_high>
+      <show_hihi>false</show_hihi>
+      <show_high>false</show_high>
+      <show_low>false</show_low>
+      <show_lolo>false</show_lolo>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <increment>10.0</increment>
+      <maximum>1500.0</maximum>
+      <limits_from_pv>false</limits_from_pv>
+    </widget>
+    <widget type="scaledslider" version="2.0.0">
+      <name>Ch3_Delay_Slider_2</name>
+      <pv_name>PULSEGEN:CH4:delay:set</pv_name>
+      <x>280</x>
+      <y>100</y>
+      <width>210</width>
+      <height>20</height>
+      <level_hihi>490.0</level_hihi>
+      <level_high>480.0</level_high>
+      <show_hihi>false</show_hihi>
+      <show_high>false</show_high>
+      <show_low>false</show_low>
+      <show_lolo>false</show_lolo>
+      <border_alarm_sensitive>false</border_alarm_sensitive>
+      <increment>10.0</increment>
+      <maximum>1500.0</maximum>
+      <limits_from_pv>false</limits_from_pv>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>repratelabel_4</name>
+      <text>CH4 Delay (us)</text>
+      <x>270</x>
+      <y>70</y>
+      <width>190</width>
+      <height>30</height>
+      <font>
+        <font name="Header 3" family="Liberation Sans" style="BOLD" size="16.0">
+        </font>
+      </font>
+    </widget>
   </widget>
 </display>
