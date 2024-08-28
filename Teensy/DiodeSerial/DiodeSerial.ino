@@ -100,7 +100,7 @@ void ISR_exttrig() {
     trigcnt++;
 
     // (2) Activate the DMA from the continuous ADC
-    if (!lock_adc) {
+    if ((!lock_adc) && (!await_update)) {
       lock_adc = true;
       trigcnt_adc = trigcnt;
       abdma1.clearCompletion(); // start DMA
@@ -192,6 +192,8 @@ void setup() {
   // attach the external interrupt
   pinMode(EXTTRIG_PIN, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(EXTTRIG_PIN), ISR_exttrig, RISING);
+  NVIC_SET_PRIORITY(IRQ_GPIO6789, 0); // set all external interrupts to maximum priority level
+  // Note that all interrupts using IRQ_GPIO6789 according to https://forum.pjrc.com/index.php?threads/teensy-4-set-interrupt-priority-on-given-pins.59828/post-231312
 
   // Initialize SCPI interface
   SCPI_Arduino_Setup(); // note, begins Serial if communication style is Serial

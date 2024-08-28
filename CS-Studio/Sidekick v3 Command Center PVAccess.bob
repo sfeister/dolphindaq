@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2024-08-22 18:31:20 by scott-->
+<!--Saved on 2024-08-27 20:23:14 by scott-->
 <display version="2.0.0">
   <name>Sidekick v3 Command Center</name>
-  <width>900</width>
-  <height>796</height>
+  <width>920</width>
+  <height>812</height>
   <widget type="label" version="2.0.0">
     <name>Label</name>
     <class>TITLE</class>
@@ -225,6 +225,7 @@
     <y>690</y>
     <width>130</width>
     <height>31</height>
+    <tooltip>$(actions)</tooltip>
   </widget>
   <widget type="action_button" version="3.0.0">
     <name>Zero Trigs</name>
@@ -243,6 +244,11 @@
         <pv_name>PROTON:trigger:count:set</pv_name>
         <value>0</value>
         <description>Zero PROTON Trigger</description>
+      </action>
+      <action type="write_pv">
+        <pv_name>PULSEGEN:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero PULSEGEN Trigger</description>
       </action>
     </actions>
     <text>Zero Trigger Counts</text>
@@ -458,5 +464,22 @@
         </font>
       </font>
     </widget>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_11</name>
+    <text>PULSEGEN</text>
+    <x>30</x>
+    <y>788</y>
+    <width>80</width>
+    <height>16</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_7</name>
+    <pv_name>PULSEGEN:trigger:count</pv_name>
+    <x>130</x>
+    <y>788</y>
+    <width>130</width>
+    <height>24</height>
+    <format>1</format>
   </widget>
 </display>

@@ -166,6 +166,10 @@ void ch4_callback()
 }
 
 void setup() {
+  delay(1000);  // A short delay here helps when this device is powering on alongside several other devices timed by it.
+                // Gives other devices a one second lead time to start accepting triggers.
+                // Starting the pulse generator a bit later helps keep their trigger counts in sync.
+
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
   pinMode(TRIGGERED_LED_PIN, OUTPUT);
@@ -190,6 +194,8 @@ void setup() {
   // attach the external interrupt
   pinMode(EXTTRIG_PIN, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(EXTTRIG_PIN), ISR_exttrig, RISING);
+  NVIC_SET_PRIORITY(IRQ_GPIO6789, 0); // set all external interrupts to maximum priority level
+  // Note that all interrupts using IRQ_GPIO6789 according to https://forum.pjrc.com/index.php?threads/teensy-4-set-interrupt-priority-on-given-pins.59828/post-231312
 
   // Initialize SCPI interface
   SCPI_Arduino_Setup(); // note, begins Serial if communication style is Serial
@@ -209,6 +215,11 @@ void loop() {
   
   if (await_update) {
       periodTimer.end();
+
+      delayMicroseconds(2000); // delay to clear out any existing trigger timers which were waiting to fire (up to 2 ms delay, so longer delays will be missed)
+      // (Note: Could also check here if any timers are active and then adjust the delay time)
+
+      // Stop any remaining timers
       tref.stop();
       t1.stop();
       t2.stop();
