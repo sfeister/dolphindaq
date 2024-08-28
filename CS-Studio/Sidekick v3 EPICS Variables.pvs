@@ -102,6 +102,13 @@
         </pv>
         <pv>
             <selected>false</selected>
+            <name>LASER:output:enabled:set</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
             <name>PULSEGEN:CH4:delay</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
@@ -145,13 +152,6 @@
         <pv>
             <selected>false</selected>
             <name>LASER:output:enabled</name>
-            <tolerance>0.1</tolerance>
-            <saved_value_timestamp/>
-            <completion>true</completion>
-        </pv>
-        <pv>
-            <selected>false</selected>
-            <name>LASER:output:enabled:set</name>
             <tolerance>0.1</tolerance>
             <saved_value_timestamp/>
             <completion>true</completion>
