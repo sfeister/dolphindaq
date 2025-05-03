@@ -1,5 +1,5 @@
 /* TFT
-    Displays image data on a TFT from external USB source, like a Pi 5.
+    Displays image data on a TFT from external USB source, like a Jetson or GPU machine.
 
     Built for a Teensy 4.1 board
 
@@ -9,6 +9,9 @@
       4    |   Output, Debug (configured as needed)
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
+
+    TODO Wishlist:
+    * Add in a variable delay that the image stays posted after being received. Could be handled with timers at trigger received.
 
     Written by Scott Feister on May 3, 2025. Modified from my earlier device, DiodeSerial.ino.
     Dual Serial approach so I can send data at faster rates via PVaccess.
@@ -23,21 +26,29 @@ using namespace TeensyTimerTool;
 #include <ddaqproto.h> // stub
 #include <pb_encode.h>
 #include <pb_decode.h>
-#include <hello.pb.h> // custom protobuffer
 #include <tft.pb.h> // custom protobuffer
 
 #define DEBUG_PIN 4 // just for debugging
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN LED_BUILTIN
 #define IMAGE_NX 240
-#define IMAGE_NY 340
+#define IMAGE_NY 320
+#define MAX_LATENCY_MICROS 50000 // maximum allowable latency between trigger arrival and image received back to Teensy, in microseconds (otherwise screen will stay black)
+// TODO: Make MAX_LATENCY_MICROS configurable over SCPI
+
+#if !defined(USB_DUAL_SERIAL) && !defined(USB_TRIPLE_SERIAL)
+#  error "Dual Serial USB must be set in Arduino IDE menu bar: Tools --> USB Type --> Dual Serial"
+#endif
 
 volatile uint16_t imgbuf_display[IMAGE_NX*IMAGE_NY];
 
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
-volatile uint64_t trigcnt_image = 0; // Trigger ID that matches the trace held in trace (until it's filled into the trace object)
-volatile bool trigd = false; // is the system triggered (and the shot alert not yet raised)
-volatile uint64_t trigtime = 0;
+volatile uint64_t trigcnt_alert = 0; // Trigger ID that matches the value that will be sent in the alert message
+volatile uint64_t trigtime = 0; // Trigger timestamp (microseconds, local to this device)
+volatile uint64_t trigtime_alert = 0; // Trigger timestamp that matches the trigger alert
+volatile bool trigd = false; // is the system triggered (e.g. in process of handling a trigger)
+volatile bool alert_ready = false; // is there a shot alert ready to be sent out
+volatile bool awaiting_response = false; // are we waiting on a response from the PC?
 
 // Instantiate a Chrono object for the led heartbeat and LED trigger display
 Chrono heartbeatChrono; 
@@ -64,7 +75,12 @@ void ISR_exttrig() {
     trigtime = micros();
 
     // (2) Raise a shot alert
-    trigd = true;
+    if (!trigd) {
+      trigd = true;
+      trigcnt_alert = trigcnt;
+      trigtime_alert = trigtime;
+      alert_ready = true;
+    }
 }
 
 void send_shot_alert() {
@@ -74,26 +90,35 @@ void send_shot_alert() {
 #endif
 
   shotalert.has_shot_num = true;
-  shotalert.shot_num = trigcnt;
+  shotalert.shot_num = trigcnt_alert;
 
   shotalert_stream = pb_ostream_from_buffer(shotalert_buf, sizeof(shotalert_buf));
   shotalert_status = pb_encode(&shotalert_stream, dolphindaq_tft_ShotAlert_fields, &shotalert);
   shotalert_len = shotalert_stream.bytes_written;
-#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
+
   if (SerialUSB1.dtr()) { // only send the alert if anyone is listening for alerts
     SerialUSB1.println("shot alert");
     SerialUSB1.println(shotalert_len); // note: will block if no space, such that it can eventually send
     SerialUSB1.write(shotalert_buf, shotalert_len);
     SerialUSB1.send_now(); // schedule transmission immediately rather than waiting up to 5 ms for USB buffer to fill
+    awaiting_response = true; // we will now wait for the next response
+
 #if defined(USB_TRIPLE_SERIAL)
     uint32_t endTime = micros();
     SerialUSB2.print("Scheduled data send. Time elapsed in the 'send_shot_alert()' blocking code of the ISR: ");
     SerialUSB2.print(endTime - startTime);
     SerialUSB2.println(" microseconds."); // I've found this to be taking under five microseconds.
-#endif
-
+#endif    
+  } else {
+    trigd = false; // we never sent out a shot alert, so we won't expect any reply.
   }
-#endif
+
+}
+
+void blank_tft_image() {
+}
+
+void update_tft_image() {
 }
 
 void setup() {
@@ -102,9 +127,7 @@ void setup() {
   // initialize the heartbeat LED and updating LED as output
   pinMode(HEARTBEAT_LED_PIN, OUTPUT);
 
-#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
   SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to start transmission
-#endif
 
   // attach the external interrupt
   pinMode(EXTTRIG_PIN, INPUT_PULLDOWN);
@@ -123,40 +146,61 @@ void loop() {
     digitalToggleFast(HEARTBEAT_LED_PIN); // write LED state to pin
     heartbeatChrono.restart();
 #if defined(USB_TRIPLE_SERIAL)
-    SerialUSB2.print("Trigger count: ");
+    SerialUSB2.print("Trigger Count: ");
     SerialUSB2.print(trigcnt);
-    SerialUSB2.println("");
+    SerialUSB2.print(", Last Alert: ");
+    SerialUSB2.println(trigcnt_alert);
 #endif
 
   }
 
-  if (trigd){ // if we haven't alerted the most recent trigger count, it's time to send that
+  if (!SerialUSB1.dtr()) { // device isn't even connected any more, give up on sending anything or awaiting a response
+    awaiting_response = false;
     trigd = false;
+    alert_ready = false;
+  }
+
+  if (alert_ready){ // if we haven't alerted the most recent trigger count, it's time to send that
+    alert_ready = false;
     send_shot_alert();
+    blank_tft_image(); // clear out the old image on the screen from the last trigger
   }
 
-#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
-  // Receive updated image data
-  if (SerialUSB1.available() > 0) {
-    // expects a payload byte length followed by the payload
-    int image_len = SerialUSB1.readStringUntil('\n').toInt(); // read message length
-    SerialUSB1.readBytes(image_buf, image_len); // read message payload
-    
-    // Decode message payload into the "image" object
-    image_stream = pb_istream_from_buffer(image_buf, image_len);
-    image_status = pb_decode(&image_stream, dolphindaq_tft_Image_fields, &image);
+  if (awaiting_response) {
+    if (SerialUSB1.available() > 0) { // receive the image
+      // expects a payload byte length followed by the payload
+      int image_len = SerialUSB1.readStringUntil('\n').toInt(); // read message length
+      SerialUSB1.readBytes(image_buf, image_len); // read message payload
+      
+      awaiting_response = false;
 
-    // Print the shot number and round trip time to show this worked.
-    int roundtrip_micros = micros() - trigtime; // I've found the roundtrip takes about 2 milliseconds.
+      // Decode message payload into the "image" object
+      image_stream = pb_istream_from_buffer(image_buf, image_len);
+      image_status = pb_decode(&image_stream, dolphindaq_tft_Image_fields, &image);
+
+      // Print the shot number and round trip time to show this worked.
+      int roundtrip_micros = micros() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
 #if defined(USB_TRIPLE_SERIAL)
-    SerialUSB2.print("Image.shot_num: ");
-    SerialUSB2.println(image.shot_num);
-    SerialUSB2.print("Microseconds elapsed in the round trip: ");
-    SerialUSB2.println(roundtrip_micros);
+      SerialUSB2.print("Image.shot_num: ");
+      SerialUSB2.println(image.shot_num);
+      SerialUSB2.print("Microseconds elapsed between trigger and completion: ");
+      SerialUSB2.println(roundtrip_micros);
 #endif
 
+      // Update the image on the TFT
+      if (roundtrip_micros < MAX_LATENCY_MICROS) {
+        update_tft_image();
+      }
+
+      trigd = false;
+    }
+
+  } else {
+    // Keep our receive buffer clear if we aren't awaiting any response, to clear out any dangling data from start/restarts
+    while (SerialUSB1.available() > 0) {
+      SerialUSB1.read(); // Read and discard each byte in the buffer
+    }
   }
-#endif
 
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }

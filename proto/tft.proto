@@ -19,5 +19,5 @@ message Image {
   optional uint64 shot_time_alt_nanos = 3; // Shot time from an alternate time source: a more-precise, but less accurate, system timer (in nanoseconds). Nanoseconds count up from zero and then roll over (at a max value that depends on the timer). Does not match meaning of Google's timestamp.proto. (if exposure time is long, then just the earliest shot time is indicated here)
   optional uint32 nx = 4; // Number of pixel values in the image, X dimension (index 1)
   optional uint32 ny = 5; // Number of pixel values in the image, Y dimension (index 0)
-  optional bytes yvals = 6; // uint16 raw pixel data; same size of image as specified in Image.nx and Image.ny; (encoding UINT16 is not an option in Google protobufs)
+  optional bytes vals = 6; // uint16 raw pixel data; same size of image as specified in Image.nx and Image.ny; (encoding UINT16 is not an option in Google protobufs)
 }

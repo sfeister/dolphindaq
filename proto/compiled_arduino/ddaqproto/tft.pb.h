@@ -26,7 +26,7 @@ typedef struct _dolphindaq_tft_Image {
     uint32_t nx;
     bool has_ny;
     uint32_t ny;
-    pb_callback_t yvals;
+    pb_callback_t vals;
 } dolphindaq_tft_Image;
 
 typedef struct _dolphindaq_tft_ShotAlert {
@@ -51,7 +51,7 @@ typedef struct _dolphindaq_tft_ShotAlert {
 #define dolphindaq_tft_Image_shot_time_alt_nanos_tag 3
 #define dolphindaq_tft_Image_nx_tag              4
 #define dolphindaq_tft_Image_ny_tag              5
-#define dolphindaq_tft_Image_yvals_tag           6
+#define dolphindaq_tft_Image_vals_tag            6
 #define dolphindaq_tft_ShotAlert_shot_num_tag    1
 #define dolphindaq_tft_ShotAlert_shot_time_tag   2
 #define dolphindaq_tft_ShotAlert_shot_time_alt_nanos_tag 3
@@ -71,7 +71,7 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  shot_time,         2) \
 X(a, STATIC,   OPTIONAL, UINT64,   shot_time_alt_nanos,   3) \
 X(a, STATIC,   OPTIONAL, UINT32,   nx,                4) \
 X(a, STATIC,   OPTIONAL, UINT32,   ny,                5) \
-X(a, CALLBACK, OPTIONAL, BYTES,    yvals,             6)
+X(a, CALLBACK, OPTIONAL, BYTES,    vals,              6)
 #define dolphindaq_tft_Image_CALLBACK pb_default_field_callback
 #define dolphindaq_tft_Image_DEFAULT NULL
 #define dolphindaq_tft_Image_shot_time_MSGTYPE google_protobuf_Timestamp

@@ -63,6 +63,8 @@ if __name__ == "__main__":
                     image.shot_num = shot_alert.shot_num;
                     image.nx = 240
                     image.ny = 320
+                    myvals = np.arange(image.nx * image.ny, dtype=np.uint16)
+                    image.vals = myvals.tobytes()
                     sendmsg(image, ser)
                 else:
                     print(line)

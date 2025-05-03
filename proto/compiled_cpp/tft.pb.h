@@ -300,20 +300,20 @@ class Image : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
 
   // accessors -------------------------------------------------------
 
-  // optional bytes yvals = 6;
-  bool has_yvals() const;
-  void clear_yvals();
-  static const int kYvalsFieldNumber = 6;
-  const ::std::string& yvals() const;
-  void set_yvals(const ::std::string& value);
+  // optional bytes vals = 6;
+  bool has_vals() const;
+  void clear_vals();
+  static const int kValsFieldNumber = 6;
+  const ::std::string& vals() const;
+  void set_vals(const ::std::string& value);
   #if LANG_CXX11
-  void set_yvals(::std::string&& value);
+  void set_vals(::std::string&& value);
   #endif
-  void set_yvals(const char* value);
-  void set_yvals(const void* value, size_t size);
-  ::std::string* mutable_yvals();
-  ::std::string* release_yvals();
-  void set_allocated_yvals(::std::string* yvals);
+  void set_vals(const char* value);
+  void set_vals(const void* value, size_t size);
+  ::std::string* mutable_vals();
+  ::std::string* release_vals();
+  void set_allocated_vals(::std::string* vals);
 
   // optional .google.protobuf.Timestamp shot_time = 2;
   bool has_shot_time() const;
@@ -367,13 +367,13 @@ class Image : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   void clear_has_nx();
   void set_has_ny();
   void clear_has_ny();
-  void set_has_yvals();
-  void clear_has_yvals();
+  void set_has_vals();
+  void clear_has_vals();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  ::google::protobuf::internal::ArenaStringPtr yvals_;
+  ::google::protobuf::internal::ArenaStringPtr vals_;
   ::google::protobuf::Timestamp* shot_time_;
   ::google::protobuf::uint64 shot_num_;
   ::google::protobuf::uint64 shot_time_alt_nanos_;
@@ -650,70 +650,70 @@ inline void Image::set_ny(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:dolphindaq.tft.Image.ny)
 }
 
-// optional bytes yvals = 6;
-inline bool Image::has_yvals() const {
+// optional bytes vals = 6;
+inline bool Image::has_vals() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Image::set_has_yvals() {
+inline void Image::set_has_vals() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Image::clear_has_yvals() {
+inline void Image::clear_has_vals() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Image::clear_yvals() {
-  yvals_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_yvals();
+inline void Image::clear_vals() {
+  vals_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_vals();
 }
-inline const ::std::string& Image::yvals() const {
-  // @@protoc_insertion_point(field_get:dolphindaq.tft.Image.yvals)
-  return yvals_.GetNoArena();
+inline const ::std::string& Image::vals() const {
+  // @@protoc_insertion_point(field_get:dolphindaq.tft.Image.vals)
+  return vals_.GetNoArena();
 }
-inline void Image::set_yvals(const ::std::string& value) {
-  set_has_yvals();
-  yvals_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:dolphindaq.tft.Image.yvals)
+inline void Image::set_vals(const ::std::string& value) {
+  set_has_vals();
+  vals_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:dolphindaq.tft.Image.vals)
 }
 #if LANG_CXX11
-inline void Image::set_yvals(::std::string&& value) {
-  set_has_yvals();
-  yvals_.SetNoArena(
+inline void Image::set_vals(::std::string&& value) {
+  set_has_vals();
+  vals_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:dolphindaq.tft.Image.yvals)
+  // @@protoc_insertion_point(field_set_rvalue:dolphindaq.tft.Image.vals)
 }
 #endif
-inline void Image::set_yvals(const char* value) {
+inline void Image::set_vals(const char* value) {
   GOOGLE_DCHECK(value != NULL);
-  set_has_yvals();
-  yvals_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:dolphindaq.tft.Image.yvals)
+  set_has_vals();
+  vals_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:dolphindaq.tft.Image.vals)
 }
-inline void Image::set_yvals(const void* value, size_t size) {
-  set_has_yvals();
-  yvals_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+inline void Image::set_vals(const void* value, size_t size) {
+  set_has_vals();
+  vals_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:dolphindaq.tft.Image.yvals)
+  // @@protoc_insertion_point(field_set_pointer:dolphindaq.tft.Image.vals)
 }
-inline ::std::string* Image::mutable_yvals() {
-  set_has_yvals();
-  // @@protoc_insertion_point(field_mutable:dolphindaq.tft.Image.yvals)
-  return yvals_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline ::std::string* Image::mutable_vals() {
+  set_has_vals();
+  // @@protoc_insertion_point(field_mutable:dolphindaq.tft.Image.vals)
+  return vals_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Image::release_yvals() {
-  // @@protoc_insertion_point(field_release:dolphindaq.tft.Image.yvals)
-  if (!has_yvals()) {
+inline ::std::string* Image::release_vals() {
+  // @@protoc_insertion_point(field_release:dolphindaq.tft.Image.vals)
+  if (!has_vals()) {
     return NULL;
   }
-  clear_has_yvals();
-  return yvals_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_vals();
+  return vals_.ReleaseNonDefaultNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Image::set_allocated_yvals(::std::string* yvals) {
-  if (yvals != NULL) {
-    set_has_yvals();
+inline void Image::set_allocated_vals(::std::string* vals) {
+  if (vals != NULL) {
+    set_has_vals();
   } else {
-    clear_has_yvals();
+    clear_has_vals();
   }
-  yvals_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), yvals);
-  // @@protoc_insertion_point(field_set_allocated:dolphindaq.tft.Image.yvals)
+  vals_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), vals);
+  // @@protoc_insertion_point(field_set_allocated:dolphindaq.tft.Image.vals)
 }
 
 #ifdef __GNUC__

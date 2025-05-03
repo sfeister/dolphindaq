@@ -96,7 +96,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, shot_time_alt_nanos_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, nx_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, ny_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, yvals_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, vals_),
   2,
   1,
   3,
@@ -139,13 +139,13 @@ void AddDescriptorsImpl() {
       "obuf/timestamp.proto\"i\n\tShotAlert\022\020\n\010sho"
       "t_num\030\001 \001(\004\022-\n\tshot_time\030\002 \001(\0132\032.google."
       "protobuf.Timestamp\022\033\n\023shot_time_alt_nano"
-      "s\030\003 \001(\004\"\214\001\n\005Image\022\020\n\010shot_num\030\001 \001(\004\022-\n\ts"
+      "s\030\003 \001(\004\"\213\001\n\005Image\022\020\n\010shot_num\030\001 \001(\004\022-\n\ts"
       "hot_time\030\002 \001(\0132\032.google.protobuf.Timesta"
       "mp\022\033\n\023shot_time_alt_nanos\030\003 \001(\004\022\n\n\002nx\030\004 "
-      "\001(\r\022\n\n\002ny\030\005 \001(\r\022\r\n\005yvals\030\006 \001(\014"
+      "\001(\r\022\n\n\002ny\030\005 \001(\r\022\014\n\004vals\030\006 \001(\014"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 310);
+      descriptor, 309);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "tft.proto", &protobuf_RegisterTypes);
   ::protobuf_google_2fprotobuf_2ftimestamp_2eproto::AddDescriptors();
@@ -513,7 +513,7 @@ const int Image::kShotTimeFieldNumber;
 const int Image::kShotTimeAltNanosFieldNumber;
 const int Image::kNxFieldNumber;
 const int Image::kNyFieldNumber;
-const int Image::kYvalsFieldNumber;
+const int Image::kValsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Image::Image()
@@ -528,9 +528,9 @@ Image::Image(const Image& from)
       _internal_metadata_(NULL),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  yvals_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.has_yvals()) {
-    yvals_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.yvals_);
+  vals_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_vals()) {
+    vals_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vals_);
   }
   if (from.has_shot_time()) {
     shot_time_ = new ::google::protobuf::Timestamp(*from.shot_time_);
@@ -544,7 +544,7 @@ Image::Image(const Image& from)
 }
 
 void Image::SharedCtor() {
-  yvals_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  vals_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&shot_time_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&ny_) -
       reinterpret_cast<char*>(&shot_time_)) + sizeof(ny_));
@@ -556,7 +556,7 @@ Image::~Image() {
 }
 
 void Image::SharedDtor() {
-  yvals_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  vals_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete shot_time_;
 }
 
@@ -583,7 +583,7 @@ void Image::Clear() {
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
     if (cached_has_bits & 0x00000001u) {
-      yvals_.ClearNonDefaultToEmptyNoArena();
+      vals_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000002u) {
       GOOGLE_DCHECK(shot_time_ != NULL);
@@ -677,12 +677,12 @@ bool Image::MergePartialFromCodedStream(
         break;
       }
 
-      // optional bytes yvals = 6;
+      // optional bytes vals = 6;
       case 6: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_yvals()));
+                input, this->mutable_vals()));
         } else {
           goto handle_unusual;
         }
@@ -742,10 +742,10 @@ void Image::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->ny(), output);
   }
 
-  // optional bytes yvals = 6;
+  // optional bytes vals = 6;
   if (cached_has_bits & 0x00000001u) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      6, this->yvals(), output);
+      6, this->vals(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -790,11 +790,11 @@ void Image::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->ny(), target);
   }
 
-  // optional bytes yvals = 6;
+  // optional bytes vals = 6;
   if (cached_has_bits & 0x00000001u) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        6, this->yvals(), target);
+        6, this->vals(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -815,11 +815,11 @@ size_t Image::ByteSizeLong() const {
         _internal_metadata_.unknown_fields());
   }
   if (_has_bits_[0 / 32] & 63u) {
-    // optional bytes yvals = 6;
-    if (has_yvals()) {
+    // optional bytes vals = 6;
+    if (has_vals()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::BytesSize(
-          this->yvals());
+          this->vals());
     }
 
     // optional .google.protobuf.Timestamp shot_time = 2;
@@ -888,8 +888,8 @@ void Image::MergeFrom(const Image& from) {
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 63u) {
     if (cached_has_bits & 0x00000001u) {
-      set_has_yvals();
-      yvals_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.yvals_);
+      set_has_vals();
+      vals_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vals_);
     }
     if (cached_has_bits & 0x00000002u) {
       mutable_shot_time()->::google::protobuf::Timestamp::MergeFrom(from.shot_time());
@@ -934,7 +934,7 @@ void Image::Swap(Image* other) {
 }
 void Image::InternalSwap(Image* other) {
   using std::swap;
-  yvals_.Swap(&other->yvals_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  vals_.Swap(&other->vals_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(shot_time_, other->shot_time_);
   swap(shot_num_, other->shot_num_);
