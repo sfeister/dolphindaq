@@ -1,4 +1,4 @@
-/* TargetFoil
+/* TargetFoil (SIDEKICK MODEL 4 EDITION ONLY FOR LED DRIVER MODULES)
     Crude mimickry of a thin foil being struck with a laser and emitting a flash of protons and electrons.
 
     Built for a Teensy 4.0 board.
@@ -15,6 +15,7 @@
     
     Written by Scott Feister on September 25, 2023.
     Updated 2024-08-07 for increased PWM rate.
+    UPDATED 2024-09-06 FOR SIDEKICK MODEL 4 ONLY to lower analogWrite frequency to 20 kHz for the LED driver module limitation
 */
 
 #include <Arduino.h>
@@ -22,7 +23,7 @@
 #define PHOTOTRANSISTOR_PIN A0
 #define ELECTRON_PIN 9
 #define PROTON_PIN 10
-#define ANALOG_WRITE_PWM_HZ 2343750
+#define ANALOG_WRITE_PWM_HZ 20000 // fastest control rate of LED driver module in Sidekick Model 4 is 20 kHz, according the Amazon.com specs
 
 int laser_raw, electron_raw, proton_raw;
 double laser_power, electron_current, proton_current;
