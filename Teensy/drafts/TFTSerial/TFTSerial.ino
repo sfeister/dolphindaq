@@ -36,32 +36,64 @@ volatile uint16_t imgbuf_display[IMAGE_NX*IMAGE_NY];
 
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
 volatile uint64_t trigcnt_image = 0; // Trigger ID that matches the trace held in trace (until it's filled into the trace object)
+volatile bool trigd = false; // is the system triggered (and the shot alert not yet raised)
+volatile uint64_t trigtime = 0;
 
 // Instantiate a Chrono object for the led heartbeat and LED trigger display
 Chrono heartbeatChrono; 
 
-/** Initialize Hello Protobuffer **/
-uint8_t hello_buf[256];
-uint32_t hello_len;
-bool hello_status;
+/** Initialize TFT ShotAlert Protobuffer **/
+uint8_t shotalert_buf[1024];
+uint32_t shotalert_len;
+bool shotalert_status;
 
-dolphindaq_Hello hello = dolphindaq_Hello_init_zero;
-pb_ostream_t hello_stream;
+dolphindaq_tft_ShotAlert shotalert = dolphindaq_tft_ShotAlert_init_zero;
+pb_ostream_t shotalert_stream;
 
-/** Initialize Diode (Trace) Data Protobuffer **/
+/** Initialize TFT Image Protobuffer **/
 uint8_t image_buf[IMAGE_NX*IMAGE_NY*2 + 1024]; // TODO: Make this array longer
 uint32_t image_len;
 bool image_status;
-
 dolphindaq_tft_Image image = dolphindaq_tft_Image_init_zero;
-pb_ostream_t image_stream;
+pb_istream_t image_stream;
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
     // (1) Increment trigger counter
     trigcnt++;
+    trigtime = micros();
 
-    // (2) TODO: Send a trigger count message over serial
+    // (2) Raise a shot alert
+    trigd = true;
+}
+
+void send_shot_alert() {
+  // Note: This function will block if called at too high rep-rate (if the USB isn't reading fast enough)
+#if defined(USB_TRIPLE_SERIAL)
+  uint32_t startTime = micros();
+#endif
+
+  shotalert.has_shot_num = true;
+  shotalert.shot_num = trigcnt;
+
+  shotalert_stream = pb_ostream_from_buffer(shotalert_buf, sizeof(shotalert_buf));
+  shotalert_status = pb_encode(&shotalert_stream, dolphindaq_tft_ShotAlert_fields, &shotalert);
+  shotalert_len = shotalert_stream.bytes_written;
+#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
+  if (SerialUSB1.dtr()) { // only send the alert if anyone is listening for alerts
+    SerialUSB1.println("shot alert");
+    SerialUSB1.println(shotalert_len); // note: will block if no space, such that it can eventually send
+    SerialUSB1.write(shotalert_buf, shotalert_len);
+    SerialUSB1.send_now(); // schedule transmission immediately rather than waiting up to 5 ms for USB buffer to fill
+#if defined(USB_TRIPLE_SERIAL)
+    uint32_t endTime = micros();
+    SerialUSB2.print("Scheduled data send. Time elapsed in the 'send_shot_alert()' blocking code of the ISR: ");
+    SerialUSB2.print(endTime - startTime);
+    SerialUSB2.println(" microseconds."); // I've found this to be taking under five microseconds.
+#endif
+
+  }
+#endif
 }
 
 void setup() {
@@ -97,6 +129,34 @@ void loop() {
 #endif
 
   }
+
+  if (trigd){ // if we haven't alerted the most recent trigger count, it's time to send that
+    trigd = false;
+    send_shot_alert();
+  }
+
+#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
+  // Receive updated image data
+  if (SerialUSB1.available() > 0) {
+    // expects a payload byte length followed by the payload
+    int image_len = SerialUSB1.readStringUntil('\n').toInt(); // read message length
+    SerialUSB1.readBytes(image_buf, image_len); // read message payload
+    
+    // Decode message payload into the "image" object
+    image_stream = pb_istream_from_buffer(image_buf, image_len);
+    image_status = pb_decode(&image_stream, dolphindaq_tft_Image_fields, &image);
+
+    // Print the shot number and round trip time to show this worked.
+    int roundtrip_micros = micros() - trigtime; // I've found the roundtrip takes about 2 milliseconds.
+#if defined(USB_TRIPLE_SERIAL)
+    SerialUSB2.print("Image.shot_num: ");
+    SerialUSB2.println(image.shot_num);
+    SerialUSB2.print("Microseconds elapsed in the round trip: ");
+    SerialUSB2.println(roundtrip_micros);
+#endif
+
+  }
+#endif
 
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }

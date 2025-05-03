@@ -33,3 +33,6 @@ pip install protobuf
 trace = diode_pb2.Trace()
 trace.shot_num = 5
 trace.trace[:] = np.arange(10)
+
+### Copying protobuffers into Arduino
+For my case, I had to copy the "compiled_arduino/ddaqproto" folder into my "C:/.../Documents/Arduino/libraries/" folder.
