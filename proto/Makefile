@@ -6,7 +6,7 @@
 #      sudo apt install python3 python3-protobuf # Python
 #      sudo apt install nanopb # NanoPB C
 
-all : python cpp nanopb
+all : python cpp nanopb arduino
 
 compiled_% : 
 	mkdir -p $@
@@ -17,6 +17,14 @@ python : *.proto compiled_python
 
 cpp : *.proto compiled_cpp
 	protoc -I=. --cpp_out=compiled_cpp *.proto
+
+arduino : *.proto nanopb # Folder suitable to copy into Arduino's library folder
+	mkdir -p compiled_arduino/ddaqproto
+	touch compiled_arduino/ddaqproto/ddaqproto.h # a stub
+	cp -r compiled_nanopb/Inc/* compiled_arduino/ddaqproto/
+	cp -r compiled_nanopb/Src/* compiled_arduino/ddaqproto/
+	cp -r compiled_nanopb/Src/google/protobuf/*.c compiled_arduino/ddaqproto/
+	cp -r compiled_nanopb/Inc/google/protobuf/*.h compiled_arduino/ddaqproto/
 
 nanopb : *.proto nanopb_src nanopb_wkt
 	mkdir -p compiled_nanopb/Inc

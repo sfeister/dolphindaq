@@ -4,7 +4,7 @@
 #ifndef PB_DOLPHINDAQ_LINECAM_LINECAM_PB_H_INCLUDED
 #define PB_DOLPHINDAQ_LINECAM_LINECAM_PB_H_INCLUDED
 #include <pb.h>
-#include "timestamp.pb.h"
+#include "google/protobuf/timestamp.pb.h"
 
 #if PB_PROTO_HEADER_VERSION != 40
 #error Regenerate this file with the current version of nanopb generator.
@@ -58,6 +58,10 @@ typedef struct _dolphindaq_linecam_Settings {
     uint32_t clk_dt_timticks;
     bool has_exposure_clk_dts;
     uint32_t exposure_clk_dts;
+    bool has_t1;
+    double t1;
+    bool has_t1_clk_dts;
+    uint32_t t1_clk_dts;
 } dolphindaq_linecam_Settings;
 
 typedef struct _dolphindaq_linecam_Data {
@@ -69,11 +73,11 @@ typedef struct _dolphindaq_linecam_Data {
 
 
 /* Initializer values for message structs */
-#define dolphindaq_linecam_Settings_init_default {false, 0, false, google_protobuf_Timestamp_init_default, {{NULL}, NULL}, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0}
+#define dolphindaq_linecam_Settings_init_default {false, 0, false, google_protobuf_Timestamp_init_default, {{NULL}, NULL}, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0}
 #define dolphindaq_linecam_Data_init_default     {false, dolphindaq_linecam_Image_init_default, false, dolphindaq_linecam_Metrics_init_default}
 #define dolphindaq_linecam_Image_init_default    {false, 0, false, google_protobuf_Timestamp_init_default, false, 0, {{NULL}, NULL}}
 #define dolphindaq_linecam_Metrics_init_default  {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
-#define dolphindaq_linecam_Settings_init_zero    {false, 0, false, google_protobuf_Timestamp_init_zero, {{NULL}, NULL}, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0}
+#define dolphindaq_linecam_Settings_init_zero    {false, 0, false, google_protobuf_Timestamp_init_zero, {{NULL}, NULL}, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0}
 #define dolphindaq_linecam_Data_init_zero        {false, dolphindaq_linecam_Image_init_zero, false, dolphindaq_linecam_Metrics_init_zero}
 #define dolphindaq_linecam_Image_init_zero       {false, 0, false, google_protobuf_Timestamp_init_zero, false, 0, {{NULL}, NULL}}
 #define dolphindaq_linecam_Metrics_init_zero     {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
@@ -103,6 +107,8 @@ typedef struct _dolphindaq_linecam_Data {
 #define dolphindaq_linecam_Settings_timtick_secs_tag 8
 #define dolphindaq_linecam_Settings_clk_dt_timticks_tag 9
 #define dolphindaq_linecam_Settings_exposure_clk_dts_tag 10
+#define dolphindaq_linecam_Settings_t1_tag       11
+#define dolphindaq_linecam_Settings_t1_clk_dts_tag 12
 #define dolphindaq_linecam_Data_image_tag        1
 #define dolphindaq_linecam_Data_metrics_tag      2
 
@@ -117,7 +123,9 @@ X(a, STATIC,   OPTIONAL, UINT32,   metrics_batch_size,   6) \
 X(a, STATIC,   OPTIONAL, DOUBLE,   clk_dt,            7) \
 X(a, STATIC,   OPTIONAL, DOUBLE,   timtick_secs,      8) \
 X(a, STATIC,   OPTIONAL, UINT32,   clk_dt_timticks,   9) \
-X(a, STATIC,   OPTIONAL, UINT32,   exposure_clk_dts,  10)
+X(a, STATIC,   OPTIONAL, UINT32,   exposure_clk_dts,  10) \
+X(a, STATIC,   OPTIONAL, DOUBLE,   t1,               11) \
+X(a, STATIC,   OPTIONAL, UINT32,   t1_clk_dts,       12)
 #define dolphindaq_linecam_Settings_CALLBACK pb_default_field_callback
 #define dolphindaq_linecam_Settings_DEFAULT NULL
 #define dolphindaq_linecam_Settings_start_time_MSGTYPE google_protobuf_Timestamp

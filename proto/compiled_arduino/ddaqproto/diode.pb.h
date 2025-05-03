@@ -4,7 +4,7 @@
 #ifndef PB_DOLPHINDAQ_DIODE_DIODE_PB_H_INCLUDED
 #define PB_DOLPHINDAQ_DIODE_DIODE_PB_H_INCLUDED
 #include <pb.h>
-#include "timestamp.pb.h"
+#include "google/protobuf/timestamp.pb.h"
 
 #if PB_PROTO_HEADER_VERSION != 40
 #error Regenerate this file with the current version of nanopb generator.
@@ -21,17 +21,18 @@ typedef struct _dolphindaq_diode_Metrics {
     pb_callback_t shot_time_seconds;
     pb_callback_t shot_time_nanos;
     pb_callback_t shot_time_alt_nanos;
-    pb_callback_t trace_sum;
-    pb_callback_t trace_mean;
-    pb_callback_t trace_max;
-    pb_callback_t trace_min;
-    pb_callback_t trace_custom;
+    pb_callback_t global_sum;
+    pb_callback_t global_mean;
+    pb_callback_t global_max;
+    pb_callback_t global_min;
+    pb_callback_t global_peak5;
     pb_callback_t bg_mean;
     pb_callback_t signal_mean;
     pb_callback_t signal_max;
     pb_callback_t reduced_integ;
     pb_callback_t reduced_mean;
     pb_callback_t reduced_max;
+    pb_callback_t custom;
 } dolphindaq_diode_Metrics;
 
 typedef struct _dolphindaq_diode_Settings {
@@ -94,11 +95,11 @@ typedef struct _dolphindaq_diode_Data {
 #define dolphindaq_diode_Settings_init_default   {false, 0, false, google_protobuf_Timestamp_init_default, {{NULL}, NULL}, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0}
 #define dolphindaq_diode_Data_init_default       {false, dolphindaq_diode_Trace_init_default, false, dolphindaq_diode_Metrics_init_default}
 #define dolphindaq_diode_Trace_init_default      {false, 0, false, google_protobuf_Timestamp_init_default, {{NULL}, NULL}}
-#define dolphindaq_diode_Metrics_init_default    {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
+#define dolphindaq_diode_Metrics_init_default    {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
 #define dolphindaq_diode_Settings_init_zero      {false, 0, false, google_protobuf_Timestamp_init_zero, {{NULL}, NULL}, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0, false, 0}
 #define dolphindaq_diode_Data_init_zero          {false, dolphindaq_diode_Trace_init_zero, false, dolphindaq_diode_Metrics_init_zero}
 #define dolphindaq_diode_Trace_init_zero         {false, 0, false, google_protobuf_Timestamp_init_zero, {{NULL}, NULL}}
-#define dolphindaq_diode_Metrics_init_zero       {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
+#define dolphindaq_diode_Metrics_init_zero       {{{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}, {{NULL}, NULL}}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define dolphindaq_diode_Metrics_shot_num_tag    1
@@ -106,17 +107,18 @@ typedef struct _dolphindaq_diode_Data {
 #define dolphindaq_diode_Metrics_shot_time_seconds_tag 3
 #define dolphindaq_diode_Metrics_shot_time_nanos_tag 4
 #define dolphindaq_diode_Metrics_shot_time_alt_nanos_tag 5
-#define dolphindaq_diode_Metrics_trace_sum_tag   6
-#define dolphindaq_diode_Metrics_trace_mean_tag  7
-#define dolphindaq_diode_Metrics_trace_max_tag   8
-#define dolphindaq_diode_Metrics_trace_min_tag   9
-#define dolphindaq_diode_Metrics_trace_custom_tag 10
+#define dolphindaq_diode_Metrics_global_sum_tag  6
+#define dolphindaq_diode_Metrics_global_mean_tag 7
+#define dolphindaq_diode_Metrics_global_max_tag  8
+#define dolphindaq_diode_Metrics_global_min_tag  9
+#define dolphindaq_diode_Metrics_global_peak5_tag 10
 #define dolphindaq_diode_Metrics_bg_mean_tag     11
 #define dolphindaq_diode_Metrics_signal_mean_tag 12
 #define dolphindaq_diode_Metrics_signal_max_tag  13
 #define dolphindaq_diode_Metrics_reduced_integ_tag 14
 #define dolphindaq_diode_Metrics_reduced_mean_tag 15
 #define dolphindaq_diode_Metrics_reduced_max_tag 16
+#define dolphindaq_diode_Metrics_custom_tag      17
 #define dolphindaq_diode_Settings_start_shot_num_tag 1
 #define dolphindaq_diode_Settings_start_time_tag 2
 #define dolphindaq_diode_Settings_trace_tvals_tag 3
@@ -189,17 +191,18 @@ X(a, CALLBACK, REPEATED, MESSAGE,  shot_time,         2) \
 X(a, CALLBACK, REPEATED, INT64,    shot_time_seconds,   3) \
 X(a, CALLBACK, REPEATED, INT32,    shot_time_nanos,   4) \
 X(a, CALLBACK, REPEATED, UINT64,   shot_time_alt_nanos,   5) \
-X(a, CALLBACK, REPEATED, UINT64,   trace_sum,         6) \
-X(a, CALLBACK, REPEATED, DOUBLE,   trace_mean,        7) \
-X(a, CALLBACK, REPEATED, UINT64,   trace_max,         8) \
-X(a, CALLBACK, REPEATED, UINT64,   trace_min,         9) \
-X(a, CALLBACK, REPEATED, DOUBLE,   trace_custom,     10) \
+X(a, CALLBACK, REPEATED, UINT64,   global_sum,        6) \
+X(a, CALLBACK, REPEATED, DOUBLE,   global_mean,       7) \
+X(a, CALLBACK, REPEATED, UINT64,   global_max,        8) \
+X(a, CALLBACK, REPEATED, UINT64,   global_min,        9) \
+X(a, CALLBACK, REPEATED, UINT64,   global_peak5,     10) \
 X(a, CALLBACK, REPEATED, DOUBLE,   bg_mean,          11) \
 X(a, CALLBACK, REPEATED, DOUBLE,   signal_mean,      12) \
 X(a, CALLBACK, REPEATED, DOUBLE,   signal_max,       13) \
 X(a, CALLBACK, REPEATED, DOUBLE,   reduced_integ,    14) \
 X(a, CALLBACK, REPEATED, DOUBLE,   reduced_mean,     15) \
-X(a, CALLBACK, REPEATED, DOUBLE,   reduced_max,      16)
+X(a, CALLBACK, REPEATED, DOUBLE,   reduced_max,      16) \
+X(a, CALLBACK, REPEATED, DOUBLE,   custom,           17)
 #define dolphindaq_diode_Metrics_CALLBACK pb_default_field_callback
 #define dolphindaq_diode_Metrics_DEFAULT NULL
 #define dolphindaq_diode_Metrics_shot_time_MSGTYPE google_protobuf_Timestamp
