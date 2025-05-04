@@ -1,0 +1,6 @@
+// https://jpa.kapsi.fi/nanopb/docs/concepts.html#modifying-generator-behaviour
+
+// https://jpa.kapsi.fi/nanopb/docs/reference.html#defining-the-options-in-a-.options-file
+
+dolphindaq.tft.ImageWaveshare.vals         max_size:134400 fixed_length:true
+dolphindaq.tft.ImageILI.vals         max_size:153600 fixed_length:true

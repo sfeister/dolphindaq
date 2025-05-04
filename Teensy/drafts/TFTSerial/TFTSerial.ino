@@ -28,13 +28,28 @@ using namespace TeensyTimerTool;
 #include <pb_decode.h>
 #include <tft.pb.h> // custom protobuffer
 
+/* BEGIN WAVESHARE HEADERS */
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
+#include <SPI.h>
+/* END WAVESHARE HEADERS */
+
+
+/* BEGIN WAVESHARE DEFINES */
+#define TFT_BL 9 // backlight pin
+#define TFT_CS 10
+#define TFT_DC 7
+#define TFT_RST 8
+/* END WAVESHARE DEFINES */
+
 #define DEBUG_PIN 4 // just for debugging
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN LED_BUILTIN
-#define IMAGE_NX 240
-#define IMAGE_NY 320
-#define MAX_LATENCY_MICROS 50000 // maximum allowable latency between trigger arrival and image received back to Teensy, in microseconds (otherwise screen will stay black)
-// TODO: Make MAX_LATENCY_MICROS configurable over SCPI
+#define IMAGE_NX 280
+#define IMAGE_NY 240
+#define MAX_LATENCY_MILLIS 400 // maximum allowable latency between trigger arrival and image received back to Teensy, in milliseconds (otherwise screen will stay black)
+// TODO: Make MAX_LATENCY_MILLIS configurable over SCPI
+#define BLANK_MILLIS 600 // time after which the image gets blanked back out
 
 #if !defined(USB_DUAL_SERIAL) && !defined(USB_TRIPLE_SERIAL)
 #  error "Dual Serial USB must be set in Arduino IDE menu bar: Tools --> USB Type --> Dual Serial"
@@ -44,14 +59,16 @@ volatile uint16_t imgbuf_display[IMAGE_NX*IMAGE_NY];
 
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
 volatile uint64_t trigcnt_alert = 0; // Trigger ID that matches the value that will be sent in the alert message
-volatile uint64_t trigtime = 0; // Trigger timestamp (microseconds, local to this device)
+volatile uint64_t trigtime = 0; // Trigger timestamp (milliseconds, local to this device)
 volatile uint64_t trigtime_alert = 0; // Trigger timestamp that matches the trigger alert
 volatile bool trigd = false; // is the system triggered (e.g. in process of handling a trigger)
 volatile bool alert_ready = false; // is there a shot alert ready to be sent out
 volatile bool awaiting_response = false; // are we waiting on a response from the PC?
 
-// Instantiate a Chrono object for the led heartbeat and LED trigger display
+// Instantiate a Chrono object for the led heartbeat, internal trigger (as desired), and blanking screen
 Chrono heartbeatChrono; 
+Chrono internalTrigger; 
+Chrono blanker; // used to blank out the screen 
 
 /** Initialize TFT ShotAlert Protobuffer **/
 uint8_t shotalert_buf[1024];
@@ -65,14 +82,19 @@ pb_ostream_t shotalert_stream;
 uint8_t image_buf[IMAGE_NX*IMAGE_NY*2 + 1024]; // TODO: Make this array longer
 uint32_t image_len;
 bool image_status;
-dolphindaq_tft_Image image = dolphindaq_tft_Image_init_zero;
+dolphindaq_tft_ImageWaveshare image = dolphindaq_tft_ImageWaveshare_init_zero; // WAVESHARE SPECIFIC
 pb_istream_t image_stream;
+
+/* BEGIN WAVESHARE DECLARATIONS */
+Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
+uint16_t framebuf[280][240];
+/* END WAVESHARE DECLARATIONS */
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
     // (1) Increment trigger counter
     trigcnt++;
-    trigtime = micros();
+    trigtime = millis();
 
     // (2) Raise a shot alert
     if (!trigd) {
@@ -115,11 +137,17 @@ void send_shot_alert() {
 
 }
 
+/* BEGIN WAVESHARE FUNCTIONS */
 void blank_tft_image() {
+    tft.fillScreen(ST77XX_BLUE);
 }
 
 void update_tft_image() {
+  tft.startWrite();
+  tft.writePixels(reinterpret_cast<uint16_t*>(&image.vals[0]), 280*240);
+  tft.endWrite();
 }
+/* END WAVESHARE FUNCTIONS */
 
 void setup() {
   pinMode(DEBUG_PIN, OUTPUT);
@@ -134,6 +162,14 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(EXTTRIG_PIN), ISR_exttrig, RISING);
   NVIC_SET_PRIORITY(IRQ_GPIO6789, 0); // set all external interrupts to maximum priority level
   // Note that all interrupts using IRQ_GPIO6789 according to https://forum.pjrc.com/index.php?threads/teensy-4-set-interrupt-priority-on-given-pins.59828/post-231312
+
+  /* BEGIN WAVESHARE SETUP */
+  tft.init(240, 280);   // Init ST7789 280x240
+  tft.fillScreen(ST77XX_BLUE);
+  pinMode(TFT_BL, OUTPUT);
+  digitalWrite(TFT_BL, HIGH);
+  /* END WAVESHARE SETUP */
+
 
   // Initialize SCPI interface
   SCPI_Arduino_Setup(); // note, begins Serial if communication style is Serial
@@ -151,7 +187,17 @@ void loop() {
     SerialUSB2.print(", Last Alert: ");
     SerialUSB2.println(trigcnt_alert);
 #endif
+  }
 
+  if (blanker.hasPassed(BLANK_MILLIS)) {
+    blank_tft_image(); // clear out the old image on the screen from the last trigger
+    blanker.restart();
+  }
+
+
+  if (internalTrigger.hasPassed(1500)) {
+    ISR_exttrig();
+    internalTrigger.restart();
   }
 
   if (!SerialUSB1.dtr()) { // device isn't even connected any more, give up on sending anything or awaiting a response
@@ -164,6 +210,7 @@ void loop() {
     alert_ready = false;
     send_shot_alert();
     blank_tft_image(); // clear out the old image on the screen from the last trigger
+    blanker.restart(); // don't blank out again for a bit
   }
 
   if (awaiting_response) {
@@ -176,20 +223,26 @@ void loop() {
 
       // Decode message payload into the "image" object
       image_stream = pb_istream_from_buffer(image_buf, image_len);
-      image_status = pb_decode(&image_stream, dolphindaq_tft_Image_fields, &image);
+      image_status = pb_decode(&image_stream, dolphindaq_tft_ImageWaveshare_fields, &image); // WAVESHARE SPECIFIC
 
       // Print the shot number and round trip time to show this worked.
-      int roundtrip_micros = micros() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
+      int roundtrip_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
 #if defined(USB_TRIPLE_SERIAL)
       SerialUSB2.print("Image.shot_num: ");
       SerialUSB2.println(image.shot_num);
-      SerialUSB2.print("Microseconds elapsed between trigger and completion: ");
-      SerialUSB2.println(roundtrip_micros);
+      SerialUSB2.print("Milliseconds elapsed between trigger and completion: ");
+      SerialUSB2.println(roundtrip_millis);
+      SerialUSB2.print("Image value at index 152 ");
+      SerialUSB2.println(image.vals[152]);
 #endif
 
       // Update the image on the TFT
-      if (roundtrip_micros < MAX_LATENCY_MICROS) {
+      if (roundtrip_millis < MAX_LATENCY_MILLIS) {
         update_tft_image();
+      } else {
+#if defined(USB_TRIPLE_SERIAL)
+        SerialUSB2.println("Image frame lost.");
+#endif
       }
 
       trigd = false;

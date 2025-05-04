@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='dolphindaq.tft',
   syntax='proto2',
   serialized_options=None,
-  serialized_pb=_b('\n\ttft.proto\x12\x0e\x64olphindaq.tft\x1a\x1fgoogle/protobuf/timestamp.proto\"i\n\tShotAlert\x12\x10\n\x08shot_num\x18\x01 \x01(\x04\x12-\n\tshot_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13shot_time_alt_nanos\x18\x03 \x01(\x04\"\x8b\x01\n\x05Image\x12\x10\n\x08shot_num\x18\x01 \x01(\x04\x12-\n\tshot_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13shot_time_alt_nanos\x18\x03 \x01(\x04\x12\n\n\x02nx\x18\x04 \x01(\r\x12\n\n\x02ny\x18\x05 \x01(\r\x12\x0c\n\x04vals\x18\x06 \x01(\x0c')
+  serialized_pb=_b('\n\ttft.proto\x12\x0e\x64olphindaq.tft\x1a\x1fgoogle/protobuf/timestamp.proto\"i\n\tShotAlert\x12\x10\n\x08shot_num\x18\x01 \x01(\x04\x12-\n\tshot_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13shot_time_alt_nanos\x18\x03 \x01(\x04\"\x94\x01\n\x0eImageWaveshare\x12\x10\n\x08shot_num\x18\x01 \x01(\x04\x12-\n\tshot_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13shot_time_alt_nanos\x18\x03 \x01(\x04\x12\n\n\x02nx\x18\x04 \x01(\r\x12\n\n\x02ny\x18\x05 \x01(\r\x12\x0c\n\x04vals\x18\x06 \x01(\x0c\"\x8e\x01\n\x08ImageILI\x12\x10\n\x08shot_num\x18\x01 \x01(\x04\x12-\n\tshot_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13shot_time_alt_nanos\x18\x03 \x01(\x04\x12\n\n\x02nx\x18\x04 \x01(\r\x12\n\n\x02ny\x18\x05 \x01(\r\x12\x0c\n\x04vals\x18\x06 \x01(\x0c')
   ,
   dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -72,50 +72,50 @@ _SHOTALERT = _descriptor.Descriptor(
 )
 
 
-_IMAGE = _descriptor.Descriptor(
-  name='Image',
-  full_name='dolphindaq.tft.Image',
+_IMAGEWAVESHARE = _descriptor.Descriptor(
+  name='ImageWaveshare',
+  full_name='dolphindaq.tft.ImageWaveshare',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='shot_num', full_name='dolphindaq.tft.Image.shot_num', index=0,
+      name='shot_num', full_name='dolphindaq.tft.ImageWaveshare.shot_num', index=0,
       number=1, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='shot_time', full_name='dolphindaq.tft.Image.shot_time', index=1,
+      name='shot_time', full_name='dolphindaq.tft.ImageWaveshare.shot_time', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='shot_time_alt_nanos', full_name='dolphindaq.tft.Image.shot_time_alt_nanos', index=2,
+      name='shot_time_alt_nanos', full_name='dolphindaq.tft.ImageWaveshare.shot_time_alt_nanos', index=2,
       number=3, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='nx', full_name='dolphindaq.tft.Image.nx', index=3,
+      name='nx', full_name='dolphindaq.tft.ImageWaveshare.nx', index=3,
       number=4, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='ny', full_name='dolphindaq.tft.Image.ny', index=4,
+      name='ny', full_name='dolphindaq.tft.ImageWaveshare.ny', index=4,
       number=5, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='vals', full_name='dolphindaq.tft.Image.vals', index=5,
+      name='vals', full_name='dolphindaq.tft.ImageWaveshare.vals', index=5,
       number=6, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=_b(""),
       message_type=None, enum_type=None, containing_type=None,
@@ -134,13 +134,81 @@ _IMAGE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=170,
-  serialized_end=309,
+  serialized_end=318,
+)
+
+
+_IMAGEILI = _descriptor.Descriptor(
+  name='ImageILI',
+  full_name='dolphindaq.tft.ImageILI',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='shot_num', full_name='dolphindaq.tft.ImageILI.shot_num', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shot_time', full_name='dolphindaq.tft.ImageILI.shot_time', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='shot_time_alt_nanos', full_name='dolphindaq.tft.ImageILI.shot_time_alt_nanos', index=2,
+      number=3, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='nx', full_name='dolphindaq.tft.ImageILI.nx', index=3,
+      number=4, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ny', full_name='dolphindaq.tft.ImageILI.ny', index=4,
+      number=5, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vals', full_name='dolphindaq.tft.ImageILI.vals', index=5,
+      number=6, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=321,
+  serialized_end=463,
 )
 
 _SHOTALERT.fields_by_name['shot_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_IMAGE.fields_by_name['shot_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_IMAGEWAVESHARE.fields_by_name['shot_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_IMAGEILI.fields_by_name['shot_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 DESCRIPTOR.message_types_by_name['ShotAlert'] = _SHOTALERT
-DESCRIPTOR.message_types_by_name['Image'] = _IMAGE
+DESCRIPTOR.message_types_by_name['ImageWaveshare'] = _IMAGEWAVESHARE
+DESCRIPTOR.message_types_by_name['ImageILI'] = _IMAGEILI
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ShotAlert = _reflection.GeneratedProtocolMessageType('ShotAlert', (_message.Message,), dict(
@@ -150,12 +218,19 @@ ShotAlert = _reflection.GeneratedProtocolMessageType('ShotAlert', (_message.Mess
   ))
 _sym_db.RegisterMessage(ShotAlert)
 
-Image = _reflection.GeneratedProtocolMessageType('Image', (_message.Message,), dict(
-  DESCRIPTOR = _IMAGE,
+ImageWaveshare = _reflection.GeneratedProtocolMessageType('ImageWaveshare', (_message.Message,), dict(
+  DESCRIPTOR = _IMAGEWAVESHARE,
   __module__ = 'tft_pb2'
-  # @@protoc_insertion_point(class_scope:dolphindaq.tft.Image)
+  # @@protoc_insertion_point(class_scope:dolphindaq.tft.ImageWaveshare)
   ))
-_sym_db.RegisterMessage(Image)
+_sym_db.RegisterMessage(ImageWaveshare)
+
+ImageILI = _reflection.GeneratedProtocolMessageType('ImageILI', (_message.Message,), dict(
+  DESCRIPTOR = _IMAGEILI,
+  __module__ = 'tft_pb2'
+  # @@protoc_insertion_point(class_scope:dolphindaq.tft.ImageILI)
+  ))
+_sym_db.RegisterMessage(ImageILI)
 
 
 # @@protoc_insertion_point(module_scope)

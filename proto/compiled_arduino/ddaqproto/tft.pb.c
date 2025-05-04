@@ -9,7 +9,10 @@
 PB_BIND(dolphindaq_tft_ShotAlert, dolphindaq_tft_ShotAlert, AUTO)
 
 
-PB_BIND(dolphindaq_tft_Image, dolphindaq_tft_Image, AUTO)
+PB_BIND(dolphindaq_tft_ImageWaveshare, dolphindaq_tft_ImageWaveshare, 4)
+
+
+PB_BIND(dolphindaq_tft_ImageILI, dolphindaq_tft_ImageILI, 4)
 
 
 

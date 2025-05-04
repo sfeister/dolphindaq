@@ -29,11 +29,16 @@ class ShotAlertDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<ShotAlert>
       _instance;
 } _ShotAlert_default_instance_;
-class ImageDefaultTypeInternal {
+class ImageWaveshareDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<Image>
+  ::google::protobuf::internal::ExplicitlyConstructed<ImageWaveshare>
       _instance;
-} _Image_default_instance_;
+} _ImageWaveshare_default_instance_;
+class ImageILIDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<ImageILI>
+      _instance;
+} _ImageILI_default_instance_;
 }  // namespace tft
 }  // namespace dolphindaq
 namespace protobuf_tft_2eproto {
@@ -52,27 +57,43 @@ static void InitDefaultsShotAlert() {
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsShotAlert}, {
       &protobuf_google_2fprotobuf_2ftimestamp_2eproto::scc_info_Timestamp.base,}};
 
-static void InitDefaultsImage() {
+static void InitDefaultsImageWaveshare() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::dolphindaq::tft::_Image_default_instance_;
-    new (ptr) ::dolphindaq::tft::Image();
+    void* ptr = &::dolphindaq::tft::_ImageWaveshare_default_instance_;
+    new (ptr) ::dolphindaq::tft::ImageWaveshare();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::dolphindaq::tft::Image::InitAsDefaultInstance();
+  ::dolphindaq::tft::ImageWaveshare::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<1> scc_info_Image =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsImage}, {
+::google::protobuf::internal::SCCInfo<1> scc_info_ImageWaveshare =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsImageWaveshare}, {
+      &protobuf_google_2fprotobuf_2ftimestamp_2eproto::scc_info_Timestamp.base,}};
+
+static void InitDefaultsImageILI() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::dolphindaq::tft::_ImageILI_default_instance_;
+    new (ptr) ::dolphindaq::tft::ImageILI();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::dolphindaq::tft::ImageILI::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<1> scc_info_ImageILI =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsImageILI}, {
       &protobuf_google_2fprotobuf_2ftimestamp_2eproto::scc_info_Timestamp.base,}};
 
 void InitDefaults() {
   ::google::protobuf::internal::InitSCC(&scc_info_ShotAlert.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_Image.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ImageWaveshare.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ImageILI.base);
 }
 
-::google::protobuf::Metadata file_level_metadata[2];
+::google::protobuf::Metadata file_level_metadata[3];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ShotAlert, _has_bits_),
@@ -86,17 +107,34 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   1,
   0,
   2,
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, _has_bits_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, shot_num_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, shot_time_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, shot_time_alt_nanos_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, nx_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, ny_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::Image, vals_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, shot_num_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, shot_time_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, shot_time_alt_nanos_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, nx_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, ny_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageWaveshare, vals_),
+  2,
+  1,
+  3,
+  4,
+  5,
+  0,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, _has_bits_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, shot_num_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, shot_time_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, shot_time_alt_nanos_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, nx_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, ny_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::dolphindaq::tft::ImageILI, vals_),
   2,
   1,
   3,
@@ -106,12 +144,14 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 8, sizeof(::dolphindaq::tft::ShotAlert)},
-  { 11, 22, sizeof(::dolphindaq::tft::Image)},
+  { 11, 22, sizeof(::dolphindaq::tft::ImageWaveshare)},
+  { 28, 39, sizeof(::dolphindaq::tft::ImageILI)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::dolphindaq::tft::_ShotAlert_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::dolphindaq::tft::_Image_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::dolphindaq::tft::_ImageWaveshare_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::dolphindaq::tft::_ImageILI_default_instance_),
 };
 
 void protobuf_AssignDescriptors() {
@@ -129,7 +169,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 2);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 3);
 }
 
 void AddDescriptorsImpl() {
@@ -139,13 +179,17 @@ void AddDescriptorsImpl() {
       "obuf/timestamp.proto\"i\n\tShotAlert\022\020\n\010sho"
       "t_num\030\001 \001(\004\022-\n\tshot_time\030\002 \001(\0132\032.google."
       "protobuf.Timestamp\022\033\n\023shot_time_alt_nano"
-      "s\030\003 \001(\004\"\213\001\n\005Image\022\020\n\010shot_num\030\001 \001(\004\022-\n\ts"
-      "hot_time\030\002 \001(\0132\032.google.protobuf.Timesta"
-      "mp\022\033\n\023shot_time_alt_nanos\030\003 \001(\004\022\n\n\002nx\030\004 "
-      "\001(\r\022\n\n\002ny\030\005 \001(\r\022\014\n\004vals\030\006 \001(\014"
+      "s\030\003 \001(\004\"\224\001\n\016ImageWaveshare\022\020\n\010shot_num\030\001"
+      " \001(\004\022-\n\tshot_time\030\002 \001(\0132\032.google.protobu"
+      "f.Timestamp\022\033\n\023shot_time_alt_nanos\030\003 \001(\004"
+      "\022\n\n\002nx\030\004 \001(\r\022\n\n\002ny\030\005 \001(\r\022\014\n\004vals\030\006 \001(\014\"\216"
+      "\001\n\010ImageILI\022\020\n\010shot_num\030\001 \001(\004\022-\n\tshot_ti"
+      "me\030\002 \001(\0132\032.google.protobuf.Timestamp\022\033\n\023"
+      "shot_time_alt_nanos\030\003 \001(\004\022\n\n\002nx\030\004 \001(\r\022\n\n"
+      "\002ny\030\005 \001(\r\022\014\n\004vals\030\006 \001(\014"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 309);
+      descriptor, 463);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "tft.proto", &protobuf_RegisterTypes);
   ::protobuf_google_2fprotobuf_2ftimestamp_2eproto::AddDescriptors();
@@ -499,31 +543,31 @@ void ShotAlert::InternalSwap(ShotAlert* other) {
 
 // ===================================================================
 
-void Image::InitAsDefaultInstance() {
-  ::dolphindaq::tft::_Image_default_instance_._instance.get_mutable()->shot_time_ = const_cast< ::google::protobuf::Timestamp*>(
+void ImageWaveshare::InitAsDefaultInstance() {
+  ::dolphindaq::tft::_ImageWaveshare_default_instance_._instance.get_mutable()->shot_time_ = const_cast< ::google::protobuf::Timestamp*>(
       ::google::protobuf::Timestamp::internal_default_instance());
 }
-void Image::clear_shot_time() {
+void ImageWaveshare::clear_shot_time() {
   if (shot_time_ != NULL) shot_time_->Clear();
   clear_has_shot_time();
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Image::kShotNumFieldNumber;
-const int Image::kShotTimeFieldNumber;
-const int Image::kShotTimeAltNanosFieldNumber;
-const int Image::kNxFieldNumber;
-const int Image::kNyFieldNumber;
-const int Image::kValsFieldNumber;
+const int ImageWaveshare::kShotNumFieldNumber;
+const int ImageWaveshare::kShotTimeFieldNumber;
+const int ImageWaveshare::kShotTimeAltNanosFieldNumber;
+const int ImageWaveshare::kNxFieldNumber;
+const int ImageWaveshare::kNyFieldNumber;
+const int ImageWaveshare::kValsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-Image::Image()
+ImageWaveshare::ImageWaveshare()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
   ::google::protobuf::internal::InitSCC(
-      &protobuf_tft_2eproto::scc_info_Image.base);
+      &protobuf_tft_2eproto::scc_info_ImageWaveshare.base);
   SharedCtor();
-  // @@protoc_insertion_point(constructor:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(constructor:dolphindaq.tft.ImageWaveshare)
 }
-Image::Image(const Image& from)
+ImageWaveshare::ImageWaveshare(const ImageWaveshare& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
       _has_bits_(from._has_bits_) {
@@ -540,42 +584,42 @@ Image::Image(const Image& from)
   ::memcpy(&shot_num_, &from.shot_num_,
     static_cast<size_t>(reinterpret_cast<char*>(&ny_) -
     reinterpret_cast<char*>(&shot_num_)) + sizeof(ny_));
-  // @@protoc_insertion_point(copy_constructor:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(copy_constructor:dolphindaq.tft.ImageWaveshare)
 }
 
-void Image::SharedCtor() {
+void ImageWaveshare::SharedCtor() {
   vals_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&shot_time_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&ny_) -
       reinterpret_cast<char*>(&shot_time_)) + sizeof(ny_));
 }
 
-Image::~Image() {
-  // @@protoc_insertion_point(destructor:dolphindaq.tft.Image)
+ImageWaveshare::~ImageWaveshare() {
+  // @@protoc_insertion_point(destructor:dolphindaq.tft.ImageWaveshare)
   SharedDtor();
 }
 
-void Image::SharedDtor() {
+void ImageWaveshare::SharedDtor() {
   vals_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete shot_time_;
 }
 
-void Image::SetCachedSize(int size) const {
+void ImageWaveshare::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const ::google::protobuf::Descriptor* Image::descriptor() {
+const ::google::protobuf::Descriptor* ImageWaveshare::descriptor() {
   ::protobuf_tft_2eproto::protobuf_AssignDescriptorsOnce();
   return ::protobuf_tft_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
 }
 
-const Image& Image::default_instance() {
-  ::google::protobuf::internal::InitSCC(&protobuf_tft_2eproto::scc_info_Image.base);
+const ImageWaveshare& ImageWaveshare::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_tft_2eproto::scc_info_ImageWaveshare.base);
   return *internal_default_instance();
 }
 
 
-void Image::Clear() {
-// @@protoc_insertion_point(message_clear_start:dolphindaq.tft.Image)
+void ImageWaveshare::Clear() {
+// @@protoc_insertion_point(message_clear_start:dolphindaq.tft.ImageWaveshare)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -599,11 +643,11 @@ void Image::Clear() {
   _internal_metadata_.Clear();
 }
 
-bool Image::MergePartialFromCodedStream(
+bool ImageWaveshare::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(parse_start:dolphindaq.tft.ImageWaveshare)
   for (;;) {
     ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -701,17 +745,17 @@ bool Image::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(parse_success:dolphindaq.tft.ImageWaveshare)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(parse_failure:dolphindaq.tft.ImageWaveshare)
   return false;
 #undef DO_
 }
 
-void Image::SerializeWithCachedSizes(
+void ImageWaveshare::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(serialize_start:dolphindaq.tft.ImageWaveshare)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -752,13 +796,13 @@ void Image::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(serialize_end:dolphindaq.tft.ImageWaveshare)
 }
 
-::google::protobuf::uint8* Image::InternalSerializeWithCachedSizesToArray(
+::google::protobuf::uint8* ImageWaveshare::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(serialize_to_array_start:dolphindaq.tft.ImageWaveshare)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -801,12 +845,12 @@ void Image::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(serialize_to_array_end:dolphindaq.tft.ImageWaveshare)
   return target;
 }
 
-size_t Image::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:dolphindaq.tft.Image)
+size_t ImageWaveshare::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:dolphindaq.tft.ImageWaveshare)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -863,23 +907,23 @@ size_t Image::ByteSizeLong() const {
   return total_size;
 }
 
-void Image::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:dolphindaq.tft.Image)
+void ImageWaveshare::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:dolphindaq.tft.ImageWaveshare)
   GOOGLE_DCHECK_NE(&from, this);
-  const Image* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const Image>(
+  const ImageWaveshare* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ImageWaveshare>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:dolphindaq.tft.ImageWaveshare)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:dolphindaq.tft.Image)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:dolphindaq.tft.ImageWaveshare)
     MergeFrom(*source);
   }
 }
 
-void Image::MergeFrom(const Image& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:dolphindaq.tft.Image)
+void ImageWaveshare::MergeFrom(const ImageWaveshare& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:dolphindaq.tft.ImageWaveshare)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -910,29 +954,29 @@ void Image::MergeFrom(const Image& from) {
   }
 }
 
-void Image::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:dolphindaq.tft.Image)
+void ImageWaveshare::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:dolphindaq.tft.ImageWaveshare)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Image::CopyFrom(const Image& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:dolphindaq.tft.Image)
+void ImageWaveshare::CopyFrom(const ImageWaveshare& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:dolphindaq.tft.ImageWaveshare)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Image::IsInitialized() const {
+bool ImageWaveshare::IsInitialized() const {
   return true;
 }
 
-void Image::Swap(Image* other) {
+void ImageWaveshare::Swap(ImageWaveshare* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void Image::InternalSwap(Image* other) {
+void ImageWaveshare::InternalSwap(ImageWaveshare* other) {
   using std::swap;
   vals_.Swap(&other->vals_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
@@ -945,7 +989,461 @@ void Image::InternalSwap(Image* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 
-::google::protobuf::Metadata Image::GetMetadata() const {
+::google::protobuf::Metadata ImageWaveshare::GetMetadata() const {
+  protobuf_tft_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_tft_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void ImageILI::InitAsDefaultInstance() {
+  ::dolphindaq::tft::_ImageILI_default_instance_._instance.get_mutable()->shot_time_ = const_cast< ::google::protobuf::Timestamp*>(
+      ::google::protobuf::Timestamp::internal_default_instance());
+}
+void ImageILI::clear_shot_time() {
+  if (shot_time_ != NULL) shot_time_->Clear();
+  clear_has_shot_time();
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ImageILI::kShotNumFieldNumber;
+const int ImageILI::kShotTimeFieldNumber;
+const int ImageILI::kShotTimeAltNanosFieldNumber;
+const int ImageILI::kNxFieldNumber;
+const int ImageILI::kNyFieldNumber;
+const int ImageILI::kValsFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ImageILI::ImageILI()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_tft_2eproto::scc_info_ImageILI.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:dolphindaq.tft.ImageILI)
+}
+ImageILI::ImageILI(const ImageILI& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _has_bits_(from._has_bits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  vals_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_vals()) {
+    vals_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vals_);
+  }
+  if (from.has_shot_time()) {
+    shot_time_ = new ::google::protobuf::Timestamp(*from.shot_time_);
+  } else {
+    shot_time_ = NULL;
+  }
+  ::memcpy(&shot_num_, &from.shot_num_,
+    static_cast<size_t>(reinterpret_cast<char*>(&ny_) -
+    reinterpret_cast<char*>(&shot_num_)) + sizeof(ny_));
+  // @@protoc_insertion_point(copy_constructor:dolphindaq.tft.ImageILI)
+}
+
+void ImageILI::SharedCtor() {
+  vals_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(&shot_time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&ny_) -
+      reinterpret_cast<char*>(&shot_time_)) + sizeof(ny_));
+}
+
+ImageILI::~ImageILI() {
+  // @@protoc_insertion_point(destructor:dolphindaq.tft.ImageILI)
+  SharedDtor();
+}
+
+void ImageILI::SharedDtor() {
+  vals_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != internal_default_instance()) delete shot_time_;
+}
+
+void ImageILI::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* ImageILI::descriptor() {
+  ::protobuf_tft_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_tft_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ImageILI& ImageILI::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_tft_2eproto::scc_info_ImageILI.base);
+  return *internal_default_instance();
+}
+
+
+void ImageILI::Clear() {
+// @@protoc_insertion_point(message_clear_start:dolphindaq.tft.ImageILI)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      vals_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(shot_time_ != NULL);
+      shot_time_->Clear();
+    }
+  }
+  if (cached_has_bits & 60u) {
+    ::memset(&shot_num_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&ny_) -
+        reinterpret_cast<char*>(&shot_num_)) + sizeof(ny_));
+  }
+  _has_bits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+bool ImageILI::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:dolphindaq.tft.ImageILI)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional uint64 shot_num = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+          set_has_shot_num();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &shot_num_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional .google.protobuf.Timestamp shot_time = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_shot_time()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint64 shot_time_alt_nanos = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          set_has_shot_time_alt_nanos();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &shot_time_alt_nanos_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint32 nx = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+          set_has_nx();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &nx_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional uint32 ny = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+          set_has_ny();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &ny_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional bytes vals = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(50u /* 50 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_vals()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:dolphindaq.tft.ImageILI)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:dolphindaq.tft.ImageILI)
+  return false;
+#undef DO_
+}
+
+void ImageILI::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:dolphindaq.tft.ImageILI)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional uint64 shot_num = 1;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->shot_num(), output);
+  }
+
+  // optional .google.protobuf.Timestamp shot_time = 2;
+  if (cached_has_bits & 0x00000002u) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->_internal_shot_time(), output);
+  }
+
+  // optional uint64 shot_time_alt_nanos = 3;
+  if (cached_has_bits & 0x00000008u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(3, this->shot_time_alt_nanos(), output);
+  }
+
+  // optional uint32 nx = 4;
+  if (cached_has_bits & 0x00000010u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->nx(), output);
+  }
+
+  // optional uint32 ny = 5;
+  if (cached_has_bits & 0x00000020u) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->ny(), output);
+  }
+
+  // optional bytes vals = 6;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      6, this->vals(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:dolphindaq.tft.ImageILI)
+}
+
+::google::protobuf::uint8* ImageILI::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:dolphindaq.tft.ImageILI)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = _has_bits_[0];
+  // optional uint64 shot_num = 1;
+  if (cached_has_bits & 0x00000004u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->shot_num(), target);
+  }
+
+  // optional .google.protobuf.Timestamp shot_time = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        2, this->_internal_shot_time(), deterministic, target);
+  }
+
+  // optional uint64 shot_time_alt_nanos = 3;
+  if (cached_has_bits & 0x00000008u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(3, this->shot_time_alt_nanos(), target);
+  }
+
+  // optional uint32 nx = 4;
+  if (cached_has_bits & 0x00000010u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->nx(), target);
+  }
+
+  // optional uint32 ny = 5;
+  if (cached_has_bits & 0x00000020u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->ny(), target);
+  }
+
+  // optional bytes vals = 6;
+  if (cached_has_bits & 0x00000001u) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        6, this->vals(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:dolphindaq.tft.ImageILI)
+  return target;
+}
+
+size_t ImageILI::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:dolphindaq.tft.ImageILI)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  if (_has_bits_[0 / 32] & 63u) {
+    // optional bytes vals = 6;
+    if (has_vals()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->vals());
+    }
+
+    // optional .google.protobuf.Timestamp shot_time = 2;
+    if (has_shot_time()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          *shot_time_);
+    }
+
+    // optional uint64 shot_num = 1;
+    if (has_shot_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+          this->shot_num());
+    }
+
+    // optional uint64 shot_time_alt_nanos = 3;
+    if (has_shot_time_alt_nanos()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+          this->shot_time_alt_nanos());
+    }
+
+    // optional uint32 nx = 4;
+    if (has_nx()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->nx());
+    }
+
+    // optional uint32 ny = 5;
+    if (has_ny()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->ny());
+    }
+
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ImageILI::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:dolphindaq.tft.ImageILI)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ImageILI* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ImageILI>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:dolphindaq.tft.ImageILI)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:dolphindaq.tft.ImageILI)
+    MergeFrom(*source);
+  }
+}
+
+void ImageILI::MergeFrom(const ImageILI& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:dolphindaq.tft.ImageILI)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 63u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_vals();
+      vals_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.vals_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      mutable_shot_time()->::google::protobuf::Timestamp::MergeFrom(from.shot_time());
+    }
+    if (cached_has_bits & 0x00000004u) {
+      shot_num_ = from.shot_num_;
+    }
+    if (cached_has_bits & 0x00000008u) {
+      shot_time_alt_nanos_ = from.shot_time_alt_nanos_;
+    }
+    if (cached_has_bits & 0x00000010u) {
+      nx_ = from.nx_;
+    }
+    if (cached_has_bits & 0x00000020u) {
+      ny_ = from.ny_;
+    }
+    _has_bits_[0] |= cached_has_bits;
+  }
+}
+
+void ImageILI::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:dolphindaq.tft.ImageILI)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ImageILI::CopyFrom(const ImageILI& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:dolphindaq.tft.ImageILI)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ImageILI::IsInitialized() const {
+  return true;
+}
+
+void ImageILI::Swap(ImageILI* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ImageILI::InternalSwap(ImageILI* other) {
+  using std::swap;
+  vals_.Swap(&other->vals_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(shot_time_, other->shot_time_);
+  swap(shot_num_, other->shot_num_);
+  swap(shot_time_alt_nanos_, other->shot_time_alt_nanos_);
+  swap(nx_, other->nx_);
+  swap(ny_, other->ny_);
+  swap(_has_bits_[0], other->_has_bits_[0]);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata ImageILI::GetMetadata() const {
   protobuf_tft_2eproto::protobuf_AssignDescriptorsOnce();
   return ::protobuf_tft_2eproto::file_level_metadata[kIndexInFileMessages];
 }
@@ -959,8 +1457,11 @@ namespace protobuf {
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::dolphindaq::tft::ShotAlert* Arena::CreateMaybeMessage< ::dolphindaq::tft::ShotAlert >(Arena* arena) {
   return Arena::CreateInternal< ::dolphindaq::tft::ShotAlert >(arena);
 }
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::dolphindaq::tft::Image* Arena::CreateMaybeMessage< ::dolphindaq::tft::Image >(Arena* arena) {
-  return Arena::CreateInternal< ::dolphindaq::tft::Image >(arena);
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::dolphindaq::tft::ImageWaveshare* Arena::CreateMaybeMessage< ::dolphindaq::tft::ImageWaveshare >(Arena* arena) {
+  return Arena::CreateInternal< ::dolphindaq::tft::ImageWaveshare >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::dolphindaq::tft::ImageILI* Arena::CreateMaybeMessage< ::dolphindaq::tft::ImageILI >(Arena* arena) {
+  return Arena::CreateInternal< ::dolphindaq::tft::ImageILI >(arena);
 }
 }  // namespace protobuf
 }  // namespace google

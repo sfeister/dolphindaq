@@ -59,11 +59,16 @@ if __name__ == "__main__":
                     shot_alert = tft_pb2.ShotAlert()
                     shot_alert.ParseFromString(msg)
                     print(shot_alert)
-                    image = tft_pb2.Image()
+                    image = tft_pb2.ImageWaveshare()
                     image.shot_num = shot_alert.shot_num;
-                    image.nx = 240
-                    image.ny = 320
-                    myvals = np.arange(image.nx * image.ny, dtype=np.uint16)
+                    image.nx = 280
+                    image.ny = 240
+                    xgv = np.linspace(0, 1, image.nx)
+                    ygv = np.linspace(0, 1, image.ny)
+                    X, Y = np.meshgrid(xgv, ygv)
+                    Z = np.sqrt(X**2 + Y**2)*2000
+                    myvals = np.round(Z.T).astype(np.uint16)
+                    #myvals = np.arange(image.nx * image.ny, dtype=np.uint16)
                     image.vals = myvals.tobytes()
                     sendmsg(image, ser)
                 else:

@@ -15,7 +15,7 @@ extern "C" {
 #endif
 
 /* Struct definitions */
-typedef struct _dolphindaq_tft_Image {
+typedef struct _dolphindaq_tft_ImageILI {
     bool has_shot_num;
     uint64_t shot_num;
     bool has_shot_time;
@@ -26,8 +26,24 @@ typedef struct _dolphindaq_tft_Image {
     uint32_t nx;
     bool has_ny;
     uint32_t ny;
-    pb_callback_t vals;
-} dolphindaq_tft_Image;
+    bool has_vals;
+    pb_byte_t vals[153600];
+} dolphindaq_tft_ImageILI;
+
+typedef struct _dolphindaq_tft_ImageWaveshare {
+    bool has_shot_num;
+    uint64_t shot_num;
+    bool has_shot_time;
+    google_protobuf_Timestamp shot_time;
+    bool has_shot_time_alt_nanos;
+    uint64_t shot_time_alt_nanos;
+    bool has_nx;
+    uint32_t nx;
+    bool has_ny;
+    uint32_t ny;
+    bool has_vals;
+    pb_byte_t vals[134400];
+} dolphindaq_tft_ImageWaveshare;
 
 typedef struct _dolphindaq_tft_ShotAlert {
     bool has_shot_num;
@@ -41,17 +57,25 @@ typedef struct _dolphindaq_tft_ShotAlert {
 
 /* Initializer values for message structs */
 #define dolphindaq_tft_ShotAlert_init_default    {false, 0, false, google_protobuf_Timestamp_init_default, false, 0}
-#define dolphindaq_tft_Image_init_default        {false, 0, false, google_protobuf_Timestamp_init_default, false, 0, false, 0, false, 0, {{NULL}, NULL}}
+#define dolphindaq_tft_ImageWaveshare_init_default {false, 0, false, google_protobuf_Timestamp_init_default, false, 0, false, 0, false, 0, false, {0}}
+#define dolphindaq_tft_ImageILI_init_default     {false, 0, false, google_protobuf_Timestamp_init_default, false, 0, false, 0, false, 0, false, {0}}
 #define dolphindaq_tft_ShotAlert_init_zero       {false, 0, false, google_protobuf_Timestamp_init_zero, false, 0}
-#define dolphindaq_tft_Image_init_zero           {false, 0, false, google_protobuf_Timestamp_init_zero, false, 0, false, 0, false, 0, {{NULL}, NULL}}
+#define dolphindaq_tft_ImageWaveshare_init_zero  {false, 0, false, google_protobuf_Timestamp_init_zero, false, 0, false, 0, false, 0, false, {0}}
+#define dolphindaq_tft_ImageILI_init_zero        {false, 0, false, google_protobuf_Timestamp_init_zero, false, 0, false, 0, false, 0, false, {0}}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define dolphindaq_tft_Image_shot_num_tag        1
-#define dolphindaq_tft_Image_shot_time_tag       2
-#define dolphindaq_tft_Image_shot_time_alt_nanos_tag 3
-#define dolphindaq_tft_Image_nx_tag              4
-#define dolphindaq_tft_Image_ny_tag              5
-#define dolphindaq_tft_Image_vals_tag            6
+#define dolphindaq_tft_ImageILI_shot_num_tag     1
+#define dolphindaq_tft_ImageILI_shot_time_tag    2
+#define dolphindaq_tft_ImageILI_shot_time_alt_nanos_tag 3
+#define dolphindaq_tft_ImageILI_nx_tag           4
+#define dolphindaq_tft_ImageILI_ny_tag           5
+#define dolphindaq_tft_ImageILI_vals_tag         6
+#define dolphindaq_tft_ImageWaveshare_shot_num_tag 1
+#define dolphindaq_tft_ImageWaveshare_shot_time_tag 2
+#define dolphindaq_tft_ImageWaveshare_shot_time_alt_nanos_tag 3
+#define dolphindaq_tft_ImageWaveshare_nx_tag     4
+#define dolphindaq_tft_ImageWaveshare_ny_tag     5
+#define dolphindaq_tft_ImageWaveshare_vals_tag   6
 #define dolphindaq_tft_ShotAlert_shot_num_tag    1
 #define dolphindaq_tft_ShotAlert_shot_time_tag   2
 #define dolphindaq_tft_ShotAlert_shot_time_alt_nanos_tag 3
@@ -65,27 +89,41 @@ X(a, STATIC,   OPTIONAL, UINT64,   shot_time_alt_nanos,   3)
 #define dolphindaq_tft_ShotAlert_DEFAULT NULL
 #define dolphindaq_tft_ShotAlert_shot_time_MSGTYPE google_protobuf_Timestamp
 
-#define dolphindaq_tft_Image_FIELDLIST(X, a) \
+#define dolphindaq_tft_ImageWaveshare_FIELDLIST(X, a) \
 X(a, STATIC,   OPTIONAL, UINT64,   shot_num,          1) \
 X(a, STATIC,   OPTIONAL, MESSAGE,  shot_time,         2) \
 X(a, STATIC,   OPTIONAL, UINT64,   shot_time_alt_nanos,   3) \
 X(a, STATIC,   OPTIONAL, UINT32,   nx,                4) \
 X(a, STATIC,   OPTIONAL, UINT32,   ny,                5) \
-X(a, CALLBACK, OPTIONAL, BYTES,    vals,              6)
-#define dolphindaq_tft_Image_CALLBACK pb_default_field_callback
-#define dolphindaq_tft_Image_DEFAULT NULL
-#define dolphindaq_tft_Image_shot_time_MSGTYPE google_protobuf_Timestamp
+X(a, STATIC,   OPTIONAL, FIXED_LENGTH_BYTES, vals,              6)
+#define dolphindaq_tft_ImageWaveshare_CALLBACK NULL
+#define dolphindaq_tft_ImageWaveshare_DEFAULT NULL
+#define dolphindaq_tft_ImageWaveshare_shot_time_MSGTYPE google_protobuf_Timestamp
+
+#define dolphindaq_tft_ImageILI_FIELDLIST(X, a) \
+X(a, STATIC,   OPTIONAL, UINT64,   shot_num,          1) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  shot_time,         2) \
+X(a, STATIC,   OPTIONAL, UINT64,   shot_time_alt_nanos,   3) \
+X(a, STATIC,   OPTIONAL, UINT32,   nx,                4) \
+X(a, STATIC,   OPTIONAL, UINT32,   ny,                5) \
+X(a, STATIC,   OPTIONAL, FIXED_LENGTH_BYTES, vals,              6)
+#define dolphindaq_tft_ImageILI_CALLBACK NULL
+#define dolphindaq_tft_ImageILI_DEFAULT NULL
+#define dolphindaq_tft_ImageILI_shot_time_MSGTYPE google_protobuf_Timestamp
 
 extern const pb_msgdesc_t dolphindaq_tft_ShotAlert_msg;
-extern const pb_msgdesc_t dolphindaq_tft_Image_msg;
+extern const pb_msgdesc_t dolphindaq_tft_ImageWaveshare_msg;
+extern const pb_msgdesc_t dolphindaq_tft_ImageILI_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
 #define dolphindaq_tft_ShotAlert_fields &dolphindaq_tft_ShotAlert_msg
-#define dolphindaq_tft_Image_fields &dolphindaq_tft_Image_msg
+#define dolphindaq_tft_ImageWaveshare_fields &dolphindaq_tft_ImageWaveshare_msg
+#define dolphindaq_tft_ImageILI_fields &dolphindaq_tft_ImageILI_msg
 
 /* Maximum encoded size of messages (where known) */
 #define dolphindaq_tft_ShotAlert_size            46
-/* dolphindaq_tft_Image_size depends on runtime parameters */
+#define dolphindaq_tft_ImageWaveshare_size       134462
+#define dolphindaq_tft_ImageILI_size             153662
 
 #ifdef __cplusplus
 } /* extern "C" */

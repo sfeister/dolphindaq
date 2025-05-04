@@ -38,6 +38,10 @@ nanopb_src : # Copies over certain bits of nanopb source code and headers (those
 	mkdir -p compiled_nanopb/Src
 	cp ../nanopb-0_4_1/*.h compiled_nanopb/Inc/
 	cp ../nanopb-0_4_1/*.c compiled_nanopb/Src/
+	# Last, we need to define "PB_FIELD_32BIT" in order to allow for our large, fixed-size arrays
+	# See https://github.com/krestenkrab/nanopb/blob/master/docs/reference.rst#compilation-options
+	# Typically we'd do this by uncommenting the relevant line in the header pb.h, but we'll just append our line to the very top instead
+	printf '#define PB_FIELD_32BIT 1\n' | cat - compiled_nanopb/Inc/pb.h > tempfile && mv tempfile compiled_nanopb/Inc/pb.h
 
 nanopb_wkt : # One or more Google Well Known Types, compiled here for NanoPB (if WKTs are used in your *.proto, these also need to be compiled and included on your embedded system)
 	mkdir -p compiled_nanopb/Inc/google/protobuf
