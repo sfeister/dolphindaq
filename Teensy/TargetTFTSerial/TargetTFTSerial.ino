@@ -260,8 +260,8 @@ void setup() {
   settings_status = pb_encode(&settings_stream, dolphindaq_diode_Settings_fields, &settings);
   settings_len = settings_stream.bytes_written;
 #if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
-  SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to start transmission
-  SerialUSB1.println("settings");
+  // SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to start transmission
+  //SerialUSB1.println("settings");
   //SerialUSB1.print(settings_len); // note: will block if no space, such that it can eventually send
   //SerialUSB1.write(settings_buf, settings_len);
 #endif
@@ -409,7 +409,7 @@ void loop() {
     encode_trace(); // Transfers Trace block into Trace-Proto block, and also clears ripe_trace and lock_trace flags.
     // Transmit protobuf data over second serial port
     if ( (SerialUSB1.dtr()) && (SerialUSB1.availableForWrite() > 100) ) {
-      SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to reset transmission
+      // SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to reset transmission
       SerialUSB1.println("settings");
       SerialUSB1.println(settings_len); // note: will block if no space, such that it can eventually send
       SerialUSB1.write(settings_buf, settings_len);
