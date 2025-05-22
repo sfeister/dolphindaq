@@ -103,7 +103,7 @@ volatile uint16_t imgbuf_adc[TRACE_NT]; // Buffer completely re-filled by the AD
 // TFT Specific
 volatile uint64_t trigtime_alert = 0; // Trigger timestamp that matches the trigger alert
 volatile bool trigd = false; // is the system triggered (e.g. in process of handling a trigger)
-volatile bool awaiting_response = false; // are we waiting on a response from the PC?
+volatile bool await_response = false; // are we waiting on a response from the PC?
 
 // Instantiate a Chrono object for the led heartbeat and LED trigger display
 Chrono heartbeatChrono; 
@@ -333,8 +333,20 @@ void loop() {
     SerialUSB2.print(lock_trace);
     SerialUSB2.print(", abdma1 interrupted: ");
     SerialUSB2.print(abdma1.interrupted());
+    SerialUSB2.print(", ripe_trace: ");
+    SerialUSB2.print(ripe_trace);
+    SerialUSB2.print(", trigd: ");
+    SerialUSB2.print(trigd);
+    SerialUSB2.print(", await_response: ");
+    SerialUSB2.print(await_response);
     SerialUSB2.print(", abdma1 interrupt Count: ");
     SerialUSB2.print(abdma1.interruptCount());
+    SerialUSB2.print(", SerialUSB1.dtr(): ");
+    SerialUSB2.print(SerialUSB1.dtr());
+    SerialUSB2.print(", SerialUSB1.availableForWrite(): ");
+    SerialUSB2.print(SerialUSB1.availableForWrite());
+    SerialUSB2.print(", SerialUSB1.available(): ");
+    SerialUSB2.print(SerialUSB1.available());
     SerialUSB2.print(", abdma1 buffer Count: ");
     SerialUSB2.print(abdma1.bufferCountLastISRFilled());
     SerialUSB2.print(", abdma1 delta Time: ");
@@ -345,6 +357,8 @@ void loop() {
     SerialUSB2.print(trigcnt_adc);
     SerialUSB2.print(", trigcnt_trace: ");
     SerialUSB2.print(trigcnt_trace);
+    SerialUSB2.print(", trigtime_alert: ");
+    SerialUSB2.print(trigtime_alert);
     SerialUSB2.println("");
 #endif
 
@@ -358,7 +372,7 @@ void loop() {
     adc->adc0->stopTimer();
 
     // cancel any existing TFT activities
-    awaiting_response = false;
+    await_response = false;
     trigd = false;
 
     // Implement all updates
@@ -366,11 +380,9 @@ void loop() {
     settings_stream = pb_ostream_from_buffer(settings_buf, sizeof(settings_buf));
     settings_status = pb_encode(&settings_stream, dolphindaq_diode_Settings_fields, &settings);
     settings_len = settings_stream.bytes_written;
-#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
     SerialUSB1.println("settings");
     SerialUSB1.println(settings_len);
     SerialUSB1.write(settings_buf, settings_len);
-#endif
 
     // Restart the ADC with new settings
     adc->adc0->startSingleRead(readPin_adc_0); // call this to setup everything before the Timer starts,
@@ -396,8 +408,7 @@ void loop() {
     blanker.restart(); // don't blank out again for a bit
     encode_trace(); // Transfers Trace block into Trace-Proto block, and also clears ripe_trace and lock_trace flags.
     // Transmit protobuf data over second serial port
-#if defined(USB_DUAL_SERIAL) || defined(USB_TRIPLE_SERIAL)
-    if ( (!SerialUSB1.dtr()) && (SerialUSB1.availableForWrite() > static_cast<int>(settings_len + data_len + 100)) ) {
+    if ( (SerialUSB1.dtr()) && (SerialUSB1.availableForWrite() > 100) ) {
       SerialUSB1.println("the quick brown fox jumps over the lazy dog"); // a unique phrase to reset transmission
       SerialUSB1.println("settings");
       SerialUSB1.println(settings_len); // note: will block if no space, such that it can eventually send
@@ -405,33 +416,13 @@ void loop() {
       SerialUSB1.println("data");
       SerialUSB1.println(data_len);
       SerialUSB1.write(data_buf, data_len);
-      awaiting_response = true;
-    }
+      await_response = true;
+    } else { // drop the frame
+#if defined(USB_TRIPLE_SERIAL)
+      SerialUSB2.println("Dropped frame (ripe trace) due to either overloaded or disconnected SerialUSB1.");
 #endif
-  }
-
-  SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
-}
-
-// ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino (with some modifications now)
-void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
-  //digitalWriteFast(DEBUG_PIN, HIGH); // DEBUG
-  volatile uint16_t *pbuffer = pabdma->bufferLastISRFilled();
-  //Serial.println(pabdma->bufferCountLastISRFilled());
-
-  if ((uint32_t)pbuffer >= 0x20200000u)
-    arm_dcache_delete((void *)pbuffer, sizeof(dma_adc_buff1));
-  
-  // Copy the buffer data into the image buffer
-  if (!lock_trace) {
-    lock_trace = true;
-    trigcnt_trace = trigcnt_adc;
-    for (int i = 0; i < TRACE_NT; i++) {
-      imgbuf_trace[i] = *pbuffer;
-      pbuffer++;
+      trigd = false;
     }
-    ripe_trace = true; // indicate that Trace block is filled and ready for usage
-    //digitalWriteFast(DEBUG_PIN, LOW); // DEBUG
   }
 
   // TFT-related
@@ -441,12 +432,15 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
   }
 
   if (!SerialUSB1.dtr()) { // device isn't even connected any more, give up on sending anything or awaiting a response
-    awaiting_response = false;
+    await_response = false;
     trigd = false;
   }
 
-  if (awaiting_response) {
+  if (await_response) {
     if (SerialUSB1.available() > 0) { // receive the image
+#if defined(USB_TRIPLE_SERIAL)
+      SerialUSB2.println("Receiving image...");
+#endif
       // Print the shot number and round trip time to show this worked.
       int roundtrip_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
 
@@ -454,7 +448,7 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
       int image_len = SerialUSB1.readStringUntil('\n').toInt(); // read message length
       SerialUSB1.readBytes(image_buf, image_len); // read message payload
       
-      awaiting_response = false;
+      await_response = false;
 
       // Decode message payload into the "image" object
       image_stream = pb_istream_from_buffer(image_buf, image_len);
@@ -494,6 +488,30 @@ void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
     while (SerialUSB1.available() > 0) {
       SerialUSB1.read(); // Read and discard each byte in the buffer
     }
+  }
+
+  SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
+}
+
+// ADC SETUP FROM EXAMPLE adc_timer_dma_oneshot.ino (with some modifications now)
+void ProcessAnalogData(AnalogBufferDMA *pabdma, int8_t adc_num) {
+  //digitalWriteFast(DEBUG_PIN, HIGH); // DEBUG
+  volatile uint16_t *pbuffer = pabdma->bufferLastISRFilled();
+  //Serial.println(pabdma->bufferCountLastISRFilled());
+
+  if ((uint32_t)pbuffer >= 0x20200000u)
+    arm_dcache_delete((void *)pbuffer, sizeof(dma_adc_buff1));
+  
+  // Copy the buffer data into the image buffer
+  if (!lock_trace) {
+    lock_trace = true;
+    trigcnt_trace = trigcnt_adc;
+    for (int i = 0; i < TRACE_NT; i++) {
+      imgbuf_trace[i] = *pbuffer;
+      pbuffer++;
+    }
+    ripe_trace = true; // indicate that Trace block is filled and ready for usage
+    //digitalWriteFast(DEBUG_PIN, LOW); // DEBUG
   }
 
 }
