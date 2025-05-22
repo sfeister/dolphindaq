@@ -10,10 +10,7 @@
             
     Followed TeensyTimerTool tutorial at: https://forum.pjrc.com/threads/59112-TeensyTimerTool
 
-    TODO Wishlist:
-    * Add in a variable delay that the image stays posted after being received. Could be handled with timers at trigger received.
-
-    Written by Scott Feister on May 3, 2025. Modified from my earlier device, DiodeSerial.ino.
+    Written by Scott Feister on May 8, 2025. Modified from my earlier device, DiodeSerial.ino.
     Dual Serial approach so I can send data at faster rates via PVaccess.
     Make sure to set up for Dual USB in Arduino IDE menu bar: "Tools" --> "USB Type" --> "Dual Serial"
 */
@@ -28,34 +25,44 @@ using namespace TeensyTimerTool;
 #include <pb_decode.h>
 #include <tft.pb.h> // custom protobuffer
 
-/* BEGIN WAVESHARE HEADERS */
-#include <Adafruit_GFX.h>    // Core graphics library
-#include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
-#include <SPI.h>
-/* END WAVESHARE HEADERS */
+/* BEGIN TFT HEADERS */
+#include <ILI9341_T4.h>
+/* END TFT HEADERS */
 
 
-/* BEGIN WAVESHARE DEFINES */
-#define TFT_BL 9 // backlight pin
-#define TFT_CS 10
-#define TFT_DC 7
-#define TFT_RST 8
-/* END WAVESHARE DEFINES */
+/* BEGIN TFT DEFINES */
+//
+// DEFAULT WIRING USING SPI 0 ON TEENSY 4/4.1
+//
+#define PIN_BACKLIGHT 255   // optional, set this only if the screen LED pin is connected directly to the Teensy. Connect with resistor.
+#define PIN_MISO    12      // mandatory  (if the display has no MISO line, set this to 255 but then VSync will be disabled...)
+#define PIN_SCK     13      // mandatory
+#define PIN_MOSI    11      // mandatory
+#define PIN_DC      10      // mandatory, can be any pin but using pin 10 (or 36 or 37 on T4.1) provides greater performance
+#define PIN_RESET   6       // optional (but recommended), can be any pin. 
+#define PIN_CS      9       // optional (but recommended), can be any pin.
+// GND --> GND on Teensy 4
+// VCC --> 3V on Teensy 4
+#define PIN_TOUCH_IRQ 255   // optional. set this only if the touchscreen is connected on the same SPI bus
+#define PIN_TOUCH_CS  255   // optional. set this only if the touchscreen is connected on the same spi bus
+
+#define SPI_SPEED       100000000 // faster (up to 100 MHz) reduces tearing for full image redraws
+
+/* END TFT DEFINES */
 
 #define DEBUG_PIN 4 // just for debugging
 #define EXTTRIG_PIN 23
 #define HEARTBEAT_LED_PIN LED_BUILTIN
-#define IMAGE_NX 280
+#define IMAGE_NX 320
 #define IMAGE_NY 240
-#define MAX_LATENCY_MILLIS 400 // maximum allowable latency between trigger arrival and image received back to Teensy, in milliseconds (otherwise screen will stay black)
+#define MAX_LATENCY_MILLIS 50 // maximum allowable latency between trigger arrival and image received back to Teensy, in milliseconds (otherwise screen will stay black)
 // TODO: Make MAX_LATENCY_MILLIS configurable over SCPI
-#define BLANK_MILLIS 600 // time after which the image gets blanked back out
+#define BLANK_MILLIS 100 // time after which the image gets blanked back out
+#define INTERNAL_TRIG_MILLIS 175 // milliseconds between internal triggers (not an exact science here!)
 
 #if !defined(USB_DUAL_SERIAL) && !defined(USB_TRIPLE_SERIAL)
 #  error "Dual Serial USB must be set in Arduino IDE menu bar: Tools --> USB Type --> Dual Serial"
 #endif
-
-volatile uint16_t imgbuf_display[IMAGE_NX*IMAGE_NY];
 
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
 volatile uint64_t trigcnt_alert = 0; // Trigger ID that matches the value that will be sent in the alert message
@@ -82,13 +89,28 @@ pb_ostream_t shotalert_stream;
 uint8_t image_buf[IMAGE_NX*IMAGE_NY*2 + 1024]; // TODO: Make this array longer
 uint32_t image_len;
 bool image_status;
-dolphindaq_tft_ImageWaveshare image = dolphindaq_tft_ImageWaveshare_init_zero; // WAVESHARE SPECIFIC
+dolphindaq_tft_ImageILI image = dolphindaq_tft_ImageILI_init_zero; // TFT SPECIFIC
 pb_istream_t image_stream;
 
-/* BEGIN WAVESHARE DECLARATIONS */
-Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
-uint16_t framebuf[280][240];
-/* END WAVESHARE DECLARATIONS */
+/* BEGIN TFT DECLARATIONS */
+// the screen driver object
+ILI9341_T4::ILI9341Driver tft(PIN_CS, PIN_DC, PIN_SCK, PIN_MOSI, PIN_MISO, PIN_RESET, PIN_TOUCH_CS, PIN_TOUCH_IRQ);
+
+// 2 diff buffers with about 6K memory each
+// (in this simple case, only 1K memory buffer would be enough). 
+ILI9341_T4::DiffBuffStatic<6000> diff1;
+ILI9341_T4::DiffBuffStatic<6000> diff2;
+
+// screen dimension 
+const int LX = 320; 
+const int LY = 240;
+//const int LX = 20; 
+//const int LY = 20;
+
+// framebuffers
+DMAMEM uint16_t internal_fb[LX*LY];     // used for buffering
+DMAMEM uint16_t fb[LX*LY];              // main framebuffer we draw onto.
+/* END TFT DECLARATIONS */
 
 // external trig callback interrupt service routine
 void ISR_exttrig() {
@@ -137,17 +159,58 @@ void send_shot_alert() {
 
 }
 
-/* BEGIN WAVESHARE FUNCTIONS */
+/* BEGIN TFT FUNCTIONS */
+/** fill a framebuffer with a given color */
+void clear(uint16_t* fb, uint16_t color = 0)
+    {
+    for (int i = 0; i < LX * LY; i++) fb[i] = color;
+    }
+
+
+/** draw a disk centered at (x,y) with radius r and color col on the framebuffer fb */
+void drawDisk(uint16_t* fb, double x, double y, double r, uint16_t col)
+    {
+    int xmin = (int)(x - r);
+    int xmax = (int)(x + r);
+    int ymin = (int)(y - r);
+    int ymax = (int)(y + r);
+    if (xmin < 0) xmin = 0;
+    if (xmax >= LX) xmax = LX - 1;
+    if (ymin < 0) ymin = 0;
+    if (ymax >= LY) ymax = LY - 1;
+    const double r2 = r * r;
+    for (int j = ymin; j <= ymax; j++)
+        {
+        double dy2 = (y - j) * (y - j);
+        for (int i = xmin; i <= xmax; i++)
+            {
+            const double dx2 = (x - i) * (x - i);
+            if (dx2 + dy2 <= r2) fb[i + (j * LX)] = col;
+            }
+        }
+    }
+
 void blank_tft_image() {
-    tft.fillScreen(ST77XX_BLACK);
+  clear(fb, ILI9341_T4_COLOR_BLACK); // draw a black background
+  //tft.overlayFPS(fb, 1); // draw fps counter on bottom right
+  tft.overlayText(fb, "Scott special demo", 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  tft.update(fb); // push the framebuffer to be displayed
 }
 
 void update_tft_image() {
-  tft.startWrite();
-  tft.writePixels(reinterpret_cast<uint16_t*>(&image.vals[0]), 280*240);
-  tft.endWrite();
+  // Copy data from image object into framebuffer object
+  // TODO: Use memcopy or something easier
+  for (int i = 0; i < LX * LY; i++) fb[i] = *reinterpret_cast<uint16_t*>(&image.vals[i*2]);
+  //tft.overlayFPS(fb, 1); // draw fps counter on bottom right
+  char buffer[20];
+  int base = 10;
+  tft.overlayText(fb, itoa(image.shot_num, buffer, base), 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  tft.update(fb); // push the framebuffer to be displayed
 }
-/* END WAVESHARE FUNCTIONS */
+
+
+
+/* END TFT FUNCTIONS */
 
 void setup() {
   pinMode(DEBUG_PIN, OUTPUT);
@@ -163,12 +226,28 @@ void setup() {
   NVIC_SET_PRIORITY(IRQ_GPIO6789, 0); // set all external interrupts to maximum priority level
   // Note that all interrupts using IRQ_GPIO6789 according to https://forum.pjrc.com/index.php?threads/teensy-4-set-interrupt-priority-on-given-pins.59828/post-231312
 
-  /* BEGIN WAVESHARE SETUP */
-  tft.init(240, 280);   // Init ST7789 280x240
-  tft.fillScreen(ST77XX_BLUE);
-  pinMode(TFT_BL, OUTPUT);
-  digitalWrite(TFT_BL, HIGH);
-  /* END WAVESHARE SETUP */
+  /* BEGIN TFT SETUP */
+#if defined(USB_TRIPLE_SERIAL)
+  tft.output(&SerialUSB2);                // output debug infos to serialUSB2 port.  
+#endif
+  while (!tft.begin(SPI_SPEED));      // init the display
+  
+  tft.setRotation(0);                 // portrait mode 240 x320
+  tft.setFramebuffer(internal_fb);    // set the internal framebuffer (enables double buffering)
+  tft.setDiffBuffers(&diff1, &diff2); // set the 2 diff buffers => activate differential updates. 
+  tft.setDiffGap(4);                  // use a small gap for the diff buffers
+
+  tft.setRefreshRate(120);            // around 120hz for the display refresh rate. 
+  tft.setVSyncSpacing(2);             // set framerate = refreshrate/2 (and enable vsync at the same time). 
+  //tft.setVSyncSpacing(0);  // disable vsync => would create screen tearing if we were moving fast enough
+
+  if (PIN_BACKLIGHT != 255)
+      { // make sure backlight is on
+      pinMode(PIN_BACKLIGHT, OUTPUT);
+      digitalWrite(PIN_BACKLIGHT, HIGH);
+      }
+  
+  /* END TFT SETUP */
 
 
   // Initialize SCPI interface
@@ -187,6 +266,7 @@ void loop() {
     SerialUSB2.print(", Last Alert: ");
     SerialUSB2.println(trigcnt_alert);
 #endif
+    //tft.printStats  ();
   }
 
   if (blanker.hasPassed(BLANK_MILLIS)) {
@@ -195,7 +275,7 @@ void loop() {
   }
 
 
-  if (internalTrigger.hasPassed(1500)) {
+  if (internalTrigger.hasPassed(INTERNAL_TRIG_MILLIS)) {
     ISR_exttrig();
     internalTrigger.restart();
   }
@@ -215,6 +295,9 @@ void loop() {
 
   if (awaiting_response) {
     if (SerialUSB1.available() > 0) { // receive the image
+      // Print the shot number and round trip time to show this worked.
+      int roundtrip_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
+
       // expects a payload byte length followed by the payload
       int image_len = SerialUSB1.readStringUntil('\n').toInt(); // read message length
       SerialUSB1.readBytes(image_buf, image_len); // read message payload
@@ -223,27 +306,33 @@ void loop() {
 
       // Decode message payload into the "image" object
       image_stream = pb_istream_from_buffer(image_buf, image_len);
-      image_status = pb_decode(&image_stream, dolphindaq_tft_ImageWaveshare_fields, &image); // WAVESHARE SPECIFIC
+      image_status = pb_decode(&image_stream, dolphindaq_tft_ImageILI_fields, &image); // TFT SPECIFIC
 
-      // Print the shot number and round trip time to show this worked.
-      int roundtrip_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
-#if defined(USB_TRIPLE_SERIAL)
-      SerialUSB2.print("Image.shot_num: ");
-      SerialUSB2.println(image.shot_num);
-      SerialUSB2.print("Milliseconds elapsed between trigger and completion: ");
-      SerialUSB2.println(roundtrip_millis);
-      SerialUSB2.print("Image value at index 152 ");
-      SerialUSB2.println(image.vals[152]);
-#endif
+      // 
+      int latency_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
 
       // Update the image on the TFT
-      if (roundtrip_millis < MAX_LATENCY_MILLIS) {
+      if (latency_millis < MAX_LATENCY_MILLIS) {
         update_tft_image();
       } else {
 #if defined(USB_TRIPLE_SERIAL)
         SerialUSB2.println("Image frame lost.");
 #endif
       }
+      int total_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
+
+#if defined(USB_TRIPLE_SERIAL)
+      SerialUSB2.print("Image.shot_num: ");
+      SerialUSB2.println(image.shot_num);
+      SerialUSB2.print("Milliseconds elapsed between trigger and data receipt: ");
+      SerialUSB2.println(roundtrip_millis);
+      SerialUSB2.print("Milliseconds elapsed between trigger and pb decode: ");
+      SerialUSB2.println(latency_millis);
+      SerialUSB2.print("Milliseconds elapsed between trigger and TFT update: ");
+      SerialUSB2.println(total_millis);
+      SerialUSB2.print("Image value at index 152 ");
+      SerialUSB2.println(image.vals[152]);
+#endif
 
       trigd = false;
     }
@@ -255,6 +344,7 @@ void loop() {
     }
   }
 
+  //tft.update(fb); // push the framebuffer to be displayed
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }
 
