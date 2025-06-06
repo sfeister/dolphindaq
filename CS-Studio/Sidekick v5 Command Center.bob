@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-06-05 17:34:28 by scott-->
+<!--Saved on 2025-06-06 13:49:02 by scott-->
 <display version="2.0.0">
-  <name>Sidekick v3 Command Center</name>
+  <name>Sidekick v5 Command Center</name>
   <width>920</width>
-  <height>812</height>
+  <height>1170</height>
   <widget type="label" version="2.0.0">
     <name>Label</name>
     <class>TITLE</class>
@@ -482,5 +482,13 @@
     <width>130</width>
     <height>24</height>
     <format>1</format>
+  </widget>
+  <widget type="image" version="2.0.0">
+    <name>Cam Probies Image</name>
+    <pv_name>pva://CAMPROBIES:image</pv_name>
+    <x>160</x>
+    <y>840</y>
+    <width>440</width>
+    <height>330</height>
   </widget>
 </display>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-tft-data-test.py: A quick test of whether I can read the protos from tft.
+target_tft-test3.py: A quick test of whether I can read the protos from tft.
 
 Created by Scott Feister on May 3, 2025.
 """
@@ -16,45 +16,54 @@ from datetime import datetime
 import os
 import time
 import numpy as np
+from skimage.transform import resize
 
 import serial
 
 from datetime import datetime
 from compiled_python import tft_pb2, diode_pb2 # from my custom protobufs
+from simprobies import infer_probies # note that "simprobies.py", custom file, this must be in the same directory as this file from which we run
 
 def handle_data(data, settings=None, ser=None):
     now = time.time()
-    assert data.HasField("trace")
-    
-    attrib = {"shot_num" : data.trace.shot_num} # attributes
-    if settings is not None:
-        attrib.update({
-            "start_shot_num" : settings.start_shot_num,
-            "trace_nt" : settings.trace_nt,
-            "dt" : settings.dt,
-            "trace_dt" : settings.trace_dt,
-            "trace_ymin" : settings.trace_ymin,
-            "trace_ymax" : settings.trace_ymax})
-               
-    image = tft_pb2.ImageILI()
-    image.shot_num = data.trace.shot_num;
-    image.nx = 320
-    image.ny = 240
-    xgv = np.linspace(0, 1, image.nx)
-    ygv = np.linspace(0, 240./320., image.ny)
-    X, Y = np.meshgrid(xgv, ygv)
-    Z = np.sqrt(X**2 + Y**2)/np.sqrt(2)*(2.0**6 - 1)
-    
-    yvals = np.frombuffer(data.trace.yvals, dtype=np.uint16)
-    print("Mean YVals: ", np.mean(yvals))
-    Z = Z * (np.mean(yvals) / 200)
-    myvals = np.round(Z.T).astype(np.uint16)
-    myvals = np.left_shift(myvals, 5) # Shift bits into the green channel
-    #myvals = np.arange(image.nx * image.ny, dtype=np.uint16)
-    image.vals = myvals.tobytes()
-    if ser:
-        sendmsg(image, ser)
+    if data.HasField("trace"):
+        
+        attrib = {"shot_num" : data.trace.shot_num} # attributes
+        if settings is not None:
+            attrib.update({
+                "start_shot_num" : settings.start_shot_num,
+                "trace_nt" : settings.trace_nt,
+                "dt" : settings.dt,
+                "trace_dt" : settings.trace_dt,
+                "trace_ymin" : settings.trace_ymin,
+                "trace_ymax" : settings.trace_ymax})
 
+        image = tft_pb2.ImageILI()
+        image.shot_num = data.trace.shot_num;
+        image.nx = 320
+        image.ny = 240
+        
+        yvals = np.frombuffer(data.trace.yvals, dtype=np.uint16)
+        print("Mean YVals: ", np.mean(yvals))
+
+        # PROBIES    
+        probies_metric = np.clip(np.mean(yvals) / 200, 0.0001, 0.9999)
+        print(f"PROBIES metric: {probies_metric}")
+        Z = infer_probies(probies_metric)
+        Z = resize(Z, [240, 240])
+        Z = np.pad(Z, [(0, 0), (40, 40)])
+        Z = Z / 10 * (2.0**6 - 1) # converted to six-bit, with lowered dynamic range
+        print(f"Max of z: {np.max(Z)}")
+        
+        # Output
+        myvals = np.round(Z.T).astype(np.uint16)
+        myvals = np.left_shift(myvals, 5) # Shift bits into the green channel
+        #myvals = np.arange(image.nx * image.ny, dtype=np.uint16)
+        image.vals = myvals.tobytes()
+        if ser:
+            sendmsg(image, ser)
+    else:
+        print("Data received but missing the 'Trace' field")
 
 def recvmsg(ser):
     """ Receive a protobuf message msg, preceded by a readline specification of the size
@@ -102,7 +111,7 @@ if __name__ == "__main__":
                     msg = recvmsg(ser)
                     data = diode_pb2.Data()
                     data.ParseFromString(msg)
-                    handle_data(data, settings=settings, ser=ser) # Do anything pva-style with this data in EPICS
+                    handle_data(data, settings=settings, ser=ser) # call probies model and send back the data
                     #print(data.trace.shot_num)
                     #print(data)
                     #print("Better yvals:")
