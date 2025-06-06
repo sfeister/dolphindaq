@@ -1,0 +1,69 @@
+# DolphinDAQ Target TFT protocol file
+# Note that the TargetTFT has a photodiode within it
+# Built by examining examples at: https://paulscherrerinstitute.github.io/StreamDevice/protocol.html#gen
+# And also by examining input/output formats at https://paulscherrerinstitute.github.io/StreamDevice/formats.html
+# Finally, a lot of this is shared with Teensy Diode
+
+Terminator = CR LF;
+
+##### Common #####
+
+info {
+	ExtraInput = Ignore;
+	out "*IDN?";
+	in "%39c";
+}
+
+debug {
+   ExtraInput = Ignore;
+   out "%s";
+   in "%39c";
+}
+
+DAQ_TriggerCountQ {
+        out "TRIGger:COUNt?";
+        in "%u";
+    }
+
+DAQ_TriggerCount {
+        out "TRIGger:COUNt %u";
+        @init { DAQ_TriggerCountQ; }
+    }
+
+#### Photodiode #####
+
+DAQ_DiodeDtQ {
+        out "DIODe:DT?";
+        in "%f";
+    }
+
+DAQ_DiodeDt {
+        out "DIODe:DT %f";
+        @init { DAQ_DiodeDtQ; }
+    }
+
+DAQ_DiodeTraceDtQ {
+        out "DIODe:TRACe:DT?";
+        in "%f";
+    }
+
+DAQ_DiodeTraceNtQ {
+        out "DIODe:TRACe:NT?";
+        in "%u";
+    }
+
+DAQ_DiodeTraceYminQ {
+        out "DIODe:TRACe:YMIN?";
+        in "%f";
+    }
+
+DAQ_DiodeTraceYmaxQ {
+        out "DIODe:TRACe:YMAX?";
+        in "%f";
+    }
+
+DAQ_DiodeTraceYarrayQ {
+        out "DIODe:TRACe:YARRay?";
+        separator=",";
+        in "%u";
+    }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Saved on 2025-06-06 13:49:02 by scott-->
+<!--Saved on 2025-06-06 16:45:26 by scott-->
 <display version="2.0.0">
   <name>Sidekick v5 Command Center</name>
-  <width>920</width>
-  <height>1170</height>
+  <width>1600</width>
+  <height>837</height>
   <widget type="label" version="2.0.0">
     <name>Label</name>
     <class>TITLE</class>
@@ -95,6 +95,23 @@
         <trace_type>1</trace_type>
         <color>
           <color red="51" green="102" blue="51">
+          </color>
+        </color>
+        <line_width>1</line_width>
+        <line_style>0</line_style>
+        <point_type>0</point_type>
+        <point_size>10</point_size>
+        <visible>true</visible>
+      </trace>
+      <trace>
+        <name>TargetTFT</name>
+        <x_pv></x_pv>
+        <y_pv>pva://TFTPROBIES-SIM:trace</y_pv>
+        <err_pv></err_pv>
+        <axis>0</axis>
+        <trace_type>1</trace_type>
+        <color>
+          <color red="255" green="0" blue="255">
           </color>
         </color>
         <line_width>1</line_width>
@@ -245,6 +262,11 @@
         <pv_name>PROTON:trigger:count:set</pv_name>
         <value>0</value>
         <description>Zero PROTON Trigger</description>
+      </action>
+      <action type="write_pv">
+        <pv_name>TFTPROBIES:trigger:count:set</pv_name>
+        <value>0</value>
+        <description>Zero TFTPROBIES Trigger</description>
       </action>
       <action type="write_pv">
         <pv_name>PULSEGEN:trigger:count:set</pv_name>
@@ -470,7 +492,7 @@
     <name>Label_11</name>
     <text>PULSEGEN</text>
     <x>30</x>
-    <y>788</y>
+    <y>813</y>
     <width>80</width>
     <height>16</height>
   </widget>
@@ -478,7 +500,7 @@
     <name>Trigger Count_7</name>
     <pv_name>PULSEGEN:trigger:count</pv_name>
     <x>130</x>
-    <y>788</y>
+    <y>813</y>
     <width>130</width>
     <height>24</height>
     <format>1</format>
@@ -486,9 +508,79 @@
   <widget type="image" version="2.0.0">
     <name>Cam Probies Image</name>
     <pv_name>pva://CAMPROBIES:image</pv_name>
-    <x>160</x>
-    <y>840</y>
-    <width>440</width>
-    <height>330</height>
+    <x>980</x>
+    <y>86</y>
+    <width>620</width>
+    <height>484</height>
+    <show_toolbar>true</show_toolbar>
+    <x_axis>
+      <visible>false</visible>
+      <title></title>
+      <minimum>0.0</minimum>
+      <maximum>100.0</maximum>
+      <title_font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </title_font>
+      <scale_font>
+        <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+        </font>
+      </scale_font>
+    </x_axis>
+    <y_axis>
+      <visible>false</visible>
+      <title>Y</title>
+      <minimum>0.0</minimum>
+      <maximum>100.0</maximum>
+      <title_font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        </font>
+      </title_font>
+      <scale_font>
+        <font name="Default" family="Liberation Sans" style="REGULAR" size="14.0">
+        </font>
+      </scale_font>
+    </y_axis>
+    <limits_from_pv>true</limits_from_pv>
+    <unsigned>true</unsigned>
+    <autoscale>false</autoscale>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_12</name>
+    <text>PROBIES Camera</text>
+    <x>990</x>
+    <y>60</y>
+    <width>310</width>
+    <height>30</height>
+    <font>
+      <font name="Header 2" family="Liberation Sans" style="BOLD" size="18.0">
+      </font>
+    </font>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_8</name>
+    <pv_name>TFTPROBIES:dt</pv_name>
+    <x>770</x>
+    <y>384</y>
+    <width>130</width>
+    <height>29</height>
+    <format>2</format>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label_13</name>
+    <text>TFTPROBIES</text>
+    <x>20</x>
+    <y>787</y>
+    <width>90</width>
+    <height>16</height>
+  </widget>
+  <widget type="textupdate" version="2.0.0">
+    <name>Trigger Count_9</name>
+    <pv_name>TFTPROBIES:trigger:count</pv_name>
+    <x>130</x>
+    <y>787</y>
+    <width>130</width>
+    <height>24</height>
+    <format>1</format>
   </widget>
 </display>

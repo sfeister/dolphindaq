@@ -1,0 +1,88 @@
+# DolphinDAQ photodiode database file
+# Matches up with the proto file of the same name
+# Built by checking against supported record types at https://paulscherrerinstitute.github.io/StreamDevice/recordtypes.html
+
+##### Common #####
+
+record(stringin,"$(P):info"){
+    field(DESC,"Device identification")
+	field(DTYP,"stream")
+	field(INP,"@teensyttft.proto info $(BUS)")
+    field(PINI,"YES")
+}
+
+record(stringin,"$(P):debug"){
+	field(DTYP,"stream")
+	field(INP,"@teensyttft.proto debug $(BUS)")
+}
+
+#### Photodiode #####
+
+record(int64in,"$(P):trigger:count"){
+    field(DESC,"Get global trigger count")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"trigger events")
+    field(INP,"@teensyttft.proto DAQ_TriggerCountQ $(BUS)")
+}
+
+
+record(int64out,"$(P):trigger:count:set"){
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
+	field(EGU,"trigger events")
+    field(OUT,"@teensyttft.proto DAQ_TriggerCount $(BUS)")
+}
+
+record(ai,"$(P):dt"){
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+	field(DTYP,"stream")
+    field(INP,"@teensyttft.proto DAQ_DiodeDtQ $(BUS)")
+}
+
+record(ao,"$(P):dt:set"){
+	field(DTYP,"stream")
+	field(EGU,"seconds")
+	field(DRVL,"5.0e-6")
+	field(DRVH,"10.0e-3") # this is not a strict device limit but seems reasonable for applications
+    field(OUT,"@teensyttft.proto DAQ_DiodeDt $(BUS)")
+}
+
+record(ai,"$(P):trace:dt"){
+    field(SCAN,"1 second")
+	field(EGU,"seconds")
+	field(DTYP,"stream")
+    field(INP,"@teensyttft.proto DAQ_DiodeTraceDtQ $(BUS)")
+}
+
+record(int64in,"$(P):trace:nt"){
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+    field(INP,"@teensyttft.proto DAQ_DiodeTraceNtQ $(BUS)")
+}
+
+record(ai,"$(P):trace:ymin"){
+    field(SCAN,"1 second")
+	field(EGU,"Volts")
+	field(DTYP,"stream")
+    field(INP,"@teensyttft.proto DAQ_DiodeTraceYminQ $(BUS)")
+}
+
+record(ai,"$(P):trace:ymax"){
+    field(SCAN,"1 second")
+	field(EGU,"Volts")
+	field(DTYP,"stream")
+	field(EGU,"Volts")
+    field(INP,"@teensyttft.proto DAQ_DiodeTraceYmaxQ $(BUS)")
+}
+
+record(aai,"$(P):trace:yarr"){
+    field(SCAN,".1 second")
+	field(DTYP,"stream")
+	field(EGU,"ADC units")
+	field(NELM,100)
+    field(FTVL,"USHORT")
+    field(INP,"@teensyttft.proto DAQ_DiodeTraceYarrayQ $(BUS)")
+}
