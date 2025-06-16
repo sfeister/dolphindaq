@@ -40,8 +40,8 @@ using namespace TeensyTimerTool;
 //
 // DEFAULT WIRING USING SPI 0 ON TEENSY 4/4.1
 //
-#define PIN_BACKLIGHT 255   // optional, set this only if the screen LED pin is connected directly to the Teensy. Connect with resistor.
 #define PIN_MISO    12      // mandatory  (if the display has no MISO line, set this to 255 but then VSync will be disabled...)
+#define PIN_BACKLIGHT 255   // optional, set this only if the screen LED pin is connected directly to the Teensy. Connect with resistor.
 #define PIN_SCK     13      // mandatory
 #define PIN_MOSI    11      // mandatory
 #define PIN_DC      10      // mandatory, can be any pin but using pin 10 (or 36 or 37 on T4.1) provides greater performance
@@ -53,12 +53,11 @@ using namespace TeensyTimerTool;
 #define PIN_TOUCH_CS  255   // optional. set this only if the touchscreen is connected on the same spi bus
 
 #define SPI_SPEED       100000000 // faster (up to 100 MHz) reduces tearing for full image redraws
+// #define SPI_SPEED       30000000 // fallback
 
 #define IMAGE_NX 320
 #define IMAGE_NY 240
-#define MAX_LATENCY_MILLIS 50 // maximum allowable latency between trigger arrival and image received back to Teensy, in milliseconds (otherwise screen will stay black)
-// TODO: Make MAX_LATENCY_MILLIS configurable over SCPI
-#define BLANK_MILLIS 100 // time after which the image gets blanked back out
+#define BLANK_MILLIS 100 // time after which the image gets blanked back out, repeatedly
 #define INTERNAL_TRIG_MILLIS 175 // milliseconds between internal triggers (not an exact science here!)
 
 /* END TFT DEFINES */
@@ -94,6 +93,7 @@ volatile uint16_t imgbuf_trace[TRACE_NT];
 volatile bool lock_adc = false; // Boolean: 1 if adc_buffer is currently being written to
 volatile bool lock_trace = false; // Boolean: 1 if trace is currently being written to
 volatile bool ripe_trace = false; // Boolean: 1 if Trace block is filled and ready (a new trace is "ripe" for transfer)
+volatile bool ripe_image = false; // Boolean: 1 if Image protobuf object is filled and ready (a new image is "ripe" for display)
 volatile bool await_update = false; // Boolean: 1 if there are new updates to the device settings waiting to be implemented, else 0
 volatile uint64_t trigcnt = 0; // Trigger ID upcounter; increments with each external trigger rising edge, whether or not an image is acquired/transmitted
 volatile uint64_t trigcnt_adc = 0; // Trigger ID that matches the trace held in adc_buf array, updated prior to buffer being filled
@@ -102,8 +102,10 @@ volatile uint16_t imgbuf_adc[TRACE_NT]; // Buffer completely re-filled by the AD
 
 // TFT Specific
 volatile uint64_t trigtime_alert = 0; // Trigger timestamp that matches the trigger alert
-volatile bool trigd = false; // is the system triggered (e.g. in process of handling a trigger)
+volatile bool trigd = false; // is the system triggered (e.g. in process of handling a trigger, including sending and receiving responses)
 volatile bool await_response = false; // are we waiting on a response from the PC?
+volatile uint64_t tft_trigger_delay_millis = 80; // time between the trigger arriving and the display being updated, in milliseconds
+int roundtrip_millis, latency_millis, total_millis; // debugging values to display
 
 // Instantiate a Chrono object for the led heartbeat and LED trigger display
 Chrono heartbeatChrono; 
@@ -235,6 +237,13 @@ void blank_tft_image() {
   tft.update(fb); // push the framebuffer to be displayed
 }
 
+void no_host_tft_image() {
+  clear(fb, ILI9341_T4_COLOR_BLACK); // draw a black background
+  //tft.overlayFPS(fb, 1); // draw fps counter on bottom right
+  tft.overlayText(fb, "Host PC Disconnected or Not Communicating", 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  tft.update(fb); // push the framebuffer to be displayed
+}
+
 void update_tft_image() {
   // Copy data from image object into framebuffer object
   // TODO: Use memcopy or something easier
@@ -322,7 +331,10 @@ void setup() {
 
 void loop() {
   // digitalToggleFast(DEBUG_PIN); // DEBUG
-  // Blink the heartbeat LED
+
+
+  ////// Blink the heartbeat LED, Print Debug Message //////////
+  // Condition: Half a second has passed since last heartbeat
   if (heartbeatChrono.hasPassed(500)) { // check if the 500 milliseconds of heartbeat have elapsed
     digitalToggleFast(HEARTBEAT_LED_PIN); // write LED state to pin
     heartbeatChrono.restart();
@@ -364,7 +376,8 @@ void loop() {
 
   }
 
-  // Check for settings updates
+  ////// Update Settings (if needed) //////////
+  // Condition: Settings were changed via SCPI
   if (await_update) {
     delayMicroseconds(100); // short delay to clear out any existing triggered pulses
 
@@ -373,6 +386,8 @@ void loop() {
 
     // cancel any existing TFT activities
     await_response = false;
+    ripe_trace = false;
+    ripe_image = false;
     trigd = false;
 
     // Implement all updates
@@ -390,18 +405,22 @@ void loop() {
 
     await_update = false;
   }
-  
-  /*
-  if (abdma1.interrupted()) {
-    digitalToggleFast(DEBUG_PIN); // DEBUG
-    //digitalToggleFast(DEBUG_PIN, HIGH);
-    ProcessAnalogData(&abdma1, 0);
+    
+    /*
+    if (abdma1.interrupted()) {
+      digitalToggleFast(DEBUG_PIN); // DEBUG
+      //digitalToggleFast(DEBUG_PIN, HIGH);
+      ProcessAnalogData(&abdma1, 0);
 
-    abdma1.clearInterrupt();
-    lock_adc = false;
-    //digitalWriteFast(DEBUG_PIN, LOW);
-  }
-  */
+      abdma1.clearInterrupt();
+      lock_adc = false;
+      //digitalWriteFast(DEBUG_PIN, LOW);
+    }
+    */
+
+  ////// Push Raw Photodiode Trace to Host PC //////////
+  // Condition: A photodiode trace has been digitized and is ready to push ("ripe trace")
+  // Result: Either an "await_response", or a dropped frame with "trigd" reset to 0.
 
   if (ripe_trace) {
     blank_tft_image(); // clear out the old image on the screen from the last trigger
@@ -425,24 +444,17 @@ void loop() {
     }
   }
 
-  // TFT-related
-  if (blanker.hasPassed(BLANK_MILLIS)) {
-    blank_tft_image(); // clear out the old image on the screen from the last trigger
-    blanker.restart();
-  }
 
-  if (!SerialUSB1.dtr()) { // device isn't even connected any more, give up on sending anything or awaiting a response
-    await_response = false;
-    trigd = false;
-  }
-
+  ////// Receive Synthetic Image from Host PC //////////
+  // Condition: We are expecting an image, and host PC has some data available to read
+  // Result: Either a "ripe_image", or a dropped frame with "trigd" reset to 0.
   if (await_response) {
     if (SerialUSB1.available() > 0) { // receive the image
 #if defined(USB_TRIPLE_SERIAL)
       SerialUSB2.println("Receiving image...");
 #endif
       // Print the shot number and round trip time to show this worked.
-      int roundtrip_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
+      roundtrip_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
 
       // expects a payload byte length followed by the payload
       int image_len = SerialUSB1.readStringUntil('\n').toInt(); // read message length
@@ -454,33 +466,9 @@ void loop() {
       image_stream = pb_istream_from_buffer(image_buf, image_len);
       image_status = pb_decode(&image_stream, dolphindaq_tft_ImageILI_fields, &image); // TFT SPECIFIC
 
-      // 
-      int latency_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
+      latency_millis = millis() - trigtime_alert;
 
-      // Update the image on the TFT
-      if (latency_millis < MAX_LATENCY_MILLIS) {
-        update_tft_image();
-      } else {
-#if defined(USB_TRIPLE_SERIAL)
-        SerialUSB2.println("Image frame lost.");
-#endif
-      }
-      int total_millis = millis() - trigtime_alert; // I've found the roundtrip takes about 2 milliseconds.
-
-#if defined(USB_TRIPLE_SERIAL)
-      SerialUSB2.print("Image.shot_num: ");
-      SerialUSB2.println(image.shot_num);
-      SerialUSB2.print("Milliseconds elapsed between trigger and data receipt: ");
-      SerialUSB2.println(roundtrip_millis);
-      SerialUSB2.print("Milliseconds elapsed between trigger and pb decode: ");
-      SerialUSB2.println(latency_millis);
-      SerialUSB2.print("Milliseconds elapsed between trigger and TFT update: ");
-      SerialUSB2.println(total_millis);
-      SerialUSB2.print("Image value at index 152 ");
-      SerialUSB2.println(image.vals[152]);
-#endif
-
-      trigd = false;
+      ripe_image = true;
     }
 
   } else {
@@ -489,6 +477,62 @@ void loop() {
       SerialUSB1.read(); // Read and discard each byte in the buffer
     }
   }
+
+  ////// Display Synthetic Image on TFT //////////
+  // Condition: The "tft_trigger_delay_millis" time has elapsed since trigger arrival, meaning it's time to display the image
+  // Condition: Synthetic image is ready
+  // Result: Either a physical display of the image, or a dropped frame with "await_response" set to 0.
+  // Result: "trigd" always is reset to 0, either way!
+
+  if (trigd && (millis() - trigtime_alert > tft_trigger_delay_millis)) {
+    if (ripe_image) {
+      update_tft_image();
+      blanker.restart();
+      ripe_image = false;
+    } else {
+#if defined(USB_TRIPLE_SERIAL)
+      SerialUSB2.println("Image frame lost due to slow response from host PC.");
+#endif
+      await_response = false;
+    }
+
+  total_millis = millis() - trigtime_alert;
+
+  #if defined(USB_TRIPLE_SERIAL)
+        SerialUSB2.print("Image.shot_num: ");
+        SerialUSB2.println(image.shot_num);
+        SerialUSB2.print("Milliseconds elapsed between trigger and data receipt: ");
+        SerialUSB2.println(roundtrip_millis);
+        SerialUSB2.print("Milliseconds elapsed between trigger and pb decode: ");
+        SerialUSB2.println(latency_millis);
+        SerialUSB2.print("Milliseconds elapsed between trigger and TFT update completion: ");
+        SerialUSB2.println(total_millis);
+        SerialUSB2.print("Image value at index 152 ");
+        SerialUSB2.println(image.vals[152]);
+  #endif
+
+  trigd = false;
+  }
+
+
+  ////// Blank out synthetic image on TFT //////////
+  // Condition: Timer has elapsed (is constantly reset)
+  if (blanker.hasPassed(BLANK_MILLIS)) {
+    blank_tft_image(); // clear out the old image on the screen from the last trigger
+    blanker.restart();
+  }
+
+  ////// Handle a disconnected serial port (Host PC not communicating, so no expectation of data) //////////
+  if (!SerialUSB1.dtr()) { // device isn't even connected any more, give up on sending anything or awaiting a response
+    await_response = false;
+    ripe_trace = false;
+    ripe_image = false;
+    trigd = false;
+    no_host_tft_image();
+    blanker.restart();
+  }
+
+
 
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }

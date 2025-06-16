@@ -53,6 +53,7 @@ extern uint64_t trigcnt;
 extern dolphindaq_diode_Settings settings;
 extern uint16_t imgbuf_trace[];
 extern bool await_update;
+extern uint64_t tft_trigger_delay_millis;
 
 static scpi_result_t DAQ_TriggerCountQ(scpi_t * context) {
     SCPI_ResultUInt64(context, trigcnt);
@@ -69,6 +70,26 @@ static scpi_result_t DAQ_TriggerCount(scpi_t * context) {
     }
 
     trigcnt = param1;
+
+    return SCPI_RES_OK;
+}
+
+// TFT Specific
+static scpi_result_t DAQ_TftTriggerDelayQ(scpi_t * context) {
+    SCPI_ResultUInt64(context, tft_trigger_delay_millis);
+
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t DAQ_TftTriggerDelay(scpi_t * context) {
+    uint64_t param1;
+
+    /* read first parameter if present */
+    if (!SCPI_ParamUInt64(context, &param1, TRUE)) {
+        return SCPI_RES_ERR;
+    }
+
+    tft_trigger_delay_millis = param1;
 
     return SCPI_RES_OK;
 }
@@ -162,6 +183,8 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "DIODe:TRACe:YMIN?", .callback = DAQ_DiodeTraceYminQ,},
     {.pattern = "DIODe:TRACe:YMAX?", .callback = DAQ_DiodeTraceYmaxQ,},
     {.pattern = "DIODe:TRACe:YARRay?", .callback = DAQ_DiodeTraceYarrayQ,},
+    {.pattern = "TFT:TRIGger:DELay?", .callback = DAQ_TftTriggerDelayQ,},
+    {.pattern = "TFT:TRIGger:DELay", .callback = DAQ_TftTriggerDelay,},
 
     {"SYSTem:COMMunication:TCPIP:CONTROL?", SCPI_SystemCommTcpipControlQ, 0},
 

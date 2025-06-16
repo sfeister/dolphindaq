@@ -50,7 +50,7 @@
 #define SCPI_IDN1 "DOLPHINDAQ"
 #define SCPI_IDN2 "Teensy TargetTFT"
 #define SCPI_IDN3 "00"
-#define SCPI_IDN4 "20250522"
+#define SCPI_IDN4 "20250616"
 
 extern const scpi_command_t scpi_commands[];
 extern scpi_interface_t scpi_interface;
