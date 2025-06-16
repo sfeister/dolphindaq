@@ -423,6 +423,34 @@
             <completion>true</completion>
         </pv>
         <pv>
+            <selected>false</selected>
+            <name>TFTPROBIES:tft:delay</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
+            <name>TFTPROBIES:tft:delay:set</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
+            <name>TFTPROBIES:tft:blank</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>false</selected>
+            <name>TFTPROBIES:tft:blank:set</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
             <selected>true</selected>
             <name>pva://PROTON-DAQ:info</name>
             <tolerance>0.1</tolerance>
