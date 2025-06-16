@@ -35,6 +35,44 @@ record(int64out,"$(P):trigger:count:set"){
     field(OUT,"@teensyttft.proto DAQ_TriggerCount $(BUS)")
 }
 
+
+
+record(int64in,"$(P):tft:delay"){
+    field(DESC,"Get trigger-to-TFT delay")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"millis")
+    field(INP,"@teensyttft.proto DAQ_TftTriggerDelayQ $(BUS)")
+}
+
+
+record(int64out,"$(P):tft:delay:set"){
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
+	field(EGU,"millis")
+    field(OUT,"@teensyttft.proto DAQ_TftTriggerDelay $(BUS)")
+}
+
+record(int64in,"$(P):tft:blank"){
+    field(DESC,"Get TFT-to-blank delay")
+    field(SCAN,"1 second")
+	field(DTYP,"stream")
+	field(EGU,"millis")
+    field(INP,"@teensyttft.proto DAQ_TftBlankDelayQ $(BUS)")
+}
+
+
+record(int64out,"$(P):tft:blank:set"){
+	field(DTYP,"stream")
+	field(DRVL,"0")
+	field(DRVH,"4294967295") # saved as unsigned 32-bit integer; max value is 2^32 - 1
+	field(EGU,"millis")
+    field(OUT,"@teensyttft.proto DAQ_TftBlankDelay $(BUS)")
+}
+
+
+
 record(ai,"$(P):dt"){
     field(SCAN,"1 second")
 	field(EGU,"seconds")

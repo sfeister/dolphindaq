@@ -30,6 +30,29 @@ DAQ_TriggerCount {
         @init { DAQ_TriggerCountQ; }
     }
 
+#### TFT #####
+
+DAQ_TftTriggerDelayQ {
+        out "TFT:TRIGger:DELay?";
+        in "%u";
+    }
+
+DAQ_TftTriggerDelay {
+        out "TFT:TRIGger:DELay %u";
+        @init { DAQ_TftTriggerDelayQ; }
+    }
+
+DAQ_TftBlankDelayQ {
+        out "TFT:BLANk:DELay?";
+        in "%u";
+    }
+
+DAQ_TftBlankDelay {
+        out "TFT:BLANk:DELay %u";
+        @init { DAQ_TftBlankDelayQ; }
+    }
+
+
 #### Photodiode #####
 
 DAQ_DiodeDtQ {
