@@ -38,7 +38,7 @@ parser.add_argument("-c", "--camera", help = 'Specify the Alvium camera ID to wh
 argument = parser.parse_args()
 DEVICE_NAME = str(argument.prefix)
 CAM_ID = str(argument.camera)
-TRIGGER_DELAY_US = 95000
+TRIGGER_DELAY_US = 130000 # time delay between the trigger arriving and the camera exposure beginning, in microseconds
 EXPOSURE_TIME_US = 1972.727051
 GAIN = 0.0
 
