@@ -53,12 +53,10 @@ using namespace TeensyTimerTool;
 #define PIN_TOUCH_CS  255   // optional. set this only if the touchscreen is connected on the same spi bus
 
 #define SPI_SPEED       100000000 // faster (up to 100 MHz) reduces tearing for full image redraws
-// #define SPI_SPEED       30000000 // fallback
+// #define SPI_SPEED       30000000 // DEBUG: fallback lower speed for increased robustness
 
 #define IMAGE_NX 320
 #define IMAGE_NY 240
-#define BLANK_MILLIS 100 // time after which the image gets blanked back out, repeatedly
-#define INTERNAL_TRIG_MILLIS 175 // milliseconds between internal triggers (not an exact science here!)
 
 /* END TFT DEFINES */
 
@@ -105,6 +103,7 @@ volatile uint64_t trigtime_alert = 0; // Trigger timestamp that matches the trig
 volatile bool trigd = false; // is the system triggered (e.g. in process of handling a trigger, including sending and receiving responses)
 volatile bool await_response = false; // are we waiting on a response from the PC?
 volatile uint64_t tft_trigger_delay_millis = 80; // time between the trigger arriving and the display being updated, in milliseconds
+volatile uint64_t tft_blank_millis = 100; // time after which the image gets blanked back out, repeatedly, in milliseconds.
 int roundtrip_millis, latency_millis, total_millis; // debugging values to display
 
 // Instantiate a Chrono object for the led heartbeat and LED trigger display
@@ -517,7 +516,7 @@ void loop() {
 
   ////// Blank out synthetic image on TFT //////////
   // Condition: Timer has elapsed (is constantly reset)
-  if (blanker.hasPassed(BLANK_MILLIS)) {
+  if (blanker.hasPassed(tft_blank_millis)) {
     blank_tft_image(); // clear out the old image on the screen from the last trigger
     blanker.restart();
   }
