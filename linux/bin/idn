@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+# Written mostly by ChatGPT on June 11, 2026
+# with some help from Scott Feister
+"""
+Query serial devices with *IDN? using PyVISA.
+
+Examples:
+    idn
+    idn /dev/ttyUSB0
+    idn /dev/ttyUSB*
+    idn '/dev/ttyUSB*'
+    idn --baud 115200 /dev/ttyUSB0
+"""
+
+from pathlib import Path
+import argparse
+import glob
+
+import pyvisa
+
+
+DEFAULT_BAUD = 9600
+TIMEOUT_MS = 1000
+
+
+def expand(patterns):
+    devices = []
+    for pattern in patterns:
+        matches = sorted(glob.glob(pattern))
+        devices.extend(matches if matches else [pattern])
+    return [Path(d) for d in devices]
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog="idn",
+        description="Query serial devices with the SCPI command *IDN? using PyVISA.",
+        epilog=(
+            "Examples:\n"
+            "  idn\n"
+            "  idn /dev/ttyUSB0\n"
+            "  idn /dev/ttyUSB*\n"
+            "  idn '/dev/ttyUSB*'\n"
+            "  idn --baud 115200 /dev/ttyUSB0"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+
+    parser.add_argument(
+        "devices",
+        nargs="*",
+        default=["/dev/ttyUSB*"],
+        help="Device path(s) or glob pattern(s). Default: /dev/ttyUSB*",
+    )
+
+    parser.add_argument(
+        "-b",
+        "--baud",
+        type=int,
+        default=DEFAULT_BAUD,
+        help=f"Serial baud rate. Default: {DEFAULT_BAUD}",
+    )
+
+    args = parser.parse_args()
+    devices = expand(args.devices)
+
+    rm = pyvisa.ResourceManager("@py")
+
+    for dev in devices:
+        print(f"{dev}:")
+        try:
+            with rm.open_resource(f"ASRL{dev}::INSTR") as inst:
+                inst.baud_rate = args.baud
+                inst.timeout = TIMEOUT_MS
+                inst.write_termination = "\n"
+                inst.read_termination = "\n"
+                print(f"  {inst.query('*IDN?').strip()}")
+        except Exception as exc:
+            print(f"  no response ({exc})")
+
+
+if __name__ == "__main__":
+    main()

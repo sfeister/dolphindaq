@@ -1,0 +1,10 @@
+# USB-connected Arduino microcontrollers (e.g. the Arduino Nano)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", SYMLINK+="ttyUSB-arduino%s{/devpath}"
+
+# USB-connected Teensy microcontrollers (e.g. the Teensy 4.0, the Teensy 4.1)
+# Serial
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="0483", SYMLINK+="ttyUSB-teensy%s{/devpath}"
+# Dual Serial
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="048b", SYMLINK+="ttyUSB-teensy%s{/devpath}-%E{ID_USB_INTERFACE_NUM}"
+# Triple Serial
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="048c", SYMLINK+="ttyUSB-teensy%s{/devpath}-%E{ID_USB_INTERFACE_NUM}"
