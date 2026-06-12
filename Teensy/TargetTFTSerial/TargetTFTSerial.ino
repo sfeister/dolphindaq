@@ -240,6 +240,9 @@ void no_host_tft_image() {
   clear(fb, ILI9341_T4_COLOR_BLACK); // draw a black background
   //tft.overlayFPS(fb, 1); // draw fps counter on bottom right
   tft.overlayText(fb, "Host PC Disconnected or Not Communicating", 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  char trigcnt_text[32];
+  snprintf(trigcnt_text, sizeof(trigcnt_text), "Trigger Count: %llu", (unsigned long long)trigcnt);
+  tft.overlayText(fb, trigcnt_text, 2, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
   tft.update(fb); // push the framebuffer to be displayed
 }
 
