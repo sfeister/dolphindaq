@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+#
+# Created by ChatGPT
+# with some help by Scott Feister
+# June 11, 2026
+#
+# set-hostname
+#
+# Rename a Sidekick Beaglebone Black Rev3 Debian 11 Linux machine.
+#
+# Run:
+#   set-hostname -h
+#
+# for usage, assumptions, and safety notes.
+
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+set-hostname
+
+Rename a Sidekick Linux machine.
+
+Usage:
+  sudo set-hostname NEW_HOSTNAME
+  set-hostname -h
+  set-hostname --help
+
+Example:
+  sudo set-hostname sk2
+
+This script updates:
+  1. /etc/hosts
+  2. the system hostname using hostnamectl
+  3. HOST= lines in /epics/iocs/*/config
+
+Requirements / assumptions:
+  - Run this script with sudo when changing the hostname.
+  - This script assumes a Debian-like Linux system with hostnamectl.
+  - /etc/hosts must exist and be writable by root.
+  - IOC config files, if present, must match:
+      /epics/iocs/*/config
+  - IOC config files are expected to contain a line like:
+      HOST=zap0
+  - The script only edits HOST= lines in IOC config files.
+  - IOC config files must be writable by root.
+
+Safety behavior:
+  - The script prints every file it edits.
+  - The script creates a timestamped backup before editing each file.
+  - The script does not automatically reboot.
+
+After running this script, reboot:
+  sudo reboot
+EOF
+}
+
+if [[ "$#" -eq 0 ]]; then
+    usage
+    exit 1
+fi
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    usage
+    exit 0
+fi
+
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Error: run this with sudo."
+    echo
+    usage
+    exit 1
+fi
+
+if [[ "$#" -ne 1 ]]; then
+    echo "Error: expected exactly one hostname."
+    echo
+    usage
+    exit 1
+fi
+
+new_hostname="$1"
+old_hostname="$(hostname)"
+timestamp="$(date +%Y%m%d-%H%M%S)"
+
+if [[ ! "$new_hostname" =~ ^[a-zA-Z0-9][a-zA-Z0-9-]{0,62}$ ]]; then
+    echo "Error: invalid hostname: $new_hostname"
+    echo "Use only letters, numbers, and hyphens."
+    echo "Do not start with a hyphen."
+    exit 1
+fi
+
+if [[ "$new_hostname" == "$old_hostname" ]]; then
+    echo "Hostname is already: $new_hostname"
+    exit 0
+fi
+
+echo "Changing hostname:"
+echo "  old: $old_hostname"
+echo "  new: $new_hostname"
+echo
+
+hosts_backup="/etc/hosts.backup.$timestamp"
+
+echo "Editing system hosts file:"
+echo "  file:   /etc/hosts"
+echo "  backup: $hosts_backup"
+
+cp /etc/hosts "$hosts_backup"
+sed -i "s/${old_hostname}/${new_hostname}/g" /etc/hosts
+
+echo "  replaced: $old_hostname -> $new_hostname"
+echo
+
+echo "Setting system hostname:"
+echo "  command: hostnamectl set-hostname $new_hostname"
+
+hostnamectl set-hostname "$new_hostname"
+
+echo
+
+echo "Checking EPICS IOC config files:"
+echo "  pattern: /epics/iocs/*/config"
+echo
+
+found_ioc_config=0
+
+for config in /epics/iocs/*/config; do
+    [[ -f "$config" ]] || continue
+
+    found_ioc_config=1
+    backup="$config.backup.$timestamp"
+
+    echo "Editing IOC config:"
+    echo "  file:   $config"
+    echo "  backup: $backup"
+
+    cp "$config" "$backup"
+    sed -i "s/^HOST=.*/HOST=${new_hostname}/" "$config"
+
+    echo "  set: HOST=$new_hostname"
+    echo
+done
+
+if [[ "$found_ioc_config" -eq 0 ]]; then
+    echo "No IOC config files found."
+    echo
+fi
+
+echo "Done."
+echo
+echo "Check hostname now:"
+echo "  hostname"
+echo
+echo "Check for remaining old hostname references:"
+echo "  grep -R \"$old_hostname\" /etc/hosts /epics/iocs 2>/dev/null"
+echo
+echo "Reboot when ready:"
+echo "  sudo reboot"
