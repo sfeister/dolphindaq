@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#
+# ioc-watch
+#
+# Written by ChatGPT with help from Scott Feister.
+# Date: 2026-06-16
+#
+# Watch the log file for a soft IOC.
+#
+# Usage:
+#   ioc-watch [watch-options...] IOC_NAME
+#
+# Examples:
+#   ioc-watch ELECTRON
+#   ioc-watch -n 0.5 ELECTRON
+#   ioc-watch -d ELECTRON
+
+set -euo pipefail
+
+if [[ $# -lt 1 ]]; then
+    echo "Usage: ioc-watch [watch-options...] IOC_NAME" >&2
+    exit 1
+fi
+
+# The final argument is the IOC name.
+ioc_name="${!#}"
+
+# Everything before the final argument is passed to watch.
+watch_args=("${@:1:$#-1}")
+
+log_file="/var/log/softioc/${ioc_name}/${ioc_name}.log"
+
+if [[ ! -f "$log_file" ]]; then
+    echo "Error: IOC log not found on this computer: $ioc_name" >&2
+    echo >&2
+    echo "This usually means the IOC is not installed or not running on this machine." >&2
+    echo >&2
+    echo "This computer:" >&2
+    echo "  $(hostname)" >&2
+    echo >&2
+    echo "Expected log file:" >&2
+    echo "  $log_file" >&2
+    echo >&2
+    echo "IOC log directories found on this computer:" >&2
+
+    if [[ -d /var/log/softioc ]]; then
+        found_any=false
+
+        while IFS= read -r dir; do
+            found_any=true
+            echo "  $(basename "$dir")" >&2
+        done < <(find /var/log/softioc -mindepth 1 -maxdepth 1 -type d | sort)
+
+        if [[ "$found_any" == false ]]; then
+            echo "  none found" >&2
+        fi
+    else
+        echo "  /var/log/softioc does not exist" >&2
+    fi
+
+    echo >&2
+    echo "Check that you are SSH'd into the correct IOC host." >&2
+    exit 1
+fi
+
+watch "${watch_args[@]}" tail "$log_file"
