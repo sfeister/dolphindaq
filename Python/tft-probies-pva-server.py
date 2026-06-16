@@ -107,10 +107,11 @@ def handle_data(data, settings=None, ser=None):
         # PROBIES    
         probies_metric = np.clip(np.mean(yvals) / 200, 0.0001, 0.9999)
         #print(f"PROBIES metric: {probies_metric}")
-        Z = infer_probies(probies_metric)
+        Z = infer_probies(probies_metric) # typically returns Z in a range of 0 to 10
         Z = resize(Z, [240, 240])
+        Z = np.clip(Z, 0, 10) # Definitively clip Z to a range of 0 to 10
         Z = np.pad(Z, [(0, 0), (40, 40)])
-        Z = Z / 10 * (2.0**6 - 1) # converted to six-bit, with lowered dynamic range  # NOTE: Check here for ASSUMPTIONS of dynamic range!
+        Z = Z / 10 * (2.0**6 - 1) # converted to basically six-bit, with lowered dynamic range  # NOTE: Check here for ASSUMPTIONS of dynamic range! Assumes Z in a range of 0 to 10 prior; becomes a range of 0 to 63
         #print(f"Max of z: {np.max(Z)}")
         
         # Output
@@ -139,7 +140,7 @@ if __name__ == "__main__":
     # https://mdavidsaver.github.io/p4p/server.html
     ctxt = Context('pva')
     dev_info = SharedPV(nt=NTScalar('s'), # scalar string
-                  initial="TFT PROBIES PVA Server, 20250606")      # setting initial value also open()'s
+                  initial="TFT PROBIES PVA Server, 20260616")      # setting initial value also open()'s
     dev_trace = SharedPV(nt=ScottNTNDArray(),
                   initial=np.zeros([8]).astype(np.uint16)) # TODO: Create more options
 

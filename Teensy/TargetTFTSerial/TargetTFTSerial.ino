@@ -254,7 +254,7 @@ void update_tft_image() {
   char buffer[20];
   int base = 10;
   tft.overlayText(fb, itoa(image.shot_num, buffer, base), 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
-  tft.update(fb); // push the framebuffer to be displayed
+  tft.update(fb, true); // push the framebuffer to be displayed (the second argument 'true' says "bypass differential updating" and makes it slower but stable)
 }
 
 /* END TFT FUNCTIONS */
