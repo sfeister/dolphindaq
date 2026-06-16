@@ -492,5 +492,19 @@
             <saved_value_timestamp/>
             <completion>true</completion>
         </pv>
+        <pv>
+            <selected>true</selected>
+            <name>pva://CAMPROBIES:image</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
+        <pv>
+            <selected>true</selected>
+            <name>pva://CAMPROBIES:info</name>
+            <tolerance>0.1</tolerance>
+            <saved_value_timestamp/>
+            <completion>true</completion>
+        </pv>
     </pvlist>
 </pvtable>
