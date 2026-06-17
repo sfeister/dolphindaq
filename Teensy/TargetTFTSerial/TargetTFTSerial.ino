@@ -232,7 +232,8 @@ void clear(uint16_t* fb, uint16_t color = 0)
 void blank_tft_image() {
   clear(fb, ILI9341_T4_COLOR_BLACK); // draw a black background
   //tft.overlayFPS(fb, 1); // draw fps counter on bottom right
-  tft.overlayText(fb, "Target Output Simulator", 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  tft.overlayText(fb, "SIMPROBIES", 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  tft.overlayText(fb, "SIMPROBIES", 1, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
   tft.update(fb); // push the framebuffer to be displayed
 }
 
@@ -443,7 +444,9 @@ void loop() {
 #if defined(USB_TRIPLE_SERIAL)
       SerialUSB2.println("Dropped frame (ripe trace) due to either overloaded or disconnected SerialUSB1.");
 #endif
-      trigd = false;
+      ripe_trace = false; // reset the Trace block for update
+      lock_trace = false; // 
+      trigd = false; // clear trigger
     }
   }
 
@@ -517,14 +520,6 @@ void loop() {
   trigd = false;
   }
 
-
-  ////// Blank out synthetic image on TFT //////////
-  // Condition: Timer has elapsed (is constantly reset)
-  if (blanker.hasPassed(tft_blank_millis)) {
-    blank_tft_image(); // clear out the old image on the screen from the last trigger
-    blanker.restart();
-  }
-
   ////// Handle a disconnected serial port (Host PC not communicating, so no expectation of data) //////////
   if (!SerialUSB1.dtr()) { // device isn't even connected any more, give up on sending anything or awaiting a response
     await_response = false;
@@ -535,7 +530,12 @@ void loop() {
     blanker.restart();
   }
 
-
+  ////// Blank out synthetic image on TFT //////////
+  // Condition: Timer has elapsed (is constantly reset)
+  if (blanker.hasPassed(tft_blank_millis)) {
+    blank_tft_image(); // clear out the old image on the screen from the last trigger
+    blanker.restart();
+  }
 
   SCPI_Arduino_Loop_Update(); // process SCPI queries and commands
 }
