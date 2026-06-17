@@ -242,7 +242,7 @@ void no_host_tft_image() {
   tft.overlayText(fb, "Host PC Disconnected or Not Communicating", 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
   char trigcnt_text[32];
   snprintf(trigcnt_text, sizeof(trigcnt_text), "Trigger Count: %llu", (unsigned long long)trigcnt);
-  tft.overlayText(fb, trigcnt_text, 2, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  tft.overlayText(fb, trigcnt_text, 2, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw trigger count bottom right    
   tft.update(fb); // push the framebuffer to be displayed
 }
 
@@ -253,7 +253,8 @@ void update_tft_image() {
   //tft.overlayFPS(fb, 1); // draw fps counter on bottom right
   char buffer[20];
   int base = 10;
-  tft.overlayText(fb, itoa(image.shot_num, buffer, base), 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw text    
+  tft.overlayText(fb, itoa(image.shot_num, buffer, base), 3, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw trigger number upper left
+  tft.overlayText(fb, itoa(image.shot_num, buffer, base), 1, 0, 12, ILI9341_T4_COLOR_WHITE, 1.0f, ILI9341_T4_COLOR_RED, 0.4f, 1); // draw trigger number bottom right (to visually confirm frame draw is complete)
   tft.update(fb); // push the framebuffer to be displayed
 }
 
