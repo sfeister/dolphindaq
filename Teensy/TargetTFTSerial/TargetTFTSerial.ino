@@ -444,8 +444,6 @@ void loop() {
 #if defined(USB_TRIPLE_SERIAL)
       SerialUSB2.println("Dropped frame (ripe trace) due to either overloaded or disconnected SerialUSB1.");
 #endif
-      ripe_trace = false; // reset the Trace block for update
-      lock_trace = false; // 
       trigd = false; // clear trigger
     }
   }
