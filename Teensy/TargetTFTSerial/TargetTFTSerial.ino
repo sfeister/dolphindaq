@@ -88,6 +88,7 @@ AnalogBufferDMA abdma1(dma_adc_buff1, buffer_size);
 volatile uint16_t imgbuf_trace[TRACE_NT];
 
 
+volatile bool disconnected = false; // Boolean: 1 if USB serial port is currently disconnected
 volatile bool lock_adc = false; // Boolean: 1 if adc_buffer is currently being written to
 volatile bool lock_trace = false; // Boolean: 1 if trace is currently being written to
 volatile bool ripe_trace = false; // Boolean: 1 if Trace block is filled and ready (a new trace is "ripe" for transfer)
@@ -170,7 +171,7 @@ void ISR_exttrig() {
     trigcnt++;
 
     // (2) Activate the DMA from the continuous ADC
-    if ((!lock_adc) && (!trigd) && (!await_update)) {
+    if ((!lock_adc) && (!trigd) && (!await_update) && (!disconnected)) {
       lock_adc = true;
       trigd = true;
       trigcnt_adc = trigcnt;
@@ -520,12 +521,15 @@ void loop() {
 
   ////// Handle a disconnected serial port (Host PC not communicating, so no expectation of data) //////////
   if (!SerialUSB1.dtr()) { // device isn't even connected any more, give up on sending anything or awaiting a response
+    disconnected = true;
     await_response = false;
     ripe_trace = false;
     ripe_image = false;
     trigd = false;
     no_host_tft_image();
     blanker.restart();
+  } else {
+    disconnected = false;
   }
 
   ////// Blank out synthetic image on TFT //////////
