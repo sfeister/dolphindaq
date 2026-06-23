@@ -4,6 +4,9 @@
 # Test outputs
 out/
 
+# Generated output folders anywhere in the project
+**/outputs/
+
 # Save files from LabVIEW Control Panel VIs
 LabVIEW/*/SavedSettings*.csv
 
